@@ -179,7 +179,19 @@ const WORKS = [
  {yt:"A-c5qBrNhRQ", kind:"film", ar:1.7778, title:"#4 最後のbaile", year:"", note:""},
  {yt:"h7Vv7Yy9QFM", kind:"film", ar:1.7778, title:"#3 憶録とは", year:"", note:""},
  {yt:"0NPtCRNJY6s", kind:"film", ar:1.7778, title:"#2 生い立ちと想い", year:"", note:""},
- {yt:"duG0mu-I2gA", kind:"film", ar:1.7778, title:"#1 平生の大空", year:"", note:""}
+ {yt:"duG0mu-I2gA", kind:"film", ar:1.7778, title:"#1 平生の大空", year:"", note:""},
+ {ig:"DgIGPTevXXl", kind:"film", ar:0.5625, title:"", year:"", note:""},
+ {ig:"DfcIj7XPL9-", kind:"film", ar:0.5625, title:"", year:"", note:""},
+ {ig:"DfXEQKhvs74", kind:"film", ar:0.5625, title:"", year:"", note:""},
+ {ig:"DfRyVHrvaVK", kind:"film", ar:0.5625, title:"", year:"", note:""},
+ {ig:"DejqODoPyC1", kind:"film", ar:0.5625, title:"", year:"", note:""},
+ {ig:"DejdijfvuaJ", kind:"film", ar:0.5625, title:"", year:"", note:""},
+ {ig:"DeXtkVWzysm", kind:"film", ar:0.5625, title:"", year:"", note:""},
+ {ig:"DdnfCK-TUCQ", kind:"film", ar:0.5625, title:"", year:"", note:""},
+ {ig:"DdiqasIzFgd", kind:"film", ar:0.5625, title:"", year:"", note:""},
+ {ig:"DdKw1P9PPUs", kind:"film", ar:0.5625, title:"", year:"", note:""},
+ {ig:"DdKwMxbvXkL", kind:"film", ar:0.5625, title:"", year:"", note:""},
+ {ig:"DcoFW0_PBW8", kind:"film", ar:0.5625, title:"", year:"", note:""}
 ];
 /* 同時に浮かぶ数。作品が少ないうちは、入れ替わりが起きるよう一つ少なく浮かべる */
 const SLOTS = Math.max(1, Math.min(5, WORKS.length - 1)), MAXON = 6;
@@ -383,6 +395,9 @@ function stepWords(dt,t){
 
 /* ── 作品：いつ、どこに浮かぶかは決めない ── */
 function mediaFor(it,big){
+ if(it.ig){
+  if(big){const f=document.createElement('iframe');f.src='https://www.instagram.com/reel/'+encodeURIComponent(it.ig)+'/embed/';f.allow='autoplay; encrypted-media; fullscreen';f.title='憶録 / Instagram';f.style.cssText='width:min(400px,88vw);height:min(720px,82vh);border:0;display:block;background:#fff;border-radius:2px';return f}
+  const m=document.createElement('img');m.alt='憶録 リール';m.decoding='async';m.src='/ig/'+encodeURIComponent(it.ig);m.onerror=()=>{m.style.visibility='hidden';if(m.parentNode)m.parentNode.style.background='#1d2620'};return m}
  if(it.yt){
   if(big){const f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(it.yt)+'?autoplay=1&rel=0&playsinline=1';f.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';f.allowFullscreen=true;f.title=it.title||'video';f.style.cssText='width:min(1100px,88vw);aspect-ratio:16/9;height:auto;border:0;display:block';return f}
   const m=document.createElement('img');m.alt=it.title||'';m.decoding='async';m.src='https://i.ytimg.com/vi/'+encodeURIComponent(it.yt)+'/hqdefault.jpg';m.onerror=()=>{m.style.visibility='hidden';if(m.parentNode)m.parentNode.style.background='#1d2620'};return m}
@@ -436,7 +451,7 @@ function spawn(){
  const m=mediaFor(it,false);m.classList.add('m');
  const clip=document.createElement('div');clip.className='clip';clip.style.clipPath=torn(w,h);
  const gr=document.createElement('span');gr.className='gr';gr.style.backgroundPosition=`${Math.round(R()*160)}px ${Math.round(R()*160)}px`;
- clip.append(m,gr);if(it.yt){const pm=document.createElement('span');pm.className='pm';clip.appendChild(pm)}
+ clip.append(m,gr);if(it.yt||it.ig){const pm=document.createElement('span');pm.className='pm';clip.appendChild(pm)}
  const cap=document.createElement('div');cap.className='c';cap.textContent=it.title||'';
  if(it.year){const yr=document.createElement('i');yr.textContent=it.year;cap.appendChild(yr)}
  el.append(clip,cap);field.appendChild(el);
@@ -466,7 +481,7 @@ let lastFocus=null;
 function show(ov){lastFocus=document.activeElement;ov.classList.add('on');ov.querySelector('.close').focus()}
 function hide(){[view,aboutView].forEach(v=>v.classList.remove('on'));setTimeout(()=>{if(!view.classList.contains('on'))vMedia.innerHTML=''},900);if(lastFocus&&lastFocus.isConnected)lastFocus.focus()}
 function openWork(o){
- const it=o.it;vMedia.innerHTML='';const m=mediaFor(it,true);if(!it.yt)m.classList.add('big');vMedia.appendChild(m);
+ const it=o.it;vMedia.innerHTML='';const m=mediaFor(it,true);if(!it.yt&&!it.ig)m.classList.add('big');vMedia.appendChild(m);
  vCap.innerHTML='';const b=document.createElement('b');b.textContent=it.title||'';vCap.appendChild(b);
  if(it.year){const i=document.createElement('i');i.textContent=it.year;vCap.appendChild(i)}
  if(it.note){const p=document.createElement('p');p.textContent=it.note;vCap.appendChild(p)}
