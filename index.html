@@ -25,7 +25,7 @@
    LAYOUT  : 全面が風景。名前は左下に小さく。作品だけが自由。 */
 :root{color-scheme:light;--ink:#fffdf6;--soft:rgba(255,253,246,.82);--faint:rgba(255,253,246,.6)}
 *{box-sizing:border-box;min-width:0}
-html{background:#6e773f url(field.webp) center 60%/cover no-repeat}html,body{margin:0;height:100%;overflow:hidden}body{background:transparent}
+html{background:#6e773f url(field.webp) center/cover no-repeat}html,body{margin:0;height:100%;overflow:hidden}body{background:transparent}
 body{color:var(--ink);font:15px/1.9 "Zen Old Mincho","Hiragino Mincho ProN",serif;-webkit-font-smoothing:antialiased}
 canvas.layer{position:fixed;left:0;top:0;width:100%;height:100%;height:100lvh;display:block}
 #bg{z-index:0}#vine{z-index:1;pointer-events:none}#near{z-index:3;pointer-events:none;filter:blur(.4px);opacity:.92}#fg{z-index:3;pointer-events:none}
@@ -52,7 +52,6 @@ canvas.layer{position:fixed;left:0;top:0;width:100%;height:100%;height:100lvh;di
 .word{position:absolute;left:0;top:0;pointer-events:auto;white-space:nowrap;font:18px/1.4 "Zen Old Mincho",serif;letter-spacing:.22em;color:var(--ink);text-decoration:none;text-shadow:0 1px 12px rgba(0,30,20,.55),0 0 2px rgba(0,30,20,.3);will-change:transform,opacity;padding:8px 4px}
 .word span{display:inline-block;will-change:transform}
 .word:hover,.word:focus-visible{outline:none;text-decoration:underline;text-decoration-thickness:.5px;text-underline-offset:6px}
-.edge{position:fixed;left:0;right:0;z-index:30;pointer-events:none}.et{top:0;height:calc(env(safe-area-inset-top) + 4px);background:linear-gradient(#6a9fc9,#6a9fc900);background-color:#6a9fc9}.eb{bottom:0;height:calc(env(safe-area-inset-bottom) + 4px);background-color:#6e773f}
 .name{position:fixed;z-index:6;left:max(3vw,16px);top:max(3vh,14px);text-align:left;text-shadow:0 2px 14px rgba(0,20,10,.45)}
 .name h1{margin:0;line-height:0}.name h1 img{display:block;width:clamp(96px,9vw,140px);height:auto;filter:drop-shadow(0 2px 14px rgba(0,20,10,.45))}
 .name .role{margin:0 0 0 2px;font-size:11px;letter-spacing:.3em;color:var(--soft)}
@@ -91,7 +90,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 <div id="field" aria-label="浮かんでいる作品"></div>
 <canvas id="near" class="layer" aria-hidden="true"></canvas>
 <canvas id="fg" class="layer" aria-hidden="true"></canvas>
-<div class="veil"></div><div class="edge et" aria-hidden="true"></div><div class="edge eb" aria-hidden="true"></div><div class="grain"></div>
+<div class="veil"></div><div class="grain"></div>
 
 <div class="name">
  <h1><img src="logo.png" alt="sora yamaguchi" width="720" height="301"></h1>
@@ -205,7 +204,8 @@ const ip=(p)=>[fit.ox+p[0]*fit.s,fit.oy+p[1]*fit.s];
 const MET={x:-999,y:-999,len:170,a:0,dx:-.86,dy:.5,on:false,age:0,life:1,v:950,next:rr(14,28)};
 function stepMeteor(dt){if(RM)return;if(!MET.on){MET.next-=dt;MET.a=0;if(MET.next<=0){MET.on=true;MET.age=0;MET.life=rr(2.4,3.6);MET.v=rr(220,380);const ang=rr(.25,.5)*(R()<.5?1:-1);MET.dx=(ang>0?-1:1)*Math.cos(Math.abs(ang));MET.dy=Math.sin(Math.abs(ang));MET.x=rr(W*.15,W*.95);MET.y=rr(H*.04,Math.max(H*.08,HZ-H*.3));MET.len=rr(200,320)}return}
  MET.age+=dt;const k=MET.age/MET.life;MET.x+=MET.dx*MET.v*dt;MET.y+=MET.dy*MET.v*dt;MET.a=Math.sin(Math.min(1,k)*Math.PI)*.9;if(k>=1){MET.on=false;MET.a=0;MET.next=rr(35,80)}}
-function layout(){const s=Math.max(W/BG.w,H/BG.h);fit={s,ox:(W-BG.w*s)*BG.fx,oy:(H-BG.h*s)*BG.fy};HZ=fit.oy+BG.h*s*BG.hz;WY=W<600?VH-58:VH*.84}
+function layout(){const E=W<600?150:0,s=Math.max(W/BG.w,(H+E*2)/BG.h);fit={s,ox:(W-BG.w*s)*BG.fx,oy:(H-BG.h*s)*BG.fy};
+ const hs=document.documentElement.style;hs.backgroundSize=`${(BG.w*s).toFixed(1)}px ${(BG.h*s).toFixed(1)}px`;hs.backgroundPosition=`${fit.ox.toFixed(1)}px ${fit.oy.toFixed(1)}px`;HZ=fit.oy+BG.h*s*BG.hz;WY=W<600?VH-58:VH*.84}
 
 /* ── 風：x と時間で決まる、ゆっくり渡っていく波（写真の草と手前の草で共有） ── */
 let MB=0,mbT=0,lastP=null;
