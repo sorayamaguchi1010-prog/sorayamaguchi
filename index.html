@@ -35,6 +35,7 @@ canvas.layer{position:fixed;inset:0;width:100%;height:100%;display:block}
 .work{filter:drop-shadow(0 12px 16px rgba(10,30,20,.32))}
 .work .clip{position:relative;width:100%;height:100%;overflow:hidden;background:#eee8dc}
 .work .m{display:block;width:100%;height:100%;object-fit:cover;filter:contrast(1.06) saturate(.88) sepia(.1) brightness(.98)}
+.work .pm{position:absolute;left:50%;top:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:rgba(255,253,246,.78) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M3.6 2.6v4.8L7.6 5z' fill='%231d2a20'/%3E%3C/svg%3E") center/60% no-repeat;opacity:.85;pointer-events:none}
 .work .gr{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),radial-gradient(120% 120% at 50% 45%,transparent 55%,rgba(60,40,20,.35))}
 .work .c{position:absolute;left:0;top:100%;margin-top:10px;font-size:12px;line-height:1.5;letter-spacing:.04em;white-space:nowrap;opacity:0;transform:translateY(-4px);transition:opacity .8s,transform .8s;text-shadow:0 1px 10px rgba(0,20,10,.6)}
 .work .c i{font:italic 300 13px "Cormorant Garamond",serif;color:var(--soft);margin-left:.6em}
@@ -93,6 +94,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
  <a href="https://www.instagram.com/sora___yamaguchi/">instagram</a>
  <a href="https://www.instagram.com/okuroku.sora/">okuroku</a>
  <a href="https://note.com/sorayamaguchi10">note</a>
+ <a href="https://www.youtube.com/@%E5%B1%B1%E5%8F%A3%E5%A4%A7%E7%A9%BA-1010">youtube</a>
  <a href="https://www.01production01.com/">01 production</a>
 </nav>
 
@@ -110,6 +112,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
    <dt>instagram</dt><dd><a href="https://www.instagram.com/sora___yamaguchi/">@sora___yamaguchi</a></dd>
    <dt>okuroku</dt><dd><a href="https://www.instagram.com/okuroku.sora/">@okuroku.sora</a></dd>
    <dt>note</dt><dd><a href="https://note.com/sorayamaguchi10">note.com/sorayamaguchi10</a></dd>
+   <dt>youtube</dt><dd><a href="https://www.youtube.com/@%E5%B1%B1%E5%8F%A3%E5%A4%A7%E7%A9%BA-1010">山口大空 / 平生の大空</a></dd>
    <dt>contact</dt><dd><a href="mailto:sorayamaguchi1010@gmail.com">sorayamaguchi1010@gmail.com</a></dd>
   </dl>
  </div>
@@ -140,7 +143,22 @@ const WORKS = [
  {src:"works/poem-04.webp", kind:"photo", ar:0.5624, title:"憶録乃詩　師走の世界", year:"", note:""},
  {src:"works/photo-13.webp", kind:"photo", ar:0.7996, title:"no. 13", year:"", note:""},
  {src:"works/photo-14.webp", kind:"photo", ar:0.838, title:"no. 14", year:"", note:""},
- {src:"works/photo-15.webp", kind:"photo", ar:1.5005, title:"no. 15", year:"", note:""}
+ {src:"works/photo-15.webp", kind:"photo", ar:1.5005, title:"no. 15", year:"", note:""},
+ {src:"works/photo-16.webp", kind:"photo", ar:0.6667, title:"no. 16", year:"", note:""},
+ {yt:"WuP3cIKGlSI", kind:"film", ar:1.7778, title:"鹿山音楽 / それぞれ  SOUMATOUドキュメンタリー（2024）", year:"", note:""},
+ {yt:"YIpzKj1wRmo", kind:"film", ar:1.7778, title:"#8 追憶の垢", year:"", note:""},
+ {yt:"FSOyK0i98KI", kind:"film", ar:1.7778, title:"繰り返す天秤座「22歳」", year:"", note:""},
+ {yt:"zNNyreMTHYQ", kind:"film", ar:1.7778, title:"soumatou / THE ROTARY", year:"", note:""},
+ {yt:"HsyTd8zlfT0", kind:"film", ar:1.7778, title:"Motion Graphics Town （2023年5月）", year:"", note:""},
+ {yt:"hipLo7yOdmY", kind:"film", ar:1.7778, title:"撮る浅草、触れる神保町。", year:"", note:""},
+ {yt:"lFTlwndZ6sE", kind:"film", ar:1.7778, title:"17歳-  20歳 vlog", year:"", note:""},
+ {yt:"raB9VjQ1k1k", kind:"film", ar:1.7778, title:"#7 風より根にように。", year:"", note:""},
+ {yt:"-cfYJdq5POU", kind:"film", ar:1.7778, title:"#6 憶録日誌", year:"", note:""},
+ {yt:"B-Sdc0uWGVs", kind:"film", ar:1.7778, title:"#5 首尾一貫", year:"", note:""},
+ {yt:"A-c5qBrNhRQ", kind:"film", ar:1.7778, title:"#4 最後のbaile", year:"", note:""},
+ {yt:"h7Vv7Yy9QFM", kind:"film", ar:1.7778, title:"#3 憶録とは", year:"", note:""},
+ {yt:"0NPtCRNJY6s", kind:"film", ar:1.7778, title:"#2 生い立ちと想い", year:"", note:""},
+ {yt:"duG0mu-I2gA", kind:"film", ar:1.7778, title:"#1 平生の大空", year:"", note:""}
 ];
 /* 同時に浮かぶ数。作品が少ないうちは、入れ替わりが起きるよう一つ少なく浮かべる */
 const SLOTS = Math.max(1, Math.min(5, WORKS.length - 1)), MAXON = 6;
@@ -168,16 +186,19 @@ function stepMeteor(dt){if(RM)return;if(!MET.on){MET.next-=dt;MET.a=0;if(MET.nex
 function layout(){const s=Math.max(W/BG.w,H/BG.h);fit={s,ox:(W-BG.w*s)*BG.fx,oy:(H-BG.h*s)*BG.fy};HZ=fit.oy+BG.h*s*BG.hz;WY=H*(W<600?.86:.84)}
 
 /* ── 風：x と時間で決まる、ゆっくり渡っていく波（写真の草と手前の草で共有） ── */
-const gust=(x,t)=>{const a=Math.sin(x*.0021-t*.62)+.6*Math.sin(x*.0049-t*1.02+1.7)+.3*Math.sin(x*.011-t*1.5);return(Math.max(0,a/1.9)**2)*(.6+.4*Math.sin(t*.17))*WS};
+let MB=0,mbT=0,lastP=null;
+addEventListener('pointermove',e=>{const n=performance.now();if(lastP){const d=Math.hypot(e.clientX-lastP.x,e.clientY-lastP.y),dt=Math.max(8,n-lastP.t);mbT=Math.max(mbT,clamp(d/dt/1.6,0,1.4))}lastP={x:e.clientX,y:e.clientY,t:n}},{passive:true});
+function stepMB(dt){MB+=(mbT-MB)*Math.min(1,dt*(mbT>MB?6:1.1));mbT=Math.max(0,mbT-dt*1.4)}
+const gust=(x,t)=>{const a=Math.sin(x*.0021-t*.62)+.6*Math.sin(x*.0049-t*1.02+1.7)+.3*Math.sin(x*.011-t*1.5);return((Math.max(0,a/1.9)**2)*(.6+.4*Math.sin(t*.17))+MB*(.55+.45*Math.max(0,a/1.9)))*WS};
 
 /* ── 写真そのものを風で揺らす（WebGL） ── */
 let gl=null,prog=null,tex=null,U={};
 const VS=`attribute vec2 p;varying vec2 v;void main(){v=p*.5+.5;v.y=1.-v.y;gl_Position=vec4(p,0.,1.);}`;
-const FS=`precision highp float;varying vec2 v;uniform sampler2D img;uniform vec2 res,isz,off,mdir;uniform vec4 met;uniform float sc,t,hz,ws,wy;
+const FS=`precision highp float;varying vec2 v;uniform sampler2D img;uniform vec2 res,isz,off,mdir;uniform vec4 met;uniform float sc,t,hz,ws,wy,mb;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
 float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*noise(p);p*=2.03;a*=.5;}return v;}
-float gust(float x){float a=sin(x*.0021-t*.62)+.6*sin(x*.0049-t*1.02+1.7)+.3*sin(x*.011-t*1.5);float g=max(0.,a/1.9);return g*g*(.6+.4*sin(t*.17))*ws;}
+float gust(float x){float a=sin(x*.0021-t*.62)+.6*sin(x*.0049-t*1.02+1.7)+.3*sin(x*.011-t*1.5);float g=max(0.,a/1.9);return (g*g*(.6+.4*sin(t*.17))+mb*(.55+.45*g))*ws;}
 void main(){
  vec2 px=v*res;vec2 sp=px;float wk=0.;
  vec2 iu=(sp-off)/(isz*sc);
@@ -226,7 +247,7 @@ function initGL(){
  try{prog=gl.createProgram();gl.attachShader(prog,sh(gl.VERTEX_SHADER,VS));gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(prog);gl.useProgram(prog)}catch(e){gl=null;return false}
  const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
  const loc=gl.getAttribLocation(prog,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
- for(const k of['img','res','isz','off','sc','t','hz','ws','wy','met','mdir'])U[k]=gl.getUniformLocation(prog,k);
+ for(const k of['img','res','isz','off','sc','t','hz','ws','wy','met','mdir','mb'])U[k]=gl.getUniformLocation(prog,k);
  tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);
  for(const[k,v]of[[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR],[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE]])gl.texParameteri(gl.TEXTURE_2D,k,v);
  gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,1,1,0,gl.RGB,gl.UNSIGNED_BYTE,new Uint8Array([110,160,215]));
@@ -235,7 +256,7 @@ function initGL(){
  return true;
 }
 function drawBG(t){
- if(gl){gl.viewport(0,0,bg.width,bg.height);gl.uniform2f(U.res,W,H);gl.uniform2f(U.isz,BG.w,BG.h);gl.uniform2f(U.off,fit.ox,fit.oy);gl.uniform1f(U.sc,fit.s);gl.uniform1f(U.t,t);gl.uniform1f(U.hz,BG.hz);gl.uniform1f(U.ws,WS);gl.uniform1f(U.wy,1e5);gl.uniform4f(U.met,MET.x,MET.y,MET.len,MET.a);gl.uniform2f(U.mdir,MET.dx,MET.dy);gl.drawArrays(gl.TRIANGLE_STRIP,0,4)}
+ if(gl){gl.viewport(0,0,bg.width,bg.height);gl.uniform2f(U.res,W,H);gl.uniform2f(U.isz,BG.w,BG.h);gl.uniform2f(U.off,fit.ox,fit.oy);gl.uniform1f(U.sc,fit.s);gl.uniform1f(U.t,t);gl.uniform1f(U.hz,BG.hz);gl.uniform1f(U.ws,WS);gl.uniform1f(U.wy,1e5);gl.uniform1f(U.mb,MB);gl.uniform4f(U.met,MET.x,MET.y,MET.len,MET.a);gl.uniform2f(U.mdir,MET.dx,MET.dy);gl.drawArrays(gl.TRIANGLE_STRIP,0,4)}
  else if(bx&&IMG.complete){bx.drawImage(IMG,fit.ox,fit.oy,BG.w*fit.s,BG.h*fit.s)}
 }
 
@@ -323,13 +344,11 @@ function spawnWord(){
  const x=-w-rr(20,60),y=freeY(w,36,x);if(y==null){a.remove();return false}
  a.style.visibility='';wRecent.push(i);if(wRecent.length>4)wRecent.shift();
  const o={el:a,spans,i,w,x:RM?rr(W*.1,W*.6):x,y,age:0,ph:R()*7,sway:0};
- a.addEventListener('pointerenter',()=>streamHold=true);a.addEventListener('pointerleave',()=>streamHold=false);
- a.addEventListener('focus',()=>streamHold=true);a.addEventListener('blur',()=>streamHold=false);
  words.push(o);return true;
 }
 let wordWait=rr(2,5);
 function stepWords(dt,t){
- const v=RM?0:windV*(streamHold?.04:1);
+ const v=RM?0:windV;
  wordWait-=dt;if(wordWait<=0&&words.length<2&&live.length+words.length<MAXON){wordWait=spawnWord()?rr(6,14):.8}
  for(let k=words.length-1;k>=0;k--){const o=words[k];o.age+=dt;o.x+=v*dt;
   const g=gust(o.x+o.w*.5,t);o.sway+=(g-o.sway)*Math.min(1,dt*2.4);
@@ -341,6 +360,9 @@ function stepWords(dt,t){
 
 /* ── 作品：いつ、どこに浮かぶかは決めない ── */
 function mediaFor(it,big){
+ if(it.yt){
+  if(big){const f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(it.yt)+'?autoplay=1&rel=0&playsinline=1';f.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';f.allowFullscreen=true;f.title=it.title||'video';f.style.cssText='width:min(1100px,88vw);aspect-ratio:16/9;height:auto;border:0;display:block';return f}
+  const m=document.createElement('img');m.alt=it.title||'';m.decoding='async';m.src='https://i.ytimg.com/vi/'+encodeURIComponent(it.yt)+'/hqdefault.jpg';return m}
  const m=document.createElement(it.kind==='film'?'video':'img');
  if(it.kind==='film'){m.muted=true;m.loop=true;m.playsInline=true;m.autoplay=true;m.setAttribute('muted','');if(big){m.controls=true;m.muted=false}}
  else{m.alt=it.title||'';m.decoding='async'}
@@ -375,7 +397,7 @@ function torn(w,h){const pts=[],j=()=>rr(0,2.4);
  return 'polygon('+pts.map(p=>p[0].toFixed(1)+'px '+p[1].toFixed(1)+'px').join(',')+')'}
 /* 風はひとつ：写真も言葉も、同じ風に同じ速さで運ばれるので追い越さず、重ならない */
 let streamHold=false,windV=0;
-function streamSpeed(t,dt){const g=gust(W*.5,t);const target=(13+g*45)*WS;windV+=(target-windV)*Math.min(1,dt*.6);return streamHold?windV*.05:windV}
+function streamSpeed(t,dt){const g=gust(W*.5,t);const target=(13+g*45+MB*140)*WS;windV+=(target-windV)*Math.min(1,dt*(MB>.05?2.2:.6));return windV}
 function rects(){const r=[];for(const o of live)r.push([o.x,o.y-14,o.w,o.h+28]);for(const o of words)r.push([o.x,o.y-10,o.w,46]);return r}
 function freeY(w,h,x){const top=H*.05,bot=WY-h;if(bot<=top)return null;const rs=rects().filter(r=>r[0]<x+w+40&&r[0]+r[2]>x-40);
  for(let k=0;k<40;k++){const y=rr(top,bot);if(rs.every(r=>y+h<r[1]||y>r[1]+r[3]))return y}return null}
@@ -391,14 +413,12 @@ function spawn(){
  const m=mediaFor(it,false);m.classList.add('m');
  const clip=document.createElement('div');clip.className='clip';clip.style.clipPath=torn(w,h);
  const gr=document.createElement('span');gr.className='gr';gr.style.backgroundPosition=`${Math.round(R()*160)}px ${Math.round(R()*160)}px`;
- clip.append(m,gr);
+ clip.append(m,gr);if(it.yt){const pm=document.createElement('span');pm.className='pm';clip.appendChild(pm)}
  const cap=document.createElement('div');cap.className='c';cap.textContent=it.title||'';
  if(it.year){const yr=document.createElement('i');yr.textContent=it.year;cap.appendChild(yr)}
  el.append(clip,cap);field.appendChild(el);
  const o={el,idx,it,w,h,x:RM?rr(W*.05,W*.8-w):x,y,cx:0,cy:0,ph:R()*7,sway:0,age:0,tilt:rr(-1.6,1.6).toFixed(2)};
- el.addEventListener('pointerenter',()=>streamHold=true);el.addEventListener('pointerleave',()=>streamHold=false);
- el.addEventListener('focus',()=>streamHold=true);el.addEventListener('blur',()=>streamHold=false);
- el.addEventListener('click',()=>openWork(o));
+  el.addEventListener('click',()=>openWork(o));
  el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openWork(o)}});
  live.push(o);return true;
 }
@@ -406,7 +426,7 @@ let spawnWait=0;
 function prePlace(){if(RM)return;const n=Math.min(SLOTS,4);for(let k=0;k<n;k++){if(!spawn())continue;const o=live[live.length-1];const x=W*(.08+.84*(k+.5)/n)-o.w/2;const y=freeY(o.w,o.h,x);if(y==null){o.el.remove();live.pop();continue}o.x=x;o.y=y;o.pre=true}}
 function stepWorks(dt,t){
  const v=RM?0:streamSpeed(t,dt);
- spawnWait-=dt;if(spawnWait<=0&&live.length<SLOTS&&live.length+words.length<MAXON){spawnWait=spawn()?rr(2,6):.6}
+ spawnWait-=dt;if(spawnWait<=0&&live.length<SLOTS&&live.length+words.length<MAXON){spawnWait=spawn()?(live.length<3?rr(.4,1.2):rr(2,6)):.6}
  for(let i=live.length-1;i>=0;i--){
   const o=live[i];o.age+=dt;o.x+=v*dt;o.cx=o.x+o.w/2;o.cy=o.y+o.h/2;
   if(o.x>W+40){o.el.remove();live.splice(i,1);continue}
@@ -423,7 +443,7 @@ let lastFocus=null;
 function show(ov){lastFocus=document.activeElement;ov.classList.add('on');ov.querySelector('.close').focus()}
 function hide(){[view,aboutView].forEach(v=>v.classList.remove('on'));setTimeout(()=>{if(!view.classList.contains('on'))vMedia.innerHTML=''},900);if(lastFocus&&lastFocus.isConnected)lastFocus.focus()}
 function openWork(o){
- const it=o.it;vMedia.innerHTML='';const m=mediaFor(it,true);m.classList.add('big');vMedia.appendChild(m);
+ const it=o.it;vMedia.innerHTML='';const m=mediaFor(it,true);if(!it.yt)m.classList.add('big');vMedia.appendChild(m);
  vCap.innerHTML='';const b=document.createElement('b');b.textContent=it.title||'';vCap.appendChild(b);
  if(it.year){const i=document.createElement('i');i.textContent=it.year;vCap.appendChild(i)}
  if(it.note){const p=document.createElement('p');p.textContent=it.note;vCap.appendChild(p)}
@@ -446,7 +466,7 @@ resize();
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,150)});
 prePlace();
 let last=performance.now();
-function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;clock+=dt;draw(clock,dt);stepWorks(dt,clock);stepWords(dt,clock);requestAnimationFrame(frame)}
+function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;clock+=dt;stepMB(dt);draw(clock,dt);stepWorks(dt,clock);stepWords(dt,clock);requestAnimationFrame(frame)}
 document.addEventListener('visibilitychange',()=>{last=performance.now()});
 requestAnimationFrame(frame);
 }
