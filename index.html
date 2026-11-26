@@ -11,6 +11,7 @@
 <link rel="icon" href="favicon.ico" sizes="48x48">
 <link rel="icon" type="image/png" href="favicon-192.png" sizes="192x192">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#6a9fc9">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Zen+Old+Mincho:wght@400&display=swap" rel="stylesheet">
 <style>
@@ -21,7 +22,7 @@
    LAYOUT  : 全面が風景。名前は左下に小さく。作品だけが自由。 */
 :root{color-scheme:light;--ink:#fffdf6;--soft:rgba(255,253,246,.82);--faint:rgba(255,253,246,.6)}
 *{box-sizing:border-box;min-width:0}
-html{background:#5d8a3e url(field.webp) center 60%/cover no-repeat}html,body{margin:0;height:100%;overflow:hidden}body{background:transparent}
+html{background:#6e773f url(field.webp) center 60%/cover no-repeat}html,body{margin:0;height:100%;overflow:hidden}body{background:transparent}
 body{color:var(--ink);font:15px/1.9 "Zen Old Mincho","Hiragino Mincho ProN",serif;-webkit-font-smoothing:antialiased}
 canvas.layer{position:fixed;left:0;top:0;width:100%;height:100%;height:100lvh;display:block}
 #bg{z-index:0}#vine{z-index:1;pointer-events:none}#near{z-index:3;pointer-events:none;filter:blur(.4px);opacity:.92}#fg{z-index:3;pointer-events:none}
@@ -48,6 +49,7 @@ canvas.layer{position:fixed;left:0;top:0;width:100%;height:100%;height:100lvh;di
 .word{position:absolute;left:0;top:0;pointer-events:auto;white-space:nowrap;font:18px/1.4 "Zen Old Mincho",serif;letter-spacing:.22em;color:var(--ink);text-decoration:none;text-shadow:0 1px 12px rgba(0,30,20,.55),0 0 2px rgba(0,30,20,.3);will-change:transform,opacity;padding:8px 4px}
 .word span{display:inline-block;will-change:transform}
 .word:hover,.word:focus-visible{outline:none;text-decoration:underline;text-decoration-thickness:.5px;text-underline-offset:6px}
+.edge{position:fixed;left:0;right:0;z-index:1;pointer-events:none;height:max(1px,env(safe-area-inset-top))}.et{top:0;background:#6a9fc9}.eb{bottom:0;height:max(1px,env(safe-area-inset-bottom));background:#6e773f}
 .name{position:fixed;z-index:6;left:max(3vw,16px);top:max(3vh,14px);text-align:left;text-shadow:0 2px 14px rgba(0,20,10,.45)}
 .name h1{margin:0;line-height:0}.name h1 img{display:block;width:clamp(96px,9vw,140px);height:auto;filter:drop-shadow(0 2px 14px rgba(0,20,10,.45))}
 .name .role{margin:0 0 0 2px;font-size:11px;letter-spacing:.3em;color:var(--soft)}
@@ -86,7 +88,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 <div id="field" aria-label="浮かんでいる作品"></div>
 <canvas id="near" class="layer" aria-hidden="true"></canvas>
 <canvas id="fg" class="layer" aria-hidden="true"></canvas>
-<div class="veil"></div><div class="grain"></div>
+<div class="veil"></div><div class="edge et" aria-hidden="true"></div><div class="edge eb" aria-hidden="true"></div><div class="grain"></div>
 
 <div class="name">
  <h1><img src="logo.png" alt="sora yamaguchi" width="720" height="301"></h1>
