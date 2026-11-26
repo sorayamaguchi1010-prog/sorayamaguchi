@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>sora yamaguchi</title>
+<meta name="description" content="sora yamaguchi — 憶録家。写真と映像を、記録ではなく記憶として。">
+<meta property="og:title" content="sora yamaguchi">
+<meta property="og:description" content="写真と映像を、記録ではなく記憶として。">
+<meta property="og:image" content="field.webp">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Zen+Old+Mincho:wght@400&display=swap" rel="stylesheet">
+<style>
+/* VOICE   : 囁くように。説明しない。風と光だけが喋る。
+   IDEA    : 夏の記憶の草原。作品は置かれていない、風に預けられている。
+   PICTURE : 入道雲が流れ、風の波が草を渡り、写真が風にあおられて揺れる。
+   COLOUR+TYPE : 夏空の青と草の緑、光の白。Cormorant の細いイタリックと Zen Old Mincho。
+   LAYOUT  : 全面が風景。名前は左下に小さく。作品だけが自由。 */
+:root{color-scheme:light;--ink:#fffdf6;--soft:rgba(255,253,246,.82);--faint:rgba(255,253,246,.6)}
+*{box-sizing:border-box;min-width:0}
+html,body{margin:0;height:100%;overflow:hidden;background:#4f8fd0}
+body{color:var(--ink);font:15px/1.9 "Zen Old Mincho","Hiragino Mincho ProN",serif;-webkit-font-smoothing:antialiased}
+canvas.layer{position:fixed;inset:0;width:100%;height:100%;display:block}
+#bg{z-index:0}#vine{z-index:1;pointer-events:none}#near{z-index:3;pointer-events:none;filter:blur(.4px);opacity:.92}#fg{z-index:3;pointer-events:none}
+#field{position:fixed;inset:0;z-index:2;pointer-events:none}
+.veil{position:fixed;inset:0;z-index:4;pointer-events:none;background:
+ radial-gradient(130% 95% at 50% 38%,transparent 60%,rgba(10,30,20,.3) 100%),
+ linear-gradient(to top,rgba(8,26,14,.55),transparent 32%)}
+.grain{position:fixed;inset:-50%;z-index:5;pointer-events:none;opacity:.22;mix-blend-mode:overlay;
+ background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+ animation:grain 1.2s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}25%{transform:translate(-3%,2%)}50%{transform:translate(2%,-3%)}75%{transform:translate(-2%,-1%)}100%{transform:translate(1%,3%)}}
+
+.work{position:absolute;left:0;top:0;pointer-events:auto;cursor:pointer;will-change:transform,opacity;outline:none;-webkit-tap-highlight-color:transparent;transform-origin:50% 0}
+.work{filter:drop-shadow(0 12px 16px rgba(10,30,20,.32))}
+.work .clip{position:relative;width:100%;height:100%;overflow:hidden;background:#eee8dc}
+.work .m{display:block;width:100%;height:100%;object-fit:cover;filter:contrast(1.06) saturate(.88) sepia(.1) brightness(.98)}
+.work .gr{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),radial-gradient(120% 120% at 50% 45%,transparent 55%,rgba(60,40,20,.35))}
+.work .c{position:absolute;left:0;top:100%;margin-top:10px;font-size:12px;line-height:1.5;letter-spacing:.04em;white-space:nowrap;opacity:0;transform:translateY(-4px);transition:opacity .8s,transform .8s;text-shadow:0 1px 10px rgba(0,20,10,.6)}
+.work .c i{font:italic 300 13px "Cormorant Garamond",serif;color:var(--soft);margin-left:.6em}
+.work:hover .c,.work:focus-visible .c{opacity:.95;transform:none}
+.work:focus-visible .clip{outline:1px solid var(--ink);outline-offset:3px}
+
+.word{position:absolute;left:0;top:0;pointer-events:auto;white-space:nowrap;font:18px/1.4 "Zen Old Mincho",serif;letter-spacing:.22em;color:var(--ink);text-decoration:none;text-shadow:0 1px 12px rgba(0,30,20,.55),0 0 2px rgba(0,30,20,.3);will-change:transform,opacity;padding:8px 4px}
+.word span{display:inline-block;will-change:transform}
+.word:hover,.word:focus-visible{outline:none;text-decoration:underline;text-decoration-thickness:.5px;text-underline-offset:6px}
+.name{position:fixed;z-index:6;left:max(5vw,20px);bottom:max(5vh,22px);text-shadow:0 2px 18px rgba(0,20,10,.4)}
+.name h1{margin:0;line-height:0}.name h1 img{display:block;width:clamp(170px,20vw,280px);height:auto;filter:drop-shadow(0 2px 14px rgba(0,20,10,.45))}
+.name .role{margin:2px 0 0 4px;font-size:13px;letter-spacing:.32em;color:var(--soft)}
+.name .line{margin:2px 0 0;font-size:13px;color:var(--faint)}
+nav{position:fixed;z-index:6;right:max(5vw,20px);bottom:max(5vh,22px);display:flex;flex-wrap:wrap;justify-content:flex-end;gap:0 2px;align-items:center;max-width:70vw}
+nav button,nav a{font:italic 300 17px "Cormorant Garamond",serif;color:var(--soft);background:none;border:0;padding:10px 12px;min-height:44px;cursor:pointer;text-decoration:none;transition:color .4s;text-shadow:0 1px 12px rgba(0,20,10,.45)}
+nav button:hover,nav a:hover,nav :focus-visible{color:var(--ink)}
+nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
+
+.over{position:fixed;inset:0;z-index:20;display:grid;place-items:center;padding:6vh 6vw;color:#fbf7ee;background:rgba(10,22,16,.6);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);opacity:0;visibility:hidden;transition:opacity .9s,visibility 0s .9s}
+.over.on{opacity:1;visibility:visible;transition:opacity .9s}
+.over figure{margin:0;max-width:min(1100px,100%);display:grid;gap:18px;justify-items:start}
+.over .big{display:block;max-width:100%;max-height:74vh;width:auto;height:auto;box-shadow:0 40px 90px -30px rgba(0,0,0,.7)}
+.over figcaption{display:flex;flex-wrap:wrap;gap:.4em 1.4em;align-items:baseline}
+.over figcaption b{font-weight:400;font-size:17px}
+.over figcaption i{font:italic 300 16px "Cormorant Garamond",serif;color:rgba(251,247,238,.75)}
+.over figcaption p{flex-basis:100%;margin:0;color:rgba(251,247,238,.75);font-size:14px;max-width:34em}
+.close{position:absolute;top:max(3vh,12px);right:max(4vw,12px);font:italic 300 18px "Cormorant Garamond",serif;color:rgba(251,247,238,.75);background:none;border:0;min-height:44px;padding:10px 14px;cursor:pointer}
+.close:hover,.close:focus-visible{color:#fff}
+.about{width:min(640px,100%);max-height:86vh;overflow-y:auto;scrollbar-width:thin;padding-right:6px}.about .prof{display:block;width:100%;height:auto;margin:0 0 18px}
+.about h2{margin:0 0 6px;font:italic 300 clamp(30px,4vw,44px)/1.05 "Cormorant Garamond",serif}
+.about .ja{margin:0 0 26px;font-size:13px;letter-spacing:.3em;color:rgba(251,247,238,.75)}
+.about p{margin:0 0 1.2em;color:rgba(251,247,238,.8)}
+.about dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 22px;margin:28px 0 0;font-size:14px}
+.about dt{font:italic 300 15px "Cormorant Garamond",serif;color:rgba(251,247,238,.55)}
+.about dd{margin:0;overflow-wrap:anywhere}
+.about a{color:#fff;text-underline-offset:4px;text-decoration-thickness:.5px}
+
+@media(max-width:600px){.name{bottom:72px}nav{left:0;right:0;bottom:max(1.5vh,8px);justify-content:center;gap:0}nav{max-width:none}nav button,nav a{padding:10px 6px;font-size:15px}}
+@media(prefers-reduced-motion:reduce){.grain{animation:none}}
+</style>
+</head>
+<body>
+<canvas id="bg" class="layer" aria-hidden="true"></canvas>
+<canvas id="vine" class="layer" aria-hidden="true"></canvas>
+<div id="field" aria-label="浮かんでいる作品"></div>
+<canvas id="near" class="layer" aria-hidden="true"></canvas>
+<canvas id="fg" class="layer" aria-hidden="true"></canvas>
+<div class="veil"></div><div class="grain"></div>
+
+<div class="name">
+ <h1><img src="logo.png" alt="sora yamaguchi" width="720" height="301"></h1>
+ <p class="role">憶録家</p>
+</div>
+<nav>
+ <button type="button" id="aboutBtn">about</button>
+ <a href="https://www.instagram.com/sora___yamaguchi/">instagram</a>
+ <a href="https://www.instagram.com/okuroku.sora/">okuroku</a>
+ <a href="https://note.com/sorayamaguchi10">note</a>
+ <a href="https://www.01production01.com/">01 production</a>
+</nav>
+
+<div class="over" id="view" role="dialog" aria-modal="true" aria-label="作品">
+ <button class="close" type="button" data-close>close</button>
+ <figure><div id="vMedia"></div><figcaption id="vCap"></figcaption></figure>
+</div>
+<div class="over" id="aboutView" role="dialog" aria-modal="true" aria-label="about">
+ <button class="close" type="button" data-close>close</button>
+ <div class="about">
+  <img class="prof" src="about/about-01.webp" alt="山口大空と申します。2001年10月10日、草津町の湯畑にある旅館に生を授かりました。" width="1400" height="1400" loading="lazy">
+  <img class="prof" src="about/about-02.webp" alt="再度怪我をした17歳の6月。…現在は、総合のテーマとして「ルーツの転用」を表現しています。" width="1400" height="1400" loading="lazy">
+  <dl>
+   <dt>studio</dt><dd><a href="https://www.01production01.com/">01 PRODUCTION</a></dd>
+   <dt>instagram</dt><dd><a href="https://www.instagram.com/sora___yamaguchi/">@sora___yamaguchi</a></dd>
+   <dt>okuroku</dt><dd><a href="https://www.instagram.com/okuroku.sora/">@okuroku.sora</a></dd>
+   <dt>note</dt><dd><a href="https://note.com/sorayamaguchi10">note.com/sorayamaguchi10</a></dd>
+   <dt>contact</dt><dd><a href="mailto:sorayamaguchi1010@gmail.com">sorayamaguchi1010@gmail.com</a></dd>
+  </dl>
+ </div>
+</div>
+
+<script>
+{
+/* ── 作品リスト ─────────────────────────────
+   works フォルダに置いて、ここに一行足すだけ。
+   kind: "photo"（jpg/png/webp） または "film"（mp4/webm、無音ループ）
+   ar: 縦横比（幅÷高さ）。title・year・note は空でもよい。 */
+const WORKS = [
+ {src:"works/summer-01.webp", kind:"photo", ar:1.5005, title:"no. 01", year:"", note:""},
+ {src:"works/summer-02.webp", kind:"photo", ar:0.6667, title:"no. 02", year:"", note:""},
+ {src:"works/summer-03.webp", kind:"photo", ar:0.6667, title:"no. 03", year:"", note:""},
+ {src:"works/summer-04.webp", kind:"photo", ar:1.7778, title:"no. 04", year:"", note:""},
+ {src:"works/photo-05.webp", kind:"photo", ar:1.0, title:"no. 05", year:"", note:""},
+ {src:"works/photo-06.webp", kind:"photo", ar:0.7996, title:"no. 06", year:"", note:""},
+ {src:"works/photo-07.webp", kind:"photo", ar:1.5005, title:"no. 07", year:"", note:""},
+ {src:"works/photo-08.webp", kind:"photo", ar:1.5005, title:"no. 08", year:"", note:""},
+ {src:"works/photo-09.webp", kind:"photo", ar:1.5005, title:"no. 09", year:"", note:""},
+ {src:"works/photo-10.webp", kind:"photo", ar:0.6667, title:"no. 10", year:"", note:""},
+ {src:"works/photo-11.webp", kind:"photo", ar:1.5005, title:"no. 11", year:"", note:""},
+ {src:"works/photo-12.webp", kind:"photo", ar:0.6677, title:"no. 12", year:"", note:""},
+ {src:"works/poem-01.webp", kind:"photo", ar:0.5624, title:"憶録乃詩　300円の旅", year:"", note:""},
+ {src:"works/poem-02.webp", kind:"photo", ar:0.5624, title:"憶録乃詩　サルビア", year:"", note:""},
+ {src:"works/poem-03.webp", kind:"photo", ar:0.5624, title:"憶録乃詩　喧騒", year:"", note:""},
+ {src:"works/poem-04.webp", kind:"photo", ar:0.5624, title:"憶録乃詩　師走の世界", year:"", note:""},
+ {src:"works/photo-13.webp", kind:"photo", ar:0.7996, title:"no. 13", year:"", note:""},
+ {src:"works/photo-14.webp", kind:"photo", ar:0.838, title:"no. 14", year:"", note:""},
+ {src:"works/photo-15.webp", kind:"photo", ar:1.5005, title:"no. 15", year:"", note:""}
+];
+/* 同時に浮かぶ数。作品が少ないうちは、入れ替わりが起きるよう一つ少なく浮かべる */
+const SLOTS = Math.max(1, Math.min(5, WORKS.length - 1));
+
+const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const bg = document.getElementById('bg'), fg = document.getElementById('fg');
+let bx=null;const fx = fg.getContext('2d'), near=document.getElementById('near'), nx=near.getContext('2d');
+const field = document.getElementById('field');
+let W=0,H=0,DPR=1,HZ=0, blades=[], motes=[], streaks=[];
+const R=Math.random, rr=(a,b)=>a+R()*(b-a), clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const ease=t=>t<.5?2*t*t:1-((-2*t+2)**2)/2;
+const WS=RM?.25:1;
+
+/* ── 背景の写真：河川敷の土手 ── */
+const BG={src:"field.webp",w:1445,h:963,hz:.66,fx:.5,fy:.5};
+const IMG=new Image();IMG.src=BG.src;
+const hx=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const mix=(a,b,t)=>{const A=hx(a),B=hx(b);return '#'+A.map((v,i)=>Math.round(v+(B[i]-v)*t).toString(16).padStart(2,'0')).join('')};
+const shade=(c,f)=>'#'+hx(c).map(v=>clamp(Math.round(v*f),0,255).toString(16).padStart(2,'0')).join('');
+let fit={s:1,ox:0,oy:0},WY=0;
+const ip=(p)=>[fit.ox+p[0]*fit.s,fit.oy+p[1]*fit.s];
+const MET={x:-999,y:-999,len:170,a:0,dx:-.86,dy:.5,on:false,age:0,life:1,v:950,next:rr(14,28)};
+function stepMeteor(dt){if(RM)return;if(!MET.on){MET.next-=dt;MET.a=0;if(MET.next<=0){MET.on=true;MET.age=0;MET.life=rr(2.4,3.6);MET.v=rr(220,380);const ang=rr(.25,.5)*(R()<.5?1:-1);MET.dx=(ang>0?-1:1)*Math.cos(Math.abs(ang));MET.dy=Math.sin(Math.abs(ang));MET.x=rr(W*.15,W*.95);MET.y=rr(H*.04,Math.max(H*.08,HZ-H*.3));MET.len=rr(200,320)}return}
+ MET.age+=dt;const k=MET.age/MET.life;MET.x+=MET.dx*MET.v*dt;MET.y+=MET.dy*MET.v*dt;MET.a=Math.sin(Math.min(1,k)*Math.PI)*.9;if(k>=1){MET.on=false;MET.a=0;MET.next=rr(35,80)}}
+function layout(){const s=Math.max(W/BG.w,H/BG.h);fit={s,ox:(W-BG.w*s)*BG.fx,oy:(H-BG.h*s)*BG.fy};HZ=fit.oy+BG.h*s*BG.hz;WY=H*(W<600?.86:.84)}
+
+/* ── 風：x と時間で決まる、ゆっくり渡っていく波（写真の草と手前の草で共有） ── */
+const gust=(x,t)=>{const a=Math.sin(x*.0021-t*.62)+.6*Math.sin(x*.0049-t*1.02+1.7)+.3*Math.sin(x*.011-t*1.5);return(Math.max(0,a/1.9)**2)*(.6+.4*Math.sin(t*.17))*WS};
+
+/* ── 写真そのものを風で揺らす（WebGL） ── */
+let gl=null,prog=null,tex=null,U={};
+const VS=`attribute vec2 p;varying vec2 v;void main(){v=p*.5+.5;v.y=1.-v.y;gl_Position=vec4(p,0.,1.);}`;
+const FS=`precision highp float;varying vec2 v;uniform sampler2D img;uniform vec2 res,isz,off,mdir;uniform vec4 met;uniform float sc,t,hz,ws,wy;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
+float fbm(vec2 p){float v=0.,a=.5;for(int i=0;i<5;i++){v+=a*noise(p);p*=2.03;a*=.5;}return v;}
+float gust(float x){float a=sin(x*.0021-t*.62)+.6*sin(x*.0049-t*1.02+1.7)+.3*sin(x*.011-t*1.5);float g=max(0.,a/1.9);return g*g*(.6+.4*sin(t*.17))*ws;}
+void main(){
+ vec2 px=v*res;vec2 sp=px;float wk=0.;
+ vec2 iu=(sp-off)/(isz*sc);
+ float edge=1.03-(iu.x-.42)*.32,rv=smoothstep(-.002,.008,iu.y-edge)*smoothstep(.38,.43,iu.x);
+ if(rv>0.){vec2 fd=normalize(vec2(-.95,.3)),cd=vec2(-fd.y,fd.x);float al=dot(px,fd),cr=dot(px,cd);
+  float dep=clamp((iu.y-edge)*10.,0.,1.);
+  vec2 wp=vec2(al*.016+t*.5*ws,cr*.055);
+  float h=fbm(wp)*.65+fbm(wp*2.3+vec2(t*.37*ws,3.1))*.35;
+  float hx=fbm(wp+vec2(.06,0.))*.65+fbm((wp+vec2(.06,0.))*2.3+vec2(t*.37*ws,3.1))*.35;
+  float hy=fbm(wp+vec2(0.,.06))*.65+fbm((wp+vec2(0.,.06))*2.3+vec2(t*.37*ws,3.1))*.35;
+  vec2 nr=vec2(hx-h,hy-h)*15.;
+  vec2 ru=vec2(iu.x+nr.x*.007,hz-.012-(iu.y-edge)*1.8+nr.y*.012);
+  vec3 refl=texture2D(img,ru).rgb;
+  vec3 w=mix(vec3(.1,.22,.25),refl,.62+.26*(1.-dep));w*=.88+h*.3;
+  float spec=pow(clamp(1.-length(nr-vec2(-.3,-.45))*1.5,0.,1.),7.);w+=spec*.7*vec3(1.,.97,.88);
+  float st=smoothstep(.6,.92,noise(vec2(al*.012+t*.8*ws,cr*.22)));w+=st*.09;
+  float bank=1.-smoothstep(0.,.014,iu.y-edge);w=mix(w,vec3(.16,.22,.14),bank*.75);
+  w+=(hash(px*.71+fract(t*11.)*57.)-.5)*.1;
+  gl_FragColor=vec4(mix(texture2D(img,iu).rgb,w,rv),1.);return;}
+ float m=smoothstep(hz-.005,hz+.06,iu.y);
+ float road=smoothstep(-.01,.02,iu.y-(1.03-(iu.x-.42)*.32));m*=1.-road*step(.42,iu.x);
+ float d=clamp((iu.y-hz)/(1.-hz),0.,1.);
+ float g=gust(sp.x);
+ float rip=sin(sp.x*.021+sp.y*.047-t*3.1)*.55+sin(sp.x*.067-t*4.3+sp.y*.019)*.45;
+ float jit=sin(sp.x*.31+sp.y*.11+t*5.7)*.5;
+ vec2 dp=vec2((g*2.4+.25*ws)*(.5+d*2.6)*(1.+rip*.7)+jit*d*ws*.8,-g*d*1.6)*m;
+ vec3 c=texture2D(img,(sp-dp-off)/(isz*sc)).rgb;
+ float sk=smoothstep(.05,.16,c.b-c.r)*smoothstep(.42,.66,c.b)*(1.-smoothstep(hz-.15,hz-.05,iu.y));
+ c+=m*g*(.55+.45*rip)*vec3(.11,.12,.04);
+ float sh=sin(sp.x*.0026-t*.11+sin(sp.y*.005+t*.04)*1.6)*sin(sp.x*.0013+sp.y*.0035-t*.07+1.3);
+ c*=1.-m*smoothstep(.2,.85,sh)*.2;
+ vec2 cp=iu*vec2(4.,8.)+vec2(-t*.016,t*.002);
+ float n=fbm(cp)*.75+fbm(cp*2.7+vec2(-t*.03,0.))*.25;
+ float cl=smoothstep(.5,.8,n)*(.35+.65*smoothstep(.02,.4,iu.y));
+ c=mix(c,mix(vec3(.82,.86,.92),vec3(1.),smoothstep(.5,.9,n)),cl*.62*sk);
+ vec2 q=sp-met.xy;float al=dot(q,-mdir),pe=abs(q.x*mdir.y-q.y*mdir.x);
+ float tl=step(0.,al)*pow(1.-smoothstep(0.,met.z,al),1.5)*exp(-pe*pe*4.);
+ float hd=exp(-dot(q,q)*.45);
+ c+=vec3(1.,.98,.94)*(tl*.75+hd*.7)*met.w*sk;
+ c+=(hash(px*.73+fract(t*13.)*91.)-.5)*.09;
+ gl_FragColor=vec4(c,1.);}`;
+function initGL(){
+ try{gl=bg.getContext('webgl',{antialias:false,premultipliedAlpha:false})}catch(e){gl=null}
+ if(!gl)return false;
+ const sh=(type,src)=>{const o=gl.createShader(type);gl.shaderSource(o,src);gl.compileShader(o);if(!gl.getShaderParameter(o,gl.COMPILE_STATUS))throw gl.getShaderInfoLog(o);return o};
+ try{prog=gl.createProgram();gl.attachShader(prog,sh(gl.VERTEX_SHADER,VS));gl.attachShader(prog,sh(gl.FRAGMENT_SHADER,FS));gl.linkProgram(prog);gl.useProgram(prog)}catch(e){gl=null;return false}
+ const b=gl.createBuffer();gl.bindBuffer(gl.ARRAY_BUFFER,b);gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([-1,-1,1,-1,-1,1,1,1]),gl.STATIC_DRAW);
+ const loc=gl.getAttribLocation(prog,'p');gl.enableVertexAttribArray(loc);gl.vertexAttribPointer(loc,2,gl.FLOAT,false,0,0);
+ for(const k of['img','res','isz','off','sc','t','hz','ws','wy','met','mdir'])U[k]=gl.getUniformLocation(prog,k);
+ tex=gl.createTexture();gl.bindTexture(gl.TEXTURE_2D,tex);
+ for(const[k,v]of[[gl.TEXTURE_MIN_FILTER,gl.LINEAR],[gl.TEXTURE_MAG_FILTER,gl.LINEAR],[gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE],[gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE]])gl.texParameteri(gl.TEXTURE_2D,k,v);
+ gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,1,1,0,gl.RGB,gl.UNSIGNED_BYTE,new Uint8Array([110,160,215]));
+ const up=()=>{gl.bindTexture(gl.TEXTURE_2D,tex);gl.texImage2D(gl.TEXTURE_2D,0,gl.RGB,gl.RGB,gl.UNSIGNED_BYTE,IMG)};
+ IMG.complete&&IMG.naturalWidth?up():IMG.addEventListener('load',up);
+ return true;
+}
+function drawBG(t){
+ if(gl){gl.viewport(0,0,bg.width,bg.height);gl.uniform2f(U.res,W,H);gl.uniform2f(U.isz,BG.w,BG.h);gl.uniform2f(U.off,fit.ox,fit.oy);gl.uniform1f(U.sc,fit.s);gl.uniform1f(U.t,t);gl.uniform1f(U.hz,BG.hz);gl.uniform1f(U.ws,WS);gl.uniform1f(U.wy,1e5);gl.uniform4f(U.met,MET.x,MET.y,MET.len,MET.a);gl.uniform2f(U.mdir,MET.dx,MET.dy);gl.drawArrays(gl.TRIANGLE_STRIP,0,4)}
+ else if(bx&&IMG.complete){bx.drawImage(IMG,fit.ox,fit.oy,BG.w*fit.s,BG.h*fit.s)}
+}
+
+/* ── 手前の草：写真の土手の色に合わせて、いちばん手前だけ描く ── */
+const GR={dark:"#3a5119",mid:"#587628",light:"#7b9638",lit:"#d6e28e"};
+const BANDS=4,TONES=[GR.dark,GR.mid,GR.light];let bandCol=[];
+function buildColors(){bandCol=[];for(let b=0;b<BANDS;b++){const f=.85+b*.06;bandCol.push(TONES.map(c=>[shade(c,f),mix(shade(c,f),GR.lit,.45)]))}}
+function onGrass(x,y){const ix=(x-fit.ox)/(BG.w*fit.s),iy=(y-fit.oy)/(BG.h*fit.s);return!(ix>.42&&iy>1.03-(ix-.42)*.32-.02)}
+function buildBlades(){
+ blades=[];const n=Math.min(700,Math.round(W*.45));
+ const A=ip([.4*BG.w,1.0*BG.h]),B=ip([1.0*BG.w,.838*BG.h]);
+ for(let i=0;i<n;i++){const u=R(),d=R(),band=Math.min(BANDS-1,Math.floor(d*BANDS));
+  let x=A[0]+(B[0]-A[0])*u+rr(-14,6),y=A[1]+(B[1]-A[1])*u+rr(-10,4);
+  if(R()<.28){x=rr(-20,A[0]);y=H-rr(0,H*.04)}
+  if(y>H+20||x<-30||x>W+30)continue;
+  blades.push({x,y,h:H*(.025+d*d*.08)*rr(.4,1.3),w:(.22+d*.6)*rr(.6,1.2),band,tone:Math.floor(R()*3),ph:R()*7,fl:rr(.7,1.3)})}
+ blades.sort((a,b)=>a.band-b.band);
+ motes=Array.from({length:RM?14:Math.round(clamp(W/22,24,64))},()=>newMote(true));
+}
+function newMote(any){return{x:any?R()*W:-20,y:rr(HZ*.5,H*.95),s:rr(.35,1),ph:R()*7,v:rr(.5,1.2),leaf:R()<.4,rot:R()*7,vr:rr(-4,4)}}
+function spawnStreak(){streaks.push({x:rr(-200,W*.6),y:rr(H*.08,H*.85),len:rr(120,340),v:rr(420,700),age:0,life:rr(1.1,2),amp:rr(4,14),f:rr(.008,.016),ph:R()*7,w:rr(.3,.55)})}
+
+function draw(t,dt){
+ drawBG(t);
+ fx.clearRect(0,0,W,H);
+ const w0=(.1+.06*Math.sin(t*.21))*WS,paths=new Array(BANDS*6);
+ for(let i=0;i<paths.length;i++)paths[i]=new Path2D();
+ for(const b of blades){const g=gust(b.x,t),bend=(Math.sin(t*1.4+b.ph)*.07*WS+w0+g*.9)*b.h*b.fl*.9;
+  const p=paths[b.band*6+b.tone*2+(g>.32?1:0)],tx=b.x+bend,ty=b.y-b.h+Math.abs(bend)*.3,cx=b.x+bend*.3,cy=b.y-b.h*.55;p.moveTo(b.x-b.w,b.y);p.quadraticCurveTo(cx-b.w*.45,cy,tx,ty);p.quadraticCurveTo(cx+b.w*.45,cy,b.x+b.w,b.y);p.closePath()}
+ nx.clearRect(0,0,W,H);
+ for(let band=0;band<BANDS;band++){for(let k=0;k<6;k++){nx.fillStyle=bandCol[band][k>>1][k&1];nx.fill(paths[band*6+k])}}
+ if(!RM&&R()<dt*(.05+gust(W*.5,t)*.35))spawnStreak();
+ for(let i=streaks.length-1;i>=0;i--){const s=streaks[i];s.age+=dt;s.x+=s.v*dt;
+  if(s.age>s.life){streaks.splice(i,1);continue}
+  const a=Math.sin(s.age/s.life*Math.PI)*.24,g=fx.createLinearGradient(s.x-s.len,0,s.x,0);
+  g.addColorStop(0,'rgba(255,255,255,0)');g.addColorStop(.7,'rgba(255,255,255,'+a+')');g.addColorStop(1,'rgba(255,255,255,0)');
+  fx.strokeStyle=g;fx.lineWidth=s.w;fx.beginPath();
+  for(let j=0;j<=16;j++){const xx=s.x-s.len+s.len*j/16,yy=s.y+Math.sin(xx*s.f+s.ph+t*2)*s.amp*(j/16);j?fx.lineTo(xx,yy):fx.moveTo(xx,yy)}fx.stroke()}
+ for(let i=0;i<motes.length;i++){const m=motes[i],g=gust(m.x,t);
+  m.x+=(20+g*240)*m.v*dt*WS;m.y+=(Math.sin(t*1.3+m.ph)*14-g*10)*dt;m.rot+=m.vr*dt*(1+g*3);
+  if(m.x>W+20||m.y<-20)motes[i]=newMote(false);
+  if(m.leaf){fx.save();fx.translate(m.x,m.y);fx.rotate(m.rot);fx.scale(1,Math.abs(Math.sin(m.rot*1.7))+.15);fx.fillStyle='rgba(84,112,40,.8)';fx.beginPath();fx.ellipse(0,0,m.s*3,m.s*.7,0,0,7);fx.fill();fx.restore()}
+  else{const r=m.s*1.3,gg=fx.createRadialGradient(m.x,m.y,0,m.x,m.y,r*2.4);gg.addColorStop(0,'rgba(255,255,244,.9)');gg.addColorStop(.4,'rgba(255,255,244,.35)');gg.addColorStop(1,'rgba(255,255,244,0)');fx.fillStyle=gg;fx.fillRect(m.x-r*2.4,m.y-r*2.4,r*4.8,r*4.8)}}
+}
+
+/* ── 電線に巻きつく蔓：伸びて、葉をつけて、また消える ── */
+const vc=document.getElementById('vine'),vx=vc.getContext('2d');
+const VPATHS=[[[935,482],[1100,497],[1300,442]],[[935,507],[1110,512],[1300,465]],[[935,525],[1120,529],[1290,500]],[[1335,447],[1395,450],[1445,451]],[[1335,490],[1390,494],[1445,497]],[[912,602],[916,535],[921,468]],[[1316,602],[1318,515],[1321,428]],[[120,604],[124,520],[128,442]]];
+const vines=[];
+function qpt(P,u){const[a,m,c]=P.map(ip),b=[2*m[0]-(a[0]+c[0])/2,2*m[1]-(a[1]+c[1])/2],k=1-u;return[k*k*a[0]+2*k*u*b[0]+u*u*c[0],k*k*a[1]+2*k*u*b[1]+u*u*c[1]]}
+function newVine(){const used=new Set(vines.map(v=>v.pi));let pi;do{pi=Math.floor(R()*VPATHS.length)}while(used.has(pi)&&used.size<VPATHS.length);
+ return{pi,rev:pi<5&&R()<.5,grow:rr(20,34),hold:rr(6,12),fade:rr(4,6),age:0,ph:R()*7,tw:rr(.14,.22),leaves:Array.from({length:40},(_,i)=>({u:(i+R()*.6)/40,side:R()<.5?-1:1,sz:rr(.7,1.3),r:R()*7}))}}
+function drawVines(t,dt){
+ vx.clearRect(0,0,W,H);if(!VPATHS.length)return;
+ while(vines.length<3)vines.push(newVine());
+ const s=Math.max(.7,fit.s*1.1);
+ for(let i=vines.length-1;i>=0;i--){const v=vines[i];v.age+=RM?0:dt;
+  const g=clamp(v.age/v.grow,0,1),fa=v.age>v.grow+v.hold?1-clamp((v.age-v.grow-v.hold)/v.fade,0,1):1;
+  if(v.age>v.grow+v.hold+v.fade){vines.splice(i,1);continue}
+  const P=VPATHS[v.pi],N=90,pts=[];
+  for(let j=0;j<=N*g;j++){const u=j/N,uu=v.rev?1-u:u,p=qpt(P,uu),p2=qpt(P,Math.min(1,uu+.01));let nx=-(p2[1]-p[1]),ny=p2[0]-p[0];const l=Math.hypot(nx,ny)||1;pts.push([p[0],p[1],nx/l,ny/l])}
+  if(pts.length<2)continue;
+  const wg=gust(pts[pts.length-1][0],t);
+  for(const strand of[0,1]){vx.beginPath();
+   pts.forEach((p,j)=>{const o=Math.sin(j*v.tw*6+v.ph+strand*Math.PI)*1.7*s*(1-strand*.35);const x=p[0]+p[2]*o,y=p[1]+p[3]*o;j?vx.lineTo(x,y):vx.moveTo(x,y)});
+   vx.strokeStyle=strand?'rgba(58,84,34,'+(.55*fa)+')':'rgba(40,62,26,'+(.85*fa)+')';vx.lineWidth=(strand?.45:.7)*s;vx.lineCap='round';vx.stroke()}
+  const tip=pts[pts.length-1];
+  if(g<1){vx.beginPath();for(let a=0;a<5.5;a+=.25){const r=(5.5-a)*.6*s;vx.lineTo(tip[0]+Math.cos(a*2+v.ph)*r,tip[1]+Math.sin(a*2+v.ph)*r-2*s)}vx.strokeStyle='rgba(60,92,36,'+(.7*fa)+')';vx.lineWidth=.45*s;vx.stroke()}
+  for(const L of v.leaves){if(L.u>g)continue;const j=Math.floor(L.u/g*(pts.length-1)),p=pts[j];if(!p)continue;
+   const grown=clamp((g-L.u)*8,0,1),sz=2*s*L.sz*grown,ang=L.r;
+   vx.save();vx.translate(p[0]+p[2]*L.side*3*s,p[1]+p[3]*L.side*3*s);vx.rotate(ang);
+   vx.fillStyle=L.side>0?'rgba(74,112,42,'+(.9*fa)+')':'rgba(52,86,32,'+(.9*fa)+')';vx.beginPath();vx.ellipse(sz*.6,0,sz,sz*.55,0,0,7);vx.fill();vx.restore()}
+ }
+}
+
+/* ── note の言葉：タイトルが風に乗って流れていく ── */
+const NOTES=[["わたしの百答 2","https://note.com/sorayamaguchi10/n/n850cb323107c"],["倉渕にて、鹿山編エンドロール。","https://note.com/sorayamaguchi10/n/n1b3ffb1a139c"],["喧騒（2022）","https://note.com/sorayamaguchi10/n/nb48ae5b2677c"],["わたしの百答 1","https://note.com/sorayamaguchi10/n/n3fa69b975c45"],["平生の大空","https://note.com/sorayamaguchi10/n/n02a56f7cd3ca"],["憶録日誌","https://note.com/sorayamaguchi10/n/nd3dd542ceb97"],["線は至れ、輝きを増すと信じて。","https://note.com/sorayamaguchi10/n/n999ae929f4d9"],["幸福のマトリクス","https://note.com/sorayamaguchi10/n/nb5f4615f4493"],["地福。風より根のように。","https://note.com/sorayamaguchi10/n/n389de16e7d1b"],["犠今憧日","https://note.com/sorayamaguchi10/n/n56d8d3916fd1"],["憶録","https://note.com/sorayamaguchi10/n/n329f8a8e2a1c"],["葬式のplaylist─ 記憶の鍵としての音楽","https://note.com/sorayamaguchi10/n/n2ac3750dcb78"]];
+const words=[];let wRecent=[];
+function spawnWord(){
+ const shown=new Set(words.map(w=>w.i));let pool=NOTES.map((_,i)=>i).filter(i=>!shown.has(i)&&!wRecent.includes(i));if(!pool.length)pool=NOTES.map((_,i)=>i).filter(i=>!shown.has(i));
+ const i=pool[Math.floor(R()*pool.length)];
+ const a=document.createElement('a');a.className='word';a.href=NOTES[i][1];a.target='_blank';a.rel='noopener';a.setAttribute('aria-label','note：'+NOTES[i][0]);
+ const spans=[...NOTES[i][0]].map(ch=>{const sp=document.createElement('span');sp.textContent=ch===' '?' ':ch;a.appendChild(sp);return sp});
+ a.style.visibility='hidden';field.appendChild(a);const w=a.offsetWidth;
+ const x=-w-rr(20,60),y=freeY(w,36,x);if(y==null){a.remove();return false}
+ a.style.visibility='';wRecent.push(i);if(wRecent.length>4)wRecent.shift();
+ const o={el:a,spans,i,w,x:RM?rr(W*.1,W*.6):x,y,age:0,ph:R()*7,sway:0};
+ a.addEventListener('pointerenter',()=>streamHold=true);a.addEventListener('pointerleave',()=>streamHold=false);
+ a.addEventListener('focus',()=>streamHold=true);a.addEventListener('blur',()=>streamHold=false);
+ words.push(o);return true;
+}
+let wordWait=rr(2,5);
+function stepWords(dt,t){
+ const v=RM?0:windV*(streamHold?.04:1);
+ wordWait-=dt;if(wordWait<=0&&words.length<2){wordWait=spawnWord()?rr(4,12):.5}
+ for(let k=words.length-1;k>=0;k--){const o=words[k];o.age+=dt;o.x+=v*dt;
+  const g=gust(o.x+o.w*.5,t);o.sway+=(g-o.sway)*Math.min(1,dt*2.4);
+  if(RM?o.age>14:o.x>W+20){o.el.remove();words.splice(k,1);continue}
+  o.el.style.transform=`translate3d(${o.x.toFixed(1)}px,${o.y.toFixed(1)}px,0)`;o.el.style.opacity=RM?'.9':'.95';
+  o.spans.forEach((sp,j)=>{const lag=Math.sin(t*2.1-j*.42+o.ph),dy=lag*(2+o.sway*7)*WS,dx=Math.sin(t*1.3-j*.3+o.ph)*o.sway*6*WS,r=Math.sin(t*2.8-j*.5+o.ph)*(1.5+o.sway*10)*WS;sp.style.transform=`translate(${dx.toFixed(1)}px,${dy.toFixed(1)}px) rotate(${r.toFixed(1)}deg)`});
+ }
+}
+
+/* ── 作品：いつ、どこに浮かぶかは決めない ── */
+function mediaFor(it,big){
+ const m=document.createElement(it.kind==='film'?'video':'img');
+ if(it.kind==='film'){m.muted=true;m.loop=true;m.playsInline=true;m.autoplay=true;m.setAttribute('muted','');if(big){m.controls=true;m.muted=false}}
+ else{m.alt=it.title||'';m.decoding='async'}
+ m.src=it.src;return m;
+}
+const live=[];let pending=[],recent=[],clock=0,spawned=0;
+function pick(){
+ const shown=new Set(live.map(w=>w.idx)),all=WORKS.map((_,i)=>i);
+ let pool=all.filter(i=>!shown.has(i)&&!recent.includes(i));if(!pool.length)pool=all.filter(i=>!shown.has(i));if(!pool.length)return -1;
+ const i=pool[Math.floor(R()*pool.length)];recent.push(i);if(recent.length>Math.min(2,WORKS.length-SLOTS))recent.shift();return i;
+}
+function place(w,h,xmax){
+ let best=null,bd=-Infinity;const mob=W<600;
+ for(let k=0;k<70;k++){
+  const x=rr(W*.02,Math.max(W*.05,(xmax||W*.7)-w*.5)),y=rr(H*(mob?.1:.08),Math.max(H*.1,H*(mob?.72:.76)-h)),cx=x+w/2,cy=y+h/2;
+  let d=1e9;for(const o of live){if(o.state==='out'||!o.cx)continue;const ox=Math.max(0,Math.min(x+w,o.x+o.w)-Math.max(x,o.x)),oy=Math.max(0,Math.min(y+h,o.y+o.h)-Math.max(y,o.y));d=Math.min(d,Math.hypot(cx-o.cx,cy-o.cy)-(o.w+w)*.5-(ox*oy)/12)}
+  if(cx<Math.min(380,W*.6)&&cy>H-(mob?260:220))d-=400;
+  d+=R()*40;if(d>bd){bd=d;best={x,y,cx,cy}}
+ }
+ return best;
+}
+/* 破れ・切れ：辺ごとに細かいギザギザ、ときどき大きく欠ける */
+function torn(w,h){const pts=[],j=()=>rr(0,2.4);
+ const tearSide=Math.floor(R()*5),tearAt=rr(.2,.8),tearW=rr(.08,.2),tearD=rr(6,16);
+ const edge=(n,f,side)=>{for(let i=0;i<=n;i++){const u=i/n;let d=j();if(side===tearSide&&Math.abs(u-tearAt)<tearW/2)d+=tearD*(1-Math.abs(u-tearAt)/(tearW/2))*rr(.6,1);pts.push(f(u,d))}};
+ const nx=Math.max(8,Math.round(w/9)),ny=Math.max(8,Math.round(h/9));
+ const cut=R()<.35?rr(6,14):0;
+ edge(nx,(u,d)=>[u*w,d+(u<.08?cut*(1-u/.08):0)],0);
+ edge(ny,(u,d)=>[w-d,u*h],1);
+ edge(nx,(u,d)=>[w-u*w,h-d],2);
+ edge(ny,(u,d)=>[d,h-u*h],3);
+ return 'polygon('+pts.map(p=>p[0].toFixed(1)+'px '+p[1].toFixed(1)+'px').join(',')+')'}
+/* 風はひとつ：写真も言葉も、同じ風に同じ速さで運ばれるので追い越さず、重ならない */
+let streamHold=false,windV=0;
+function streamSpeed(t){const g=gust(W*.5,t),intro=Math.max(0,1-clock/6)*240;const target=(16+g*150)*WS+intro;windV+=(target-windV)*.04;return streamHold?windV*.04:windV}
+function rects(){const r=[];for(const o of live)r.push([o.x,o.y-14,o.w,o.h+28]);for(const o of words)r.push([o.x,o.y-10,o.w,46]);return r}
+function freeY(w,h,x){const top=H*.05,bot=WY-h;if(bot<=top)return null;const rs=rects().filter(r=>r[0]<x+w+40&&r[0]+r[2]>x-40);
+ for(let k=0;k<40;k++){const y=rr(top,bot);if(rs.every(r=>y+h<r[1]||y>r[1]+r[3]))return y}return null}
+function spawn(){
+ if(live.length>=SLOTS)return false;
+ const idx=pick();if(idx<0)return false;const it=WORKS[idx],k=rr(.75,1.2),base=clamp(Math.min(W,H)*.24,90,230)*k;
+ const w=it.ar>=1?base*Math.min(it.ar,1.3):base*Math.max(it.ar,.62),h=w/it.ar;
+ let x=-w-rr(20,60),y=freeY(w,h,x);
+ if(y==null){const leftMost=Math.min(0,...live.map(o=>o.x),...words.map(o=>o.x));x=Math.min(x,leftMost-w-rr(30,90));y=freeY(w,h,x)}
+ if(y==null){recent.pop();return false}
+ const el=document.createElement('div');el.className='work';el.tabIndex=0;el.setAttribute('role','button');
+ el.setAttribute('aria-label',(it.title||'作品')+'を見る');el.style.width=w+'px';el.style.height=h+'px';
+ const m=mediaFor(it,false);m.classList.add('m');
+ const clip=document.createElement('div');clip.className='clip';clip.style.clipPath=torn(w,h);
+ const gr=document.createElement('span');gr.className='gr';gr.style.backgroundPosition=`${Math.round(R()*160)}px ${Math.round(R()*160)}px`;
+ clip.append(m,gr);
+ const cap=document.createElement('div');cap.className='c';cap.textContent=it.title||'';
+ if(it.year){const yr=document.createElement('i');yr.textContent=it.year;cap.appendChild(yr)}
+ el.append(clip,cap);field.appendChild(el);
+ const o={el,idx,it,w,h,x:RM?rr(W*.05,W*.8-w):x,y,cx:0,cy:0,ph:R()*7,sway:0,age:0,tilt:rr(-1.6,1.6).toFixed(2)};
+ el.addEventListener('pointerenter',()=>streamHold=true);el.addEventListener('pointerleave',()=>streamHold=false);
+ el.addEventListener('focus',()=>streamHold=true);el.addEventListener('blur',()=>streamHold=false);
+ el.addEventListener('click',()=>openWork(o));
+ el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openWork(o)}});
+ live.push(o);return true;
+}
+let spawnWait=0;
+function stepWorks(dt,t){
+ const v=RM?0:streamSpeed(t);
+ spawnWait-=dt;if(spawnWait<=0&&live.length<SLOTS){spawnWait=spawn()?rr(.6,2.2):.4}
+ for(let i=live.length-1;i>=0;i--){
+  const o=live[i];o.age+=dt;o.x+=v*dt;o.cx=o.x+o.w/2;o.cy=o.y+o.h/2;
+  if(o.x>W+40){o.el.remove();live.splice(i,1);continue}
+  const g=gust(o.cx,t);o.sway+=(g-o.sway)*Math.min(1,dt*2.4);
+    o.el.style.transform=`translate3d(${o.x.toFixed(1)}px,${o.y.toFixed(1)}px,0) rotate(${o.tilt}deg)`;
+  if(RM)o.el.style.opacity=Math.min(1,o.age/2).toFixed(2);
+ }
+}
+
+/* ── ひらく ── */
+const view=document.getElementById('view'),vMedia=document.getElementById('vMedia'),vCap=document.getElementById('vCap'),aboutView=document.getElementById('aboutView');
+let lastFocus=null;
+function show(ov){lastFocus=document.activeElement;ov.classList.add('on');ov.querySelector('.close').focus()}
+function hide(){[view,aboutView].forEach(v=>v.classList.remove('on'));setTimeout(()=>{if(!view.classList.contains('on'))vMedia.innerHTML=''},900);if(lastFocus&&lastFocus.isConnected)lastFocus.focus()}
+function openWork(o){
+ const it=o.it;vMedia.innerHTML='';const m=mediaFor(it,true);m.classList.add('big');vMedia.appendChild(m);
+ vCap.innerHTML='';const b=document.createElement('b');b.textContent=it.title||'';vCap.appendChild(b);
+ if(it.year){const i=document.createElement('i');i.textContent=it.year;vCap.appendChild(i)}
+ if(it.note){const p=document.createElement('p');p.textContent=it.note;vCap.appendChild(p)}
+ show(view);
+}
+document.getElementById('aboutBtn').addEventListener('click',()=>show(aboutView));
+[view,aboutView].forEach(v=>v.addEventListener('click',e=>{if(e.target===v||e.target.hasAttribute('data-close'))hide()}));
+addEventListener('keydown',e=>{if(e.key==='Escape')hide()});
+
+/* ── 起動 ── */
+function resize(){
+ DPR=Math.min(devicePixelRatio||1,1.6);W=innerWidth;H=innerHeight;
+ bg.width=W*DPR;bg.height=H*DPR;for(const c of[fg,near,vc]){c.width=W*DPR;c.height=H*DPR;c.getContext('2d').setTransform(DPR,0,0,DPR,0,0)}
+ if(!gl&&bx)bx.setTransform(DPR,0,0,DPR,0,0);
+ layout();buildColors();buildBlades();
+ for(const o of live){o.y=clamp(o.y,H*.05,Math.max(H*.05,WY-o.h))}
+}
+if(!initGL()){bx=bg.getContext('2d')}
+resize();
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,150)});
+let last=performance.now();
+function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;clock+=dt;stepMeteor(dt);draw(clock,dt);drawVines(clock,dt);stepWorks(dt,clock);stepWords(dt,clock);requestAnimationFrame(frame)}
+document.addEventListener('visibilitychange',()=>{last=performance.now()});
+requestAnimationFrame(frame);
+}
+</script>
+</body>
+</html>
