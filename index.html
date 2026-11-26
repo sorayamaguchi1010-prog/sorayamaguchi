@@ -37,7 +37,7 @@ canvas.layer{position:fixed;inset:0;width:100%;height:100%;display:block}
 .work .m{display:block;width:100%;height:100%;object-fit:cover;filter:contrast(1.06) saturate(.88) sepia(.1) brightness(.98)}
 .work .pm{position:absolute;left:50%;top:50%;width:34px;height:34px;margin:-17px 0 0 -17px;border-radius:50%;background:rgba(255,253,246,.78) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M3.6 2.6v4.8L7.6 5z' fill='%231d2a20'/%3E%3C/svg%3E") center/60% no-repeat;opacity:.85;pointer-events:none}
 .work .gr{position:absolute;inset:0;pointer-events:none;opacity:.5;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.1' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"),radial-gradient(120% 120% at 50% 45%,transparent 55%,rgba(60,40,20,.35))}
-.work .c{position:absolute;left:0;top:100%;margin-top:10px;font-size:12px;line-height:1.5;letter-spacing:.04em;white-space:nowrap;opacity:0;transform:translateY(-4px);transition:opacity .8s,transform .8s;text-shadow:0 1px 10px rgba(0,20,10,.6)}
+.work .c{position:absolute;left:0;top:100%;margin-top:10px;font-size:12px;line-height:1.7;letter-spacing:.04em;white-space:pre;opacity:0;transform:translateY(-4px);transition:opacity .8s,transform .8s;text-shadow:0 1px 10px rgba(0,20,10,.6)}
 .work .c i{font:italic 300 13px "Cormorant Garamond",serif;color:var(--soft);margin-left:.6em}
 .work:hover .c,.work:focus-visible .c{opacity:.95;transform:none}
 .work:focus-visible .clip{outline:1px solid var(--ink);outline-offset:3px}
@@ -59,7 +59,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .over figure{margin:0;max-width:min(1100px,100%);display:grid;gap:18px;justify-items:start}
 .over .big{display:block;max-width:100%;max-height:74vh;width:auto;height:auto;box-shadow:0 40px 90px -30px rgba(0,0,0,.7)}
 .over figcaption{display:flex;flex-wrap:wrap;gap:.4em 1.4em;align-items:baseline}
-.over figcaption b{font-weight:400;font-size:17px}
+.over figcaption b{font-weight:400;font-size:17px;white-space:pre-line;line-height:2}
 .over figcaption i{font:italic 300 16px "Cormorant Garamond",serif;color:rgba(251,247,238,.75)}
 .over figcaption p{flex-basis:100%;margin:0;white-space:pre-line;line-height:2;color:rgba(251,247,238,.75);font-size:14px;max-width:34em}
 .close{position:absolute;top:max(3vh,12px);right:max(4vw,12px);font:italic 300 18px "Cormorant Garamond",serif;color:rgba(251,247,238,.75);background:none;border:0;min-height:44px;padding:10px 14px;cursor:pointer}
@@ -127,35 +127,37 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
    kind: "photo"（jpg/png/webp） または "film"（mp4/webm、無音ループ）
    ar: 縦横比（幅÷高さ）。title・year・note は空でもよい。 */
 const WORKS = [
- {src:"works/summer-01.webp", kind:"photo", ar:1.5005, title:"no. 01", year:"", note:""},
- {src:"works/summer-02.webp", kind:"photo", ar:0.6667, title:"no. 02", year:"", note:""},
- {src:"works/summer-03.webp", kind:"photo", ar:0.6667, title:"no. 03", year:"", note:"車窓から濁流のように流れる景色に生きる\nひとびとの営みを想う"},
- {src:"works/summer-04.webp", kind:"photo", ar:1.7778, title:"no. 04", year:"", note:""},
- {src:"works/photo-05.webp", kind:"photo", ar:1.0, title:"no. 05", year:"", note:""},
- {src:"works/photo-06.webp", kind:"photo", ar:0.7996, title:"no. 06", year:"", note:""},
- {src:"works/photo-07.webp", kind:"photo", ar:1.5005, title:"no. 07", year:"", note:""},
- {src:"works/photo-08.webp", kind:"photo", ar:1.5005, title:"no. 08", year:"", note:""},
- {src:"works/photo-09.webp", kind:"photo", ar:1.5005, title:"no. 09", year:"", note:""},
- {src:"works/photo-10.webp", kind:"photo", ar:0.6667, title:"no. 10", year:"", note:""},
- {src:"works/photo-11.webp", kind:"photo", ar:1.5005, title:"no. 11", year:"", note:""},
- {src:"works/photo-12.webp", kind:"photo", ar:0.6677, title:"no. 12", year:"", note:""},
+ {src:"works/summer-01.webp", kind:"photo", ar:1.5005, title:"", year:"", note:""},
+ {src:"works/summer-02.webp", kind:"photo", ar:0.6667, title:"", year:"", note:""},
+ {src:"works/summer-03.webp", kind:"photo", ar:0.6667, title:"車窓から濁流のように流れる景色に生きる
+ひとびとの営みを想う", year:"", note:""},
+ {src:"works/summer-04.webp", kind:"photo", ar:1.7778, title:"", year:"", note:""},
+ {src:"works/photo-05.webp", kind:"photo", ar:1.0, title:"", year:"", note:""},
+ {src:"works/photo-06.webp", kind:"photo", ar:0.7996, title:"", year:"", note:""},
+ {src:"works/photo-07.webp", kind:"photo", ar:1.5005, title:"", year:"", note:""},
+ {src:"works/photo-08.webp", kind:"photo", ar:1.5005, title:"", year:"", note:""},
+ {src:"works/photo-09.webp", kind:"photo", ar:1.5005, title:"", year:"", note:""},
+ {src:"works/photo-10.webp", kind:"photo", ar:0.6667, title:"", year:"", note:""},
+ {src:"works/photo-11.webp", kind:"photo", ar:1.5005, title:"", year:"", note:""},
+ {src:"works/photo-12.webp", kind:"photo", ar:0.6677, title:"", year:"", note:""},
  {src:"works/poem-01.webp", kind:"photo", ar:0.5624, title:"憶録乃詩　300円の旅", year:"", note:""},
  {src:"works/poem-02.webp", kind:"photo", ar:0.5624, title:"憶録乃詩　サルビア", year:"", note:""},
  {src:"works/poem-03.webp", kind:"photo", ar:0.5624, title:"憶録乃詩　喧騒", year:"", note:""},
  {src:"works/poem-04.webp", kind:"photo", ar:0.5624, title:"憶録乃詩　師走の世界", year:"", note:""},
- {src:"works/photo-13.webp", kind:"photo", ar:0.7996, title:"no. 13", year:"", note:"安堵と暗度"},
- {src:"works/photo-14.webp", kind:"photo", ar:0.838, title:"no. 14", year:"", note:""},
- {src:"works/photo-15.webp", kind:"photo", ar:1.5005, title:"no. 15", year:"", note:""},
- {src:"works/photo-16.webp", kind:"photo", ar:0.6667, title:"no. 16", year:"", note:""},
- {src:"works/photo-17.webp", kind:"photo", ar:1.5, title:"no. 17", year:"", note:""},
- {src:"works/photo-18.webp", kind:"photo", ar:1.494, title:"no. 18", year:"", note:""},
- {src:"works/photo-19.webp", kind:"photo", ar:1.7792, title:"no. 19", year:"", note:""},
- {src:"works/photo-20.webp", kind:"photo", ar:0.8027, title:"no. 20", year:"", note:""},
- {src:"works/photo-21.webp", kind:"photo", ar:1.7792, title:"no. 21", year:"", note:""},
- {src:"works/photo-22.webp", kind:"photo", ar:0.6667, title:"no. 22", year:"", note:""},
- {src:"works/photo-23.webp", kind:"photo", ar:0.6667, title:"no. 23", year:"", note:""},
- {src:"works/photo-24.webp", kind:"photo", ar:0.5628, title:"no. 24", year:"", note:""},
- {src:"works/photo-25.webp", kind:"photo", ar:1.0, title:"no. 25", year:"", note:""},
+ {src:"works/photo-13.webp", kind:"photo", ar:0.7996, title:"安堵と暗度", year:"", note:""},
+ {src:"works/photo-14.webp", kind:"photo", ar:0.838, title:"", year:"", note:""},
+ {src:"works/photo-15.webp", kind:"photo", ar:1.5005, title:"調布の商店街の時間感覚が
+手提のバッグで持ち帰れれば良いのに", year:"", note:""},
+ {src:"works/photo-16.webp", kind:"photo", ar:0.6667, title:"", year:"", note:""},
+ {src:"works/photo-17.webp", kind:"photo", ar:1.5, title:"", year:"", note:""},
+ {src:"works/photo-18.webp", kind:"photo", ar:1.494, title:"", year:"", note:""},
+ {src:"works/photo-19.webp", kind:"photo", ar:1.7792, title:"", year:"", note:""},
+ {src:"works/photo-20.webp", kind:"photo", ar:0.8027, title:"", year:"", note:""},
+ {src:"works/photo-21.webp", kind:"photo", ar:1.7792, title:"", year:"", note:""},
+ {src:"works/photo-22.webp", kind:"photo", ar:0.6667, title:"", year:"", note:""},
+ {src:"works/photo-23.webp", kind:"photo", ar:0.6667, title:"", year:"", note:""},
+ {src:"works/photo-24.webp", kind:"photo", ar:0.5628, title:"", year:"", note:""},
+ {src:"works/photo-25.webp", kind:"photo", ar:1.0, title:"", year:"", note:""},
  {src:"about/about-01.webp", kind:"photo", ar:1, title:"山口大空と申します。", year:"", note:""},
  {src:"about/about-02.webp", kind:"photo", ar:1, title:"ルーツの転用", year:"", note:""},
  {yt:"WuP3cIKGlSI", kind:"film", ar:1.7778, title:"鹿山音楽 / それぞれ  SOUMATOUドキュメンタリー（2024）", year:"", note:""},
