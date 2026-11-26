@@ -45,9 +45,9 @@ canvas.layer{position:fixed;inset:0;width:100%;height:100%;display:block}
 .word{position:absolute;left:0;top:0;pointer-events:auto;white-space:nowrap;font:18px/1.4 "Zen Old Mincho",serif;letter-spacing:.22em;color:var(--ink);text-decoration:none;text-shadow:0 1px 12px rgba(0,30,20,.55),0 0 2px rgba(0,30,20,.3);will-change:transform,opacity;padding:8px 4px}
 .word span{display:inline-block;will-change:transform}
 .word:hover,.word:focus-visible{outline:none;text-decoration:underline;text-decoration-thickness:.5px;text-underline-offset:6px}
-.name{position:fixed;z-index:6;left:max(5vw,20px);bottom:max(5vh,22px);text-shadow:0 2px 18px rgba(0,20,10,.4)}
-.name h1{margin:0;line-height:0}.name h1 img{display:block;width:clamp(170px,20vw,280px);height:auto;filter:drop-shadow(0 2px 14px rgba(0,20,10,.45))}
-.name .role{margin:2px 0 0 4px;font-size:13px;letter-spacing:.32em;color:var(--soft)}
+.name{position:fixed;z-index:6;left:max(3vw,16px);top:max(3vh,14px);text-align:left;text-shadow:0 2px 14px rgba(0,20,10,.45)}
+.name h1{margin:0;line-height:0}.name h1 img{display:block;width:clamp(96px,9vw,140px);height:auto;filter:drop-shadow(0 2px 14px rgba(0,20,10,.45))}
+.name .role{margin:0 0 0 2px;font-size:11px;letter-spacing:.3em;color:var(--soft)}
 .name .line{margin:2px 0 0;font-size:13px;color:var(--faint)}
 nav{position:fixed;z-index:6;right:max(5vw,20px);bottom:max(5vh,22px);display:flex;flex-wrap:wrap;justify-content:flex-end;gap:0 2px;align-items:center;max-width:70vw}
 nav button,nav a{font:italic 300 17px "Cormorant Garamond",serif;color:var(--soft);background:none;border:0;padding:10px 12px;min-height:44px;cursor:pointer;text-decoration:none;transition:color .4s;text-shadow:0 1px 12px rgba(0,20,10,.45)}
@@ -64,7 +64,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .over figcaption p{flex-basis:100%;margin:0;color:rgba(251,247,238,.75);font-size:14px;max-width:34em}
 .close{position:absolute;top:max(3vh,12px);right:max(4vw,12px);font:italic 300 18px "Cormorant Garamond",serif;color:rgba(251,247,238,.75);background:none;border:0;min-height:44px;padding:10px 14px;cursor:pointer}
 .close:hover,.close:focus-visible{color:#fff}
-.about{width:min(640px,100%);max-height:86vh;overflow-y:auto;scrollbar-width:thin;padding-right:6px}.about .prof{display:block;width:100%;height:auto;margin:0 0 18px}
+.about{max-width:30em;max-height:86vh;overflow-y:auto}
 .about h2{margin:0 0 6px;font:italic 300 clamp(30px,4vw,44px)/1.05 "Cormorant Garamond",serif}
 .about .ja{margin:0 0 26px;font-size:13px;letter-spacing:.3em;color:rgba(251,247,238,.75)}
 .about p{margin:0 0 1.2em;color:rgba(251,247,238,.8)}
@@ -73,7 +73,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .about dd{margin:0;overflow-wrap:anywhere}
 .about a{color:#fff;text-underline-offset:4px;text-decoration-thickness:.5px}
 
-@media(max-width:600px){.name{bottom:72px}nav{left:0;right:0;bottom:max(1.5vh,8px);justify-content:center;gap:0}nav{max-width:none}nav button,nav a{padding:10px 6px;font-size:15px}}
+@media(max-width:600px){nav{left:0;right:0;bottom:max(1.5vh,8px);justify-content:center;gap:0}nav{max-width:none}nav button,nav a{padding:10px 6px;font-size:15px}}
 @media(prefers-reduced-motion:reduce){.grain{animation:none}}
 </style>
 </head>
@@ -105,8 +105,10 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 <div class="over" id="aboutView" role="dialog" aria-modal="true" aria-label="about">
  <button class="close" type="button" data-close>close</button>
  <div class="about">
-  <img class="prof" src="about/about-01.webp" alt="山口大空と申します。2001年10月10日、草津町の湯畑にある旅館に生を授かりました。" width="1400" height="1400" loading="lazy">
-  <img class="prof" src="about/about-02.webp" alt="再度怪我をした17歳の6月。…現在は、総合のテーマとして「ルーツの転用」を表現しています。" width="1400" height="1400" loading="lazy">
+  <h2>sora yamaguchi</h2>
+  <p class="ja">山口 大空 ／ 憶録家</p>
+  <p>群馬県草津町に生まれる。写真と映像を、記録ではなく記憶として残している。</p>
+  <p>ここに並ぶものはない。風が吹いたときに、どれかがふっと浮かぶだけ。同じ順番は二度と来ない。</p>
   <dl>
    <dt>studio</dt><dd><a href="https://www.01production01.com/">01 PRODUCTION</a></dd>
    <dt>instagram</dt><dd><a href="https://www.instagram.com/sora___yamaguchi/">@sora___yamaguchi</a></dd>
@@ -145,6 +147,17 @@ const WORKS = [
  {src:"works/photo-14.webp", kind:"photo", ar:0.838, title:"no. 14", year:"", note:""},
  {src:"works/photo-15.webp", kind:"photo", ar:1.5005, title:"no. 15", year:"", note:""},
  {src:"works/photo-16.webp", kind:"photo", ar:0.6667, title:"no. 16", year:"", note:""},
+ {src:"works/photo-17.webp", kind:"photo", ar:1.5, title:"no. 17", year:"", note:""},
+ {src:"works/photo-18.webp", kind:"photo", ar:1.494, title:"no. 18", year:"", note:""},
+ {src:"works/photo-19.webp", kind:"photo", ar:1.7792, title:"no. 19", year:"", note:""},
+ {src:"works/photo-20.webp", kind:"photo", ar:0.8027, title:"no. 20", year:"", note:""},
+ {src:"works/photo-21.webp", kind:"photo", ar:1.7792, title:"no. 21", year:"", note:""},
+ {src:"works/photo-22.webp", kind:"photo", ar:0.6667, title:"no. 22", year:"", note:""},
+ {src:"works/photo-23.webp", kind:"photo", ar:0.6667, title:"no. 23", year:"", note:""},
+ {src:"works/photo-24.webp", kind:"photo", ar:0.5628, title:"no. 24", year:"", note:""},
+ {src:"works/photo-25.webp", kind:"photo", ar:1.0, title:"no. 25", year:"", note:""},
+ {src:"about/about-01.webp", kind:"photo", ar:1, title:"山口大空と申します。", year:"", note:""},
+ {src:"about/about-02.webp", kind:"photo", ar:1, title:"ルーツの転用", year:"", note:""},
  {yt:"WuP3cIKGlSI", kind:"film", ar:1.7778, title:"鹿山音楽 / それぞれ  SOUMATOUドキュメンタリー（2024）", year:"", note:""},
  {yt:"YIpzKj1wRmo", kind:"film", ar:1.7778, title:"#8 追憶の垢", year:"", note:""},
  {yt:"FSOyK0i98KI", kind:"film", ar:1.7778, title:"繰り返す天秤座「22歳」", year:"", note:""},
@@ -362,7 +375,7 @@ function stepWords(dt,t){
 function mediaFor(it,big){
  if(it.yt){
   if(big){const f=document.createElement('iframe');f.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(it.yt)+'?autoplay=1&rel=0&playsinline=1';f.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';f.allowFullscreen=true;f.title=it.title||'video';f.style.cssText='width:min(1100px,88vw);aspect-ratio:16/9;height:auto;border:0;display:block';return f}
-  const m=document.createElement('img');m.alt=it.title||'';m.decoding='async';m.src='https://i.ytimg.com/vi/'+encodeURIComponent(it.yt)+'/hqdefault.jpg';return m}
+  const m=document.createElement('img');m.alt=it.title||'';m.decoding='async';m.src='https://i.ytimg.com/vi/'+encodeURIComponent(it.yt)+'/hqdefault.jpg';m.onerror=()=>{m.style.visibility='hidden';if(m.parentNode)m.parentNode.style.background='#1d2620'};return m}
  const m=document.createElement(it.kind==='film'?'video':'img');
  if(it.kind==='film'){m.muted=true;m.loop=true;m.playsInline=true;m.autoplay=true;m.setAttribute('muted','');if(big){m.controls=true;m.muted=false}}
  else{m.alt=it.title||'';m.decoding='async'}
@@ -399,7 +412,7 @@ function torn(w,h){const pts=[],j=()=>rr(0,2.4);
 let streamHold=false,windV=0;
 function streamSpeed(t,dt){const g=gust(W*.5,t);const target=(13+g*45+MB*140)*WS;windV+=(target-windV)*Math.min(1,dt*(MB>.05?2.2:.6));return windV}
 function rects(){const r=[];for(const o of live)r.push([o.x,o.y-14,o.w,o.h+28]);for(const o of words)r.push([o.x,o.y-10,o.w,46]);return r}
-function freeY(w,h,x){const top=H*.05,bot=WY-h;if(bot<=top)return null;const rs=rects().filter(r=>r[0]<x+w+40&&r[0]+r[2]>x-40);
+function freeY(w,h,x){const top=Math.max(H*.05,(document.querySelector('.name')?.getBoundingClientRect().bottom||0)+18),bot=WY-h;if(bot<=top)return null;const rs=rects().filter(r=>r[0]<x+w+40&&r[0]+r[2]>x-40);
  for(let k=0;k<40;k++){const y=rr(top,bot);if(rs.every(r=>y+h<r[1]||y>r[1]+r[3]))return y}return null}
 function spawn(){
  if(live.length>=SLOTS)return false;
