@@ -78,7 +78,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 </head>
 <body>
 <canvas id="bg" class="layer" aria-hidden="true"></canvas>
-<canvas id="vine" class="layer" aria-hidden="true"></canvas>
+<canvas id="vine" class="layer" aria-hidden="true" hidden></canvas>
 <div id="field" aria-label="浮かんでいる作品"></div>
 <canvas id="near" class="layer" aria-hidden="true"></canvas>
 <canvas id="fg" class="layer" aria-hidden="true"></canvas>
@@ -143,7 +143,7 @@ const WORKS = [
  {src:"works/photo-15.webp", kind:"photo", ar:1.5005, title:"no. 15", year:"", note:""}
 ];
 /* 同時に浮かぶ数。作品が少ないうちは、入れ替わりが起きるよう一つ少なく浮かべる */
-const SLOTS = Math.max(1, Math.min(5, WORKS.length - 1));
+const SLOTS = Math.max(1, Math.min(5, WORKS.length - 1)), MAXON = 6;
 
 const RM = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const bg = document.getElementById('bg'), fg = document.getElementById('fg');
@@ -330,12 +330,12 @@ function spawnWord(){
 let wordWait=rr(2,5);
 function stepWords(dt,t){
  const v=RM?0:windV*(streamHold?.04:1);
- wordWait-=dt;if(wordWait<=0&&words.length<2){wordWait=spawnWord()?rr(4,12):.5}
+ wordWait-=dt;if(wordWait<=0&&words.length<2&&live.length+words.length<MAXON){wordWait=spawnWord()?rr(6,14):.8}
  for(let k=words.length-1;k>=0;k--){const o=words[k];o.age+=dt;o.x+=v*dt;
   const g=gust(o.x+o.w*.5,t);o.sway+=(g-o.sway)*Math.min(1,dt*2.4);
   if(RM?o.age>14:o.x>W+20){o.el.remove();words.splice(k,1);continue}
-  o.el.style.transform=`translate3d(${o.x.toFixed(1)}px,${o.y.toFixed(1)}px,0)`;o.el.style.opacity=RM?'.9':'.95';
-  o.spans.forEach((sp,j)=>{const lag=Math.sin(t*2.1-j*.42+o.ph),dy=lag*(2+o.sway*7)*WS,dx=Math.sin(t*1.3-j*.3+o.ph)*o.sway*6*WS,r=Math.sin(t*2.8-j*.5+o.ph)*(1.5+o.sway*10)*WS;sp.style.transform=`translate(${dx.toFixed(1)}px,${dy.toFixed(1)}px) rotate(${r.toFixed(1)}deg)`});
+  const fy=Math.sin(o.age*.4+o.ph)*5*WS;o.el.style.transform=`translate3d(${o.x.toFixed(2)}px,${(o.y+fy).toFixed(2)}px,0)`;o.el.style.opacity=(Math.min(1,o.age/1.8)*.95).toFixed(3);
+  o.spans.forEach((sp,j)=>{const lag=Math.sin(t*1.1-j*.38+o.ph),dy=lag*(2+o.sway*3)*WS,dx=0,r=Math.sin(t*.9-j*.4+o.ph)*(1+o.sway*3)*WS;sp.style.transform=`translate(${dx.toFixed(1)}px,${dy.toFixed(1)}px) rotate(${r.toFixed(1)}deg)`});
  }
 }
 
@@ -375,7 +375,7 @@ function torn(w,h){const pts=[],j=()=>rr(0,2.4);
  return 'polygon('+pts.map(p=>p[0].toFixed(1)+'px '+p[1].toFixed(1)+'px').join(',')+')'}
 /* 風はひとつ：写真も言葉も、同じ風に同じ速さで運ばれるので追い越さず、重ならない */
 let streamHold=false,windV=0;
-function streamSpeed(t){const g=gust(W*.5,t),intro=Math.max(0,1-clock/6)*240;const target=(16+g*150)*WS+intro;windV+=(target-windV)*.04;return streamHold?windV*.04:windV}
+function streamSpeed(t,dt){const g=gust(W*.5,t);const target=(13+g*45)*WS;windV+=(target-windV)*Math.min(1,dt*.6);return streamHold?windV*.05:windV}
 function rects(){const r=[];for(const o of live)r.push([o.x,o.y-14,o.w,o.h+28]);for(const o of words)r.push([o.x,o.y-10,o.w,46]);return r}
 function freeY(w,h,x){const top=H*.05,bot=WY-h;if(bot<=top)return null;const rs=rects().filter(r=>r[0]<x+w+40&&r[0]+r[2]>x-40);
  for(let k=0;k<40;k++){const y=rr(top,bot);if(rs.every(r=>y+h<r[1]||y>r[1]+r[3]))return y}return null}
@@ -403,15 +403,17 @@ function spawn(){
  live.push(o);return true;
 }
 let spawnWait=0;
+function prePlace(){if(RM)return;const n=Math.min(SLOTS,4);for(let k=0;k<n;k++){if(!spawn())continue;const o=live[live.length-1];const x=W*(.08+.84*(k+.5)/n)-o.w/2;const y=freeY(o.w,o.h,x);if(y==null){o.el.remove();live.pop();continue}o.x=x;o.y=y;o.pre=true}}
 function stepWorks(dt,t){
- const v=RM?0:streamSpeed(t);
- spawnWait-=dt;if(spawnWait<=0&&live.length<SLOTS){spawnWait=spawn()?rr(.6,2.2):.4}
+ const v=RM?0:streamSpeed(t,dt);
+ spawnWait-=dt;if(spawnWait<=0&&live.length<SLOTS&&live.length+words.length<MAXON){spawnWait=spawn()?rr(2,6):.6}
  for(let i=live.length-1;i>=0;i--){
   const o=live[i];o.age+=dt;o.x+=v*dt;o.cx=o.x+o.w/2;o.cy=o.y+o.h/2;
   if(o.x>W+40){o.el.remove();live.splice(i,1);continue}
   const g=gust(o.cx,t);o.sway+=(g-o.sway)*Math.min(1,dt*2.4);
-    o.el.style.transform=`translate3d(${o.x.toFixed(1)}px,${o.y.toFixed(1)}px,0) rotate(${o.tilt}deg)`;
-  if(RM)o.el.style.opacity=Math.min(1,o.age/2).toFixed(2);
+    const fy=RM?0:Math.sin(o.age*.42+o.ph)*6+Math.sin(o.age*.19+o.ph*1.7)*3,fr=RM?0:Math.sin(o.age*.27+o.ph)*1.1;
+  o.el.style.transform=`translate3d(${o.x.toFixed(2)}px,${(o.y+fy).toFixed(2)}px,0) rotate(${(+o.tilt+fr).toFixed(3)}deg)`;
+  const fi=Math.min(1,o.age/1.8);o.el.style.opacity=(RM?fi:(o.pre?fi:1)).toFixed(3);
  }
 }
 
@@ -442,8 +444,9 @@ function resize(){
 if(!initGL()){bx=bg.getContext('2d')}
 resize();
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,150)});
+prePlace();
 let last=performance.now();
-function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;clock+=dt;stepMeteor(dt);draw(clock,dt);drawVines(clock,dt);stepWorks(dt,clock);stepWords(dt,clock);requestAnimationFrame(frame)}
+function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;clock+=dt;draw(clock,dt);stepWorks(dt,clock);stepWords(dt,clock);requestAnimationFrame(frame)}
 document.addEventListener('visibilitychange',()=>{last=performance.now()});
 requestAnimationFrame(frame);
 }
