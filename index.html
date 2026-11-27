@@ -205,11 +205,11 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 @keyframes rmIn{from{transform:translate(-50%,-50%) scale(calc(var(--rs,1)*1.12));filter:blur(6px) brightness(.5)}}
 .rm-wall{position:absolute;left:-60%;right:-60%;top:-80%;height:146%;background:radial-gradient(60% 70% at 22% 40%,rgba(255,214,150,.30),transparent 70%),linear-gradient(rgba(0,0,0,.35),transparent 30%,rgba(0,0,0,.25)),url(tex/wood-back.webp) 0 0/360px auto}
 .rm-wall::after{content:"";position:absolute;left:0;right:0;bottom:0;height:18px;background:linear-gradient(#3a2618,#22150c);box-shadow:0 6px 12px rgba(0,0,0,.5)}
-.rm-floor{position:absolute;left:-120%;right:-120%;top:66%;height:160%;background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.1) 40%,rgba(0,0,0,.4)),url(tex/wood-board.webp) 0 0/auto 90px;transform:perspective(900px) rotateX(62deg);transform-origin:50% 0}
+.rm-floor{position:absolute;z-index:0;left:-120%;right:-120%;top:66%;height:160%;background:linear-gradient(rgba(0,0,0,.6),rgba(0,0,0,.15) 12%,rgba(0,0,0,.05) 30%,rgba(0,0,0,.45)),repeating-linear-gradient(rgba(0,0,0,.35) 0 2px,transparent 2px 46px,rgba(0,0,0,.35) 46px 48px,transparent 48px 104px,rgba(0,0,0,.3) 104px 106px,transparent 106px 180px),url(tex/wood-board.webp) 0 0/auto 60px}
 .rm-window{position:absolute;left:12%;top:12%;width:22%;height:34%;background:url(field.webp) 40% 55%/cover;box-shadow:0 0 0 14px #3a2416,0 0 0 16px #1e130b,0 30px 60px rgba(0,0,0,.5),0 0 120px 40px rgba(255,220,160,.18)}
 .rm-window span{position:absolute;inset:0;background:linear-gradient(90deg,transparent 49%,#3a2416 49% 51%,transparent 51%),linear-gradient(transparent 49%,#3a2416 49% 51%,transparent 51%),linear-gradient(120deg,rgba(255,255,255,.18),transparent 40%)}
 .rm-sign{position:absolute;left:41%;top:10%;margin:0;font:italic 300 54px/1 "Cormorant Garamond",serif;letter-spacing:.06em;color:#e9d9bb;text-shadow:0 2px 0 rgba(0,0,0,.5),0 0 20px rgba(255,210,150,.25);opacity:.9}
-.rm-item{position:absolute;padding:0;border:0;background:none;cursor:pointer;transition:transform .7s cubic-bezier(.3,.7,.2,1),filter .7s;-webkit-tap-highlight-color:transparent}
+.rm-item{position:absolute;z-index:3;padding:0;border:0;background:none;cursor:pointer;transition:transform .7s cubic-bezier(.3,.7,.2,1),filter .7s;-webkit-tap-highlight-color:transparent}
 .rm-item img{display:block;width:100%;height:auto;filter:saturate(.85) brightness(.82) drop-shadow(0 18px 14px rgba(0,0,0,.55));-webkit-user-drag:none}
 .rm-item:hover,.rm-item:focus-visible{transform:translateY(-6px) scale(1.03);outline:none}
 .rm-item:hover img,.rm-item:focus-visible img{filter:saturate(.95) brightness(1) drop-shadow(0 22px 16px rgba(0,0,0,.6))}
@@ -964,10 +964,10 @@ function fitRoom(){const pt=innerHeight>innerWidth*1.15;rmScene.classList.toggle
 function placeRoom(pt,SW,SH){const FL=SH*(pt?.56:.68),P=FL/(pt?2.2:1.95),H0=FL-1.5*P,D0=4;
  const at=(el,xf,z,mw,ar,lift=0)=>{const f=D0/(D0-z),ppm=P*f,yb=H0+(FL-H0)*f-lift*ppm,w=mw*ppm;Object.assign(el.style,{left:(SW*xf-w/2).toFixed(1)+'px',top:(yb-w*ar).toFixed(1)+'px',width:w.toFixed(1)+'px',height:'auto'});return{yb,ppm,w}};
  const g=id=>document.getElementById(id);
- at(g('rmCase'),pt?.78:.83,.02,.9,700/344);
+ at(g('rmCase'),pt?.78:.83,.35,.9,700/344);
  const d=at(g('rmDesk'),pt?.36:.52,.7,1.2,492/720);
- at(g('rmProj'),pt?.45:.57,.62,.4,457/560,.66);
- at(g('rmBox'),pt?.22:.17,pt?1.25:.9,.55,401/600);
+ at(g('rmProj'),pt?.16:.12,pt?1.25:.9,.4,457/560);
+ at(g('rmBox'),pt?.4:.24,pt?1.25:.9,.55,401/600);
  const win=document.querySelector('.rm-window'),ww=1.1*P,wh=1.0*P;Object.assign(win.style,{left:(SW*(pt?.3:.24)-ww/2).toFixed(1)+'px',top:(FL-1.88*P).toFixed(1)+'px',width:ww.toFixed(1)+'px',height:wh.toFixed(1)+'px'});
  const pins=g('rmPins'),cw=.054*P*1.5,wall=g('rmWall');pins.style.setProperty('--cw',cw.toFixed(1)+'px');pins.style.setProperty('--cg',(cw*.22).toFixed(1)+'px');pins.style.setProperty('--cols',pt?4:6);
  Object.assign(wall.style,{left:(SW*(pt?.74:.53)-(pt?4:6)*cw*1.22/2).toFixed(1)+'px',top:(FL-(pt?1.95:1.75)*P).toFixed(1)+'px'});
