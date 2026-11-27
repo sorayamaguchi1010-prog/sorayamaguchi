@@ -107,7 +107,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .book::before,.book::after{content:"";position:absolute;left:4px;right:4px;height:1px;background:var(--line,rgba(230,200,140,.55))}
 .book::before{top:7px}.book::after{bottom:8px}
 .book .gr2{position:absolute;inset:0;pointer-events:none;opacity:.35;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
-.book .t{position:relative;display:block;margin:0 auto;max-height:calc(100% - 26px);overflow:hidden}
+.book .t{position:relative;display:block;margin:0 auto;overflow:hidden;line-break:strict;word-break:normal}.book .tcy{text-combine-upright:all;-webkit-text-combine:horizontal;letter-spacing:0;font-size:.92em}
 .book .k{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);writing-mode:horizontal-tb;font:italic 300 10px "Cormorant Garamond",serif;letter-spacing:.05em;opacity:.7}
 .book.ph{padding:0;background:#222 var(--img) center/cover}
 .book.ph .t{display:none}
@@ -117,7 +117,26 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .swipe-hint{position:fixed;z-index:6;left:50%;bottom:calc(env(safe-area-inset-bottom) + 58px);transform:translateX(-50%);margin:0;font-size:11px;letter-spacing:.2em;color:var(--faint);text-shadow:0 1px 10px rgba(0,20,10,.5);opacity:0;transition:opacity 2s;pointer-events:none;white-space:nowrap}
 .swipe-hint.on{opacity:1}
 @media(min-width:601px){.swipe-hint{display:none}}
-@media(prefers-reduced-motion:reduce){.shelf{transition:none}}
+@media(prefers-reduced-motion:reduce){.shelf,.pinboard{transition:none}}
+#board{position:absolute;left:0;top:0;z-index:2;padding:0;border:0;background:none;cursor:pointer;transform-origin:50% 100%;filter:drop-shadow(0 6px 8px rgba(10,25,10,.35)) saturate(.85);transition:transform .8s cubic-bezier(.3,.7,.2,1);-webkit-tap-highlight-color:transparent}
+#board svg{display:block;width:100%;height:auto}
+#board .hut-label{position:absolute;left:50%;bottom:100%;transform:translate(-50%,6px);white-space:nowrap;font-size:12px;letter-spacing:.2em;color:var(--ink);text-shadow:0 1px 10px rgba(0,20,10,.6);opacity:0;transition:opacity .8s,transform .8s}
+#board:hover,#board:focus-visible{transform:scale(1.05);outline:none}
+#board:hover .hut-label,#board:focus-visible .hut-label{opacity:1;transform:translate(-50%,-4px)}
+@media(hover:none){#board .hut-label{opacity:.85}}
+.pinboard{position:fixed;inset:0;z-index:15;color:#efe6d6;background:#1b130d url(tex/wood-back.webp) center/420px auto repeat;display:flex;flex-direction:column;padding:calc(env(safe-area-inset-top) + 18px) max(4vw,16px) calc(env(safe-area-inset-bottom) + 14px);transform:translateY(102%);transition:transform 1.2s cubic-bezier(.65,0,.25,1)}
+.pinboard.on{transform:none}
+.pinboard::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(110% 80% at 50% 10%,rgba(255,200,130,.16),transparent 55%),linear-gradient(rgba(0,0,0,.3),transparent 20%,transparent 80%,rgba(0,0,0,.45))}
+.pinboard>*{position:relative}
+.pb-body{flex:1;overflow-y:auto;padding:18px 0 10px;scrollbar-width:thin}
+.pb-board{column-width:210px;column-gap:26px;padding:34px 30px 40px;background:#5e4029 url(tex/wood-board.webp) center/auto 64px repeat;border:16px solid transparent;border-image:url(tex/wood-side.webp) 0 30 repeat;box-shadow:inset 0 0 40px rgba(0,0,0,.6),0 20px 40px -12px rgba(0,0,0,.7)}
+.pin{display:block;break-inside:avoid;margin:0 0 30px;padding:8px 8px 10px;background:#f1ebdd;border:0;width:100%;cursor:pointer;position:relative;transform:rotate(var(--r,0deg));box-shadow:0 10px 16px -6px rgba(0,0,0,.55),0 1px 0 rgba(255,255,255,.6) inset;transition:transform .6s cubic-bezier(.3,.7,.2,1),box-shadow .6s;color:#3a3128;text-align:left}
+.pin img{display:block;width:100%;height:auto;filter:contrast(1.04) saturate(.9) sepia(.08)}
+.pin .cap{display:block;margin-top:7px;font:12px/1.7 "Zen Old Mincho",serif;white-space:pre-line;min-height:4px}
+.pin::before{content:"";position:absolute;top:-6px;left:50%;width:14px;height:14px;margin-left:-7px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#ff8a7a,#b52d1e 60%,#6e140c);box-shadow:0 4px 5px rgba(0,0,0,.5);z-index:2}
+.pin:hover,.pin:focus-visible{transform:rotate(0deg) translateY(-4px) scale(1.02);box-shadow:0 18px 24px -8px rgba(0,0,0,.6);outline:none}
+@media(max-width:600px){.pb-board{column-width:140px;column-gap:16px;padding:26px 16px 30px;border-width:10px}}
+
 #hut{position:absolute;left:0;top:0;z-index:2;padding:0;border:0;background:none;cursor:pointer;transform-origin:50% 100%;filter:drop-shadow(0 6px 8px rgba(10,25,10,.35)) saturate(.85) contrast(1.02);transition:transform .8s cubic-bezier(.3,.7,.2,1);-webkit-tap-highlight-color:transparent}
 #hut svg{display:block;width:100%;height:auto}
 #hut .wglow{opacity:.45;transition:opacity 1s}
@@ -154,35 +173,61 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 <canvas id="vine" class="layer" aria-hidden="true" hidden></canvas>
 <div id="field" aria-label="浮かんでいる作品"></div>
 <button type="button" id="hut" aria-label="古屋に入る（憶録の本棚）">
-<svg viewBox="0 0 220 170" aria-hidden="true">
+<svg viewBox="0 0 240 180" aria-hidden="true">
  <defs>
-  <filter id="age" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="1.4" numOctaves="2" seed="4" result="n"/><feColorMatrix in="n" type="saturate" values="0" result="g"/><feComponentTransfer in="g" result="g2"><feFuncA type="table" tableValues="0 .5"/></feComponentTransfer><feComposite in="g2" in2="SourceGraphic" operator="in" result="m"/><feBlend in="SourceGraphic" in2="m" mode="multiply"/></filter>
-  <linearGradient id="wall" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#6e4b31"/><stop offset="1" stop-color="#4a3020"/></linearGradient>
-  <linearGradient id="roof" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#4b4440"/><stop offset="1" stop-color="#2b2522"/></linearGradient>
+  <filter id="age" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves="2" seed="4" result="n"/><feColorMatrix in="n" type="saturate" values="0" result="g"/><feComponentTransfer in="g" result="g2"><feFuncA type="table" tableValues="0 .5"/></feComponentTransfer><feComposite in="g2" in2="SourceGraphic" operator="in" result="m"/><feBlend in="SourceGraphic" in2="m" mode="multiply"/></filter>
+  <linearGradient id="hfront" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5a3c28"/><stop offset="1" stop-color="#3a2618"/></linearGradient>
+  <linearGradient id="hside" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#80583a"/><stop offset="1" stop-color="#6a4730"/></linearGradient>
+  <linearGradient id="hroof" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#5b534d"/><stop offset="1" stop-color="#2f2925"/></linearGradient>
   <radialGradient id="lamp"><stop offset="0" stop-color="#ffe2a0"/><stop offset=".6" stop-color="#ffb65c"/><stop offset="1" stop-color="#c97a2c"/></radialGradient>
   <radialGradient id="glow"><stop offset="0" stop-color="#ffcf7a" stop-opacity=".55"/><stop offset="1" stop-color="#ffcf7a" stop-opacity="0"/></radialGradient>
  </defs>
- <ellipse cx="112" cy="160" rx="96" ry="9" fill="#1d2a12" opacity=".45"/>
+ <ellipse cx="128" cy="164" rx="108" ry="12" fill="#1d2a12" opacity=".42"/>
  <g filter="url(#age)">
-  <rect x="36" y="78" width="150" height="80" fill="url(#wall)"/>
-  <g stroke="#2e1d12" stroke-width="1.1" opacity=".7"><path d="M48 80v78M60 80v78M72 80v78M84 80v78M96 80v78M108 80v78M120 80v78M132 80v78M144 80v78M156 80v78M168 80v78M180 80v78"/></g>
-  <rect x="36" y="78" width="150" height="7" fill="#2f1f15"/>
-  <rect x="36" y="150" width="150" height="8" fill="#3a2a1e"/>
-  <polygon points="14,84 111,24 208,84 196,90 111,38 26,90" fill="url(#roof)"/>
-  <polygon points="26,90 111,38 196,90" fill="#3a332f"/>
-  <g stroke="#1c1815" stroke-width="1.2" opacity=".75"><path d="M40 80L111 36M54 84L111 46M70 88L111 56M182 80L111 36M168 84L111 46M152 88L111 56M111 38v52"/></g>
-  <path d="M14 84L111 24L208 84" fill="none" stroke="#5a524c" stroke-width="3" stroke-linecap="round"/>
-  <rect x="150" y="34" width="10" height="26" fill="#2c2623"/><rect x="148" y="31" width="14" height="5" fill="#3d3632"/>
-  <rect x="58" y="98" width="36" height="60" fill="#d8c9a6"/>
-  <g stroke="#5a3d27" stroke-width="2.2"><path d="M58 98h36v60H58zM76 98v60M58 113h36M58 128h36M58 143h36"/></g>
-  <rect class="win" x="122" y="100" width="46" height="30" fill="url(#lamp)"/>
-  <g stroke="#3a2618" stroke-width="2.4"><path d="M122 100h46v30h-46zM145 100v30M122 115h46"/></g>
-  <rect x="118" y="130" width="54" height="5" fill="#3a2a1e"/>
+  <polygon points="30,102 66,74 102,106 102,166 30,158" fill="url(#hfront)"/>
+  <g stroke="#24160d" stroke-width="1" opacity=".75"><path d="M42 93v66M54 84v76M66 76v86M78 86v77M90 96v68"/></g>
+  <polygon points="102,106 214,92 214,150 102,166" fill="url(#hside)"/>
+  <g stroke="#3a2416" stroke-width="1" opacity=".55"><path d="M116 104v60M130 102v60M144 100v59M158 98v58M172 97v57M186 95v57M200 93v57"/></g>
+  <polygon points="102,159 214,144 214,150 102,166" fill="#2e1f14"/>
+  <polygon points="58,66 172,52 222,90 104,108" fill="url(#hroof)"/>
+  <g stroke="#1e1916" stroke-width="1.1" opacity=".8"><path d="M72 64L118 104M88 62L134 102M104 60L150 100M120 58L166 98M136 56L182 96M152 54L198 94M166 53L212 91"/></g>
+  <polygon points="58,66 104,108 100,112 22,104 26,100" fill="#3b342f"/>
+  <path d="M24 103L64 69L104 109" fill="none" stroke="#6a625b" stroke-width="3" stroke-linecap="round"/>
+  <path d="M58 66L172 52" stroke="#7a716a" stroke-width="3" stroke-linecap="round"/>
+  <polygon points="150,40 160,39 161,62 151,63" fill="#2c2623"/><polygon points="148,37 163,36 163,41 148,42" fill="#3d3632"/>
+  <polygon points="48,118 82,121 82,163 48,160" fill="#d6c7a2"/>
+  <g stroke="#4a3220" stroke-width="2"><path d="M48 118L82 121L82 163L48 160ZM65 119.5v42M48 132l34 3M48 146l34 3"/></g>
+  <polygon class="win" points="132,112 176,107 176,133 132,138" fill="url(#lamp)"/>
+  <g stroke="#3a2618" stroke-width="2.2"><path d="M132 112L176 107L176 133L132 138ZM154 109.5v26M132 125l44 -5"/></g>
+  <polygon points="128,138 180,132 180,136 128,142" fill="#3a2a1e"/>
  </g>
- <circle class="wglow" cx="145" cy="115" r="46" fill="url(#glow)"/>
- <g stroke="#3f6a22" stroke-width="1.4" stroke-linecap="round" opacity=".9"><path d="M30 160l-3-14M36 160l2-12M44 160l-2-10M178 160l4-13M186 160l-1-11M194 160l3-9M98 160l-2-8M104 160l2-9"/></g>
+ <circle class="wglow" cx="154" cy="122" r="48" fill="url(#glow)"/>
+ <g stroke="#3f6a22" stroke-width="1.4" stroke-linecap="round" opacity=".9"><path d="M26 160l-3-13M34 161l2-11M42 162l-2-9M110 168l-2-10M118 167l2-9M206 152l4-12M214 151l-1-10M222 150l3-8"/></g>
 </svg>
 <span class="hut-label">憶録の本棚</span>
+</button>
+<button type="button" id="board" aria-label="掲示板（写真）">
+<svg viewBox="0 0 200 170" aria-hidden="true">
+ <defs><linearGradient id="bwood" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#7a5636"/><stop offset="1" stop-color="#5a3c25"/></linearGradient></defs>
+ <ellipse cx="100" cy="162" rx="78" ry="7" fill="#1d2a12" opacity=".4"/>
+ <g filter="url(#age)">
+  <rect x="30" y="40" width="9" height="122" fill="#4a3220"/><rect x="161" y="40" width="9" height="122" fill="#4a3220"/>
+  <polygon points="16,32 100,14 184,32 180,38 100,22 20,38" fill="#3b332e"/>
+  <rect x="20" y="38" width="160" height="92" fill="url(#bwood)"/>
+  <rect x="26" y="44" width="148" height="80" fill="#6b4a2f"/>
+  <g stroke="#3a2616" stroke-width="1" opacity=".55"><path d="M26 64h148M26 84h148M26 104h148"/></g>
+  <g><rect x="38" y="52" width="30" height="22" fill="#e9e2d2" transform="rotate(-4 53 63)"/><rect x="41" y="55" width="24" height="15" fill="#7fa3b8" transform="rotate(-4 53 63)"/>
+  <rect x="78" y="50" width="26" height="32" fill="#ece5d6" transform="rotate(3 91 66)"/><rect x="81" y="53" width="20" height="22" fill="#b89a62" transform="rotate(3 91 66)"/>
+  <rect x="116" y="54" width="44" height="28" fill="#e9e2d2" transform="rotate(-2 138 68)"/><rect x="119" y="57" width="38" height="20" fill="#5f7f52" transform="rotate(-2 138 68)"/>
+  <rect x="44" y="88" width="34" height="26" fill="#ece5d6" transform="rotate(5 61 101)"/><rect x="47" y="91" width="28" height="18" fill="#c98a5a" transform="rotate(5 61 101)"/>
+  <rect x="96" y="90" width="24" height="28" fill="#e9e2d2" transform="rotate(-6 108 104)"/><rect x="99" y="93" width="18" height="19" fill="#3e5a6e" transform="rotate(-6 108 104)"/>
+  <rect x="130" y="90" width="32" height="24" fill="#ece5d6" transform="rotate(2 146 102)"/><rect x="133" y="93" width="26" height="16" fill="#9bb07a" transform="rotate(2 146 102)"/></g>
+  <g fill="#b23a2a"><circle cx="53" cy="52" r="2.2"/><circle cx="91" cy="50" r="2.2"/><circle cx="138" cy="54" r="2.2"/><circle cx="61" cy="88" r="2.2"/><circle cx="108" cy="90" r="2.2"/><circle cx="146" cy="90" r="2.2"/></g>
+  <rect x="20" y="128" width="160" height="5" fill="#3a2a1e"/>
+ </g>
+ <g stroke="#3f6a22" stroke-width="1.4" stroke-linecap="round" opacity=".9"><path d="M28 162l-3-12M36 162l2-10M158 162l3-11M168 162l-2-9"/></g>
+</svg>
+<span class="hut-label">写真の掲示板</span>
 </button>
 <canvas id="near" class="layer" aria-hidden="true"></canvas>
 <canvas id="fg" class="layer" aria-hidden="true"></canvas>
@@ -196,6 +241,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 <nav>
  <button type="button" id="aboutBtn">about</button>
  <button type="button" id="shelfBtn">憶録</button>
+ <button type="button" id="pinBtn">写真</button>
  <a href="https://www.instagram.com/sora___yamaguchi/">instagram</a>
  <a href="https://www.instagram.com/okuroku.sora/">okuroku</a>
  <a href="https://note.com/sorayamaguchi10">note</a>
@@ -207,6 +253,10 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
  <header class="sh-head"><div><h2>憶録</h2><p>追憶を目的に記録する</p></div><button type="button" class="sh-close" id="shelfClose">草原へ戻る →</button></header>
  <div class="sh-body" id="shelfBody"></div>
  <p class="sh-hint">左へスワイプで草原へ</p>
+</section>
+<section class="pinboard" id="pinboard" aria-label="写真の掲示板" aria-hidden="true">
+ <header class="sh-head"><div><h2>写真</h2><p>掲示板に留めた、ただの写真</p></div><button type="button" class="sh-close" id="pinClose">草原へ戻る ↓</button></header>
+ <div class="pb-body"><div class="pb-board" id="pinBody"></div></div>
 </section>
 <p class="swipe-hint" id="swipeHint">→ 右へスワイプで、憶録の本棚</p>
 <div class="over" id="view" role="dialog" aria-modal="true" aria-label="作品">
@@ -608,13 +658,19 @@ const seeded=s=>()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Mat
 const shelf=document.getElementById('shelf'),shelfBody=document.getElementById('shelfBody');
 const CLOTH=[["#4f5b45","#efe6d0"],["#7a3b2e","#f2e2c9"],["#2f3e52","#e7e0cf"],["#c9b28a","#2b2219"],["#5d4a3a","#f0e4cc"],["#1f2a24","#d9cfb8"],["#8a6d3b","#f6ecd6"],["#e8dfcc","#3a2e22"],["#3d2f3f","#eadbc6"],["#6f7d6a","#f4ecdc"]];
 function bookEl(title,kind,onOpen,opt={}){
- const b=document.createElement('button');b.type='button';b.className='book';const r=seeded(title.length*31+title.charCodeAt(0)*7+(opt.seed||0));
+ const b=document.createElement('button');b.type='button';b.className='book';const r=seeded(title.length*31+(title.charCodeAt(0)||7)*7+(opt.seed||0));
  const c=CLOTH[Math.floor(r()*CLOTH.length)];b.style.setProperty('--bg',c[0]);b.style.setProperty('--fg',c[1]);
- const n=[...title].length,h=Math.round(160+r()*60),w=opt.img?Math.round(h*.56):Math.round(Math.max(36,Math.min(104,(n<=8?26+n*2:20+Math.ceil(n/9)*24)+r()*8)));
+ const m=title.match(/^#(\d+)\s*/),body=m?title.slice(m[0].length):title,n=[...body].length+(m?1:0);
+ const h=Math.round(170+r()*56),ADV=14.9,COL=17.2,cap=Math.max(4,Math.floor((h-58)/ADV));
+ const k=Math.max(1,Math.ceil(n/cap)),per=Math.ceil(n/k);
+ const w=opt.img?Math.round(h*.56):Math.round(Math.max(36,k*COL+20+r()*6));
  b.style.height=h+'px';b.style.width=w+'px';if(r()<.14)b.style.setProperty('--lean',(r()<.5?-1:1)*(3+r()*3)+'deg');
  if(opt.img){b.classList.add('ph');b.style.setProperty('--img',`url("${opt.img}")`)}
- const t=document.createElement('span');t.className='t';t.textContent=title;const k=document.createElement('span');k.className='k';k.textContent=kind;const g=document.createElement('span');g.className='gr2';
- b.append(t,g,k);b.setAttribute('aria-label',(title||kind)+'（'+kind+'）');b.addEventListener('click',onOpen);return b}
+ const t=document.createElement('span');t.className='t';t.style.height=(per*ADV+ADV*.45).toFixed(1)+'px';
+ if(m){const u=document.createElement('span');u.className='tcy';u.textContent='#'+m[1];t.appendChild(u)}
+ t.appendChild(document.createTextNode(body));
+ const kk=document.createElement('span');kk.className='k';kk.textContent=kind;const g=document.createElement('span');g.className='gr2';
+ b.append(t,g,kk);b.setAttribute('aria-label',(title||kind)+'（'+kind+'）');b.addEventListener('click',onOpen);return b}
 function row(name,items){const d=document.createElement('div');d.className='row';const h=document.createElement('h3');h.textContent=name;const bs=document.createElement('div');bs.className='books';items.forEach(x=>bs.appendChild(x));d.append(h,bs);shelfBody.appendChild(d)}
 function buildShelf(){
  shelfBody.innerHTML='';
@@ -627,7 +683,7 @@ function buildShelf(){
  row('リール　@okuroku.sora',reels.map((w,i)=>bookEl('','reel',()=>openWork({it:w}),{img:'/ig/'+encodeURIComponent(w.ig),seed:i})));
 }
 let shelfBuilt=false;
-function openShelf(){if(!shelfBuilt){buildShelf();shelfBuilt=true}shelf.classList.add('on');shelf.setAttribute('aria-hidden','false');document.getElementById('shelfClose').focus({preventScroll:true});hint.classList.remove('on')}
+function openShelf(){if(typeof closePins==='function')closePins();if(!shelfBuilt){buildShelf();shelfBuilt=true}shelf.classList.add('on');shelf.setAttribute('aria-hidden','false');document.getElementById('shelfClose').focus({preventScroll:true});hint.classList.remove('on')}
 function closeShelf(){shelf.classList.remove('on');shelf.setAttribute('aria-hidden','true')}
 document.getElementById('shelfBtn').addEventListener('click',openShelf);
 document.getElementById('shelfClose').addEventListener('click',closeShelf);
@@ -642,7 +698,7 @@ const hint=document.getElementById('swipeHint');setTimeout(()=>hint.classList.ad
 
 /* ── 古屋：土手の上に置く。クリックで本棚へ ── */
 const hut=document.getElementById('hut');
-function placeHut(){const mob=W<600,bx=mob?(fit.ox<0?(-fit.ox+W*.18)/fit.s:.12*BG.w):.11*BG.w,by=BG.h*(mob?.705:.72);const p=ip([bx,by]);const w=mob?Math.min(118,W*.3):clamp(W*.085,96,150);hut.style.width=w+'px';const h=w*170/220;hut.style.left=(p[0]-w/2).toFixed(1)+'px';hut.style.top=(p[1]-h).toFixed(1)+'px'}
+function placeHut(){const mob=W<600,bx=mob?(fit.ox<0?(-fit.ox+W*.18)/fit.s:.12*BG.w):.11*BG.w,by=BG.h*(mob?.705:.72);const p=ip([bx,by]);const w=mob?Math.min(124,W*.32):clamp(W*.095,104,164);hut.style.width=w+'px';const h=w*180/240;hut.style.left=(p[0]-w/2).toFixed(1)+'px';hut.style.top=(p[1]-h).toFixed(1)+'px'}
 hut.addEventListener('click',openShelf);
 
 /* ── 作品を3Dで手に取る：ドラッグで回転、ホイール・ピンチで拡大、ダブルクリックで戻す ── */
@@ -681,12 +737,25 @@ function viewer3D(it){
  requestAnimationFrame(loop);
  return stage}
 
+/* ── 写真の掲示板 ── */
+const pinboard=document.getElementById('pinboard'),pinBody=document.getElementById('pinBody'),boardEl=document.getElementById('board');
+let pinBuilt=false;
+function buildPins(){pinBody.innerHTML='';const ps=WORKS.filter(w=>/^works\/(summer|photo)-/.test(w.src||''));const rr2=seeded(77);
+ ps.forEach(w=>{const b=document.createElement('button');b.type='button';b.className='pin';b.style.setProperty('--r',((rr2()-.5)*6).toFixed(2)+'deg');
+  const im=new Image();im.src=w.src;im.alt=w.title||'写真';im.loading='lazy';im.decoding='async';const c=document.createElement('span');c.className='cap';c.textContent=w.title||'';
+  b.append(im,c);b.addEventListener('click',()=>openWork({it:w}));pinBody.appendChild(b)})}
+function openPins(){if(!pinBuilt){buildPins();pinBuilt=true}closeShelf();pinboard.classList.add('on');pinboard.setAttribute('aria-hidden','false');document.getElementById('pinClose').focus({preventScroll:true})}
+function closePins(){pinboard.classList.remove('on');pinboard.setAttribute('aria-hidden','true')}
+boardEl.addEventListener('click',openPins);document.getElementById('pinBtn').addEventListener('click',openPins);document.getElementById('pinClose').addEventListener('click',closePins);
+addEventListener('keydown',e=>{if(e.key==='Escape'&&pinboard.classList.contains('on')&&!view.classList.contains('on'))closePins()});
+function placeBoard(){const mob=W<600,bx=mob?(fit.ox<0?(-fit.ox+W*.8)/fit.s:.8*BG.w):.86*BG.w,by=BG.h*(mob?.73:.75);const p=ip([bx,by]);const w=mob?Math.min(96,W*.25):clamp(W*.07,80,124);boardEl.style.width=w+'px';const h=w*170/200;boardEl.style.left=(p[0]-w/2).toFixed(1)+'px';boardEl.style.top=(p[1]-h).toFixed(1)+'px'}
+
 /* ── 起動 ── */
 function resize(){
  DPR=Math.min(devicePixelRatio||1,1.6);W=innerWidth;H=Math.max(innerHeight,LVH.offsetHeight||0);VH=innerHeight;
  bg.width=W*DPR;bg.height=H*DPR;for(const c of[fg,near,vc]){c.width=W*DPR;c.height=H*DPR;c.getContext('2d').setTransform(DPR,0,0,DPR,0,0)}
  if(!gl&&bx)bx.setTransform(DPR,0,0,DPR,0,0);
- layout();buildColors();buildBlades();placeHut();
+ layout();buildColors();buildBlades();placeHut();placeBoard();
  for(const o of live){o.y=clamp(o.y,H*.05,Math.max(H*.05,WY-o.h))}
 }
 if(!initGL()){bx=bg.getContext('2d')}
