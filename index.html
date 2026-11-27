@@ -83,14 +83,51 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 
 @media(max-width:600px){.name{left:14px;top:calc(env(safe-area-inset-top) + 8px)}nav{left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 2px);justify-content:center;gap:0;max-width:none}nav{flex-wrap:nowrap}nav button,nav a{padding:10px 4px;font-size:13px;min-height:40px;white-space:nowrap}.veil{background:radial-gradient(130% 95% at 50% 38%,transparent 62%,rgba(10,30,20,.22) 100%),linear-gradient(to top,rgba(8,26,14,.45),transparent 12%)}}
 @media(prefers-reduced-motion:reduce){.grain{animation:none}}
+#cam{position:fixed;left:0;top:0;width:100%;height:100%;height:100lvh;z-index:0;will-change:transform;transform-origin:50% 55%}
+#cam #bg{z-index:0}#cam #field{z-index:2}#cam #near,#cam #fg{z-index:3}
+.shelf{position:fixed;inset:0;z-index:15;color:#efe6d6;background:
+ radial-gradient(120% 80% at 50% 0%,rgba(255,214,150,.10),transparent 60%),
+ linear-gradient(#211a14,#16110d);transform:translateX(-102%);transition:transform 1.2s cubic-bezier(.65,0,.25,1);display:flex;flex-direction:column;
+ padding:calc(env(safe-area-inset-top) + 18px) max(4vw,16px) calc(env(safe-area-inset-bottom) + 14px)}
+.shelf.on{transform:none}
+.sh-head{display:flex;justify-content:space-between;align-items:flex-end;gap:16px;padding:6px 4px 14px;border-bottom:1px solid rgba(239,230,214,.12)}
+.sh-head h2{margin:0;font:400 26px/1.1 "Zen Old Mincho",serif;letter-spacing:.4em}
+.sh-head p{margin:6px 0 0;font-size:12px;letter-spacing:.2em;color:rgba(239,230,214,.6)}
+.sh-close{font:italic 300 17px "Cormorant Garamond",serif;color:rgba(239,230,214,.8);background:none;border:0;min-height:44px;padding:8px 6px;cursor:pointer}
+.sh-close:hover,.sh-close:focus-visible{color:#fff}
+.sh-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:10px 0 20px;scrollbar-width:thin}
+.row{position:relative;margin:30px 0 0;padding:0 10px}
+.row h3{margin:0 0 8px 2px;font:400 12px "Zen Old Mincho",serif;letter-spacing:.3em;color:rgba(239,230,214,.55)}
+.books{display:flex;align-items:flex-end;flex-wrap:nowrap;gap:3px;min-height:230px;padding:0 6px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch}.books::-webkit-scrollbar{display:none}
+.row::after{content:"";position:absolute;left:0;right:0;bottom:-14px;height:14px;border-radius:2px;background:linear-gradient(#6b4c33,#4a3322 60%,#2c1e14);box-shadow:0 14px 22px -6px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,220,180,.25)}
+.book{position:relative;flex:none;border:0;padding:12px 0 14px;cursor:pointer;color:var(--fg,#f3ead8);background:var(--bg,#556b4f);
+ writing-mode:vertical-rl;font:13px/1.25 "Zen Old Mincho",serif;letter-spacing:.14em;text-align:start;overflow:hidden;
+ border-radius:2px 3px 1px 1px;box-shadow:inset 2px 0 0 rgba(255,255,255,.08),inset -3px 0 6px rgba(0,0,0,.35),0 2px 4px rgba(0,0,0,.4);
+ transition:transform .5s cubic-bezier(.3,.7,.2,1),box-shadow .5s;transform-origin:50% 100%}
+.book::before,.book::after{content:"";position:absolute;left:4px;right:4px;height:1px;background:var(--line,rgba(230,200,140,.55))}
+.book::before{top:7px}.book::after{bottom:8px}
+.book .gr2{position:absolute;inset:0;pointer-events:none;opacity:.35;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.book .t{position:relative;display:block;margin:0 auto;max-height:calc(100% - 26px);overflow:hidden}
+.book .k{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);writing-mode:horizontal-tb;font:italic 300 10px "Cormorant Garamond",serif;letter-spacing:.05em;opacity:.7}
+.book.ph{padding:0;background:#222 var(--img) center/cover}
+.book.ph .t{display:none}
+.book:hover,.book:focus-visible{transform:translateY(-10px) rotate(var(--lean,0deg));box-shadow:inset 2px 0 0 rgba(255,255,255,.1),0 14px 18px -8px rgba(0,0,0,.6);outline:none}
+.book:focus-visible{box-shadow:0 0 0 1px #fff}
+.sh-hint{margin:8px 0 0;text-align:center;font-size:11px;letter-spacing:.2em;color:rgba(239,230,214,.4)}
+.swipe-hint{position:fixed;z-index:6;left:50%;bottom:calc(env(safe-area-inset-bottom) + 58px);transform:translateX(-50%);margin:0;font-size:11px;letter-spacing:.2em;color:var(--faint);text-shadow:0 1px 10px rgba(0,20,10,.5);opacity:0;transition:opacity 2s;pointer-events:none;white-space:nowrap}
+.swipe-hint.on{opacity:1}
+@media(min-width:601px){.swipe-hint{display:none}}
+@media(prefers-reduced-motion:reduce){.shelf{transition:none}}
 </style>
 </head>
 <body>
+<div id="cam">
 <canvas id="bg" class="layer" aria-hidden="true"></canvas>
 <canvas id="vine" class="layer" aria-hidden="true" hidden></canvas>
 <div id="field" aria-label="浮かんでいる作品"></div>
 <canvas id="near" class="layer" aria-hidden="true"></canvas>
 <canvas id="fg" class="layer" aria-hidden="true"></canvas>
+</div>
 <div class="veil"></div><div class="grain"></div>
 
 <div class="name">
@@ -99,6 +136,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 </div>
 <nav>
  <button type="button" id="aboutBtn">about</button>
+ <button type="button" id="shelfBtn">憶録</button>
  <a href="https://www.instagram.com/sora___yamaguchi/">instagram</a>
  <a href="https://www.instagram.com/okuroku.sora/">okuroku</a>
  <a href="https://note.com/sorayamaguchi10">note</a>
@@ -106,6 +144,12 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
  <a href="https://www.01production01.com/">01 production</a>
 </nav>
 
+<section class="shelf" id="shelf" aria-label="憶録 作品一覧" aria-hidden="true">
+ <header class="sh-head"><div><h2>憶録</h2><p>追憶を目的に記録する</p></div><button type="button" class="sh-close" id="shelfClose">草原へ戻る →</button></header>
+ <div class="sh-body" id="shelfBody"></div>
+ <p class="sh-hint">左へスワイプで草原へ</p>
+</section>
+<p class="swipe-hint" id="swipeHint">→ 右へスワイプで、憶録の本棚</p>
 <div class="over" id="view" role="dialog" aria-modal="true" aria-label="作品">
  <button class="close" type="button" data-close>close</button>
  <figure><div id="vMedia"></div><figcaption id="vCap"></figcaption></figure>
@@ -492,6 +536,51 @@ document.getElementById('aboutBtn').addEventListener('click',()=>show(aboutView)
 [view,aboutView].forEach(v=>v.addEventListener('click',e=>{if(e.target===v||e.target.hasAttribute('data-close'))hide()}));
 addEventListener('keydown',e=>{if(e.key==='Escape')hide()});
 
+/* ── カメラ：手持ちで撮っているような、ゆっくりした揺れ（冒頭は大きく、だんだん落ち着く） ── */
+const cam=document.getElementById('cam');
+function stepCam(t){if(RM){cam.style.transform='';return}
+ const k=Math.pow(Math.max(0,1-t/7),1.4),A=7*k+1.1;
+ const x=(Math.sin(t*1.1)+.55*Math.sin(t*2.3+1.3)+.25*Math.sin(t*3.7+2.1))*A,y=(Math.sin(t*.9+.7)+.5*Math.sin(t*2.1+2.6)+.2*Math.sin(t*3.3))*A*.8;
+ const r=(Math.sin(t*.7+1.1)*.6+Math.sin(t*1.9)*.25)*(.5*k+.08),sc=1.035+.05*k;
+ cam.style.transform=`translate3d(${x.toFixed(2)}px,${y.toFixed(2)}px,0) rotate(${r.toFixed(3)}deg) scale(${sc.toFixed(4)})`}
+
+/* ── 憶録の本棚：右へスワイプで開く ── */
+const seeded=s=>()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const shelf=document.getElementById('shelf'),shelfBody=document.getElementById('shelfBody');
+const CLOTH=[["#4f5b45","#efe6d0"],["#7a3b2e","#f2e2c9"],["#2f3e52","#e7e0cf"],["#c9b28a","#2b2219"],["#5d4a3a","#f0e4cc"],["#1f2a24","#d9cfb8"],["#8a6d3b","#f6ecd6"],["#e8dfcc","#3a2e22"],["#3d2f3f","#eadbc6"],["#6f7d6a","#f4ecdc"]];
+function bookEl(title,kind,onOpen,opt={}){
+ const b=document.createElement('button');b.type='button';b.className='book';const r=seeded(title.length*31+title.charCodeAt(0)*7+(opt.seed||0));
+ const c=CLOTH[Math.floor(r()*CLOTH.length)];b.style.setProperty('--bg',c[0]);b.style.setProperty('--fg',c[1]);
+ const h=Math.round(150+r()*70),w=opt.img?Math.round(h*.56):Math.round(Math.max(34,Math.min(58,22+[...title].length*1.6+r()*10)));
+ b.style.height=h+'px';b.style.width=w+'px';if(r()<.14)b.style.setProperty('--lean',(r()<.5?-1:1)*(3+r()*3)+'deg');
+ if(opt.img){b.classList.add('ph');b.style.setProperty('--img',`url("${opt.img}")`)}
+ const t=document.createElement('span');t.className='t';t.textContent=title;const k=document.createElement('span');k.className='k';k.textContent=kind;const g=document.createElement('span');g.className='gr2';
+ b.append(t,g,k);b.setAttribute('aria-label',(title||kind)+'（'+kind+'）');b.addEventListener('click',onOpen);return b}
+function row(name,items){const d=document.createElement('div');d.className='row';const h=document.createElement('h3');h.textContent=name;const bs=document.createElement('div');bs.className='books';items.forEach(x=>bs.appendChild(x));d.append(h,bs);shelfBody.appendChild(d)}
+function buildShelf(){
+ shelfBody.innerHTML='';
+ const poems=WORKS.filter(w=>/^works\/poem-/.test(w.src||''));
+ row('詩　憶録乃詩',poems.map(w=>bookEl(w.title.replace(/^憶録乃詩\s*/,''),'poem',()=>openWork({it:w}))));
+ row('言葉　note',NOTES.map(([t,u],i)=>bookEl(t,'note',()=>{window.open(u,'_blank','noopener')},{seed:i})));
+ const vids=WORKS.filter(w=>w.yt&&/^#\d/.test(w.title)).sort((a,b)=>parseInt(a.title.slice(1))-parseInt(b.title.slice(1)));
+ row('映像　憶録',vids.map(w=>bookEl(w.title,'film',()=>openWork({it:w}))));
+ const reels=WORKS.filter(w=>w.ig);
+ row('リール　@okuroku.sora',reels.map((w,i)=>bookEl('','reel',()=>openWork({it:w}),{img:'/ig/'+encodeURIComponent(w.ig),seed:i})));
+}
+let shelfBuilt=false;
+function openShelf(){if(!shelfBuilt){buildShelf();shelfBuilt=true}shelf.classList.add('on');shelf.setAttribute('aria-hidden','false');document.getElementById('shelfClose').focus({preventScroll:true});hint.classList.remove('on')}
+function closeShelf(){shelf.classList.remove('on');shelf.setAttribute('aria-hidden','true')}
+document.getElementById('shelfBtn').addEventListener('click',openShelf);
+document.getElementById('shelfClose').addEventListener('click',closeShelf);
+addEventListener('keydown',e=>{if(view.classList.contains('on')||aboutView.classList.contains('on'))return;if(e.key==='ArrowRight'&&!shelf.classList.contains('on'))openShelf();else if((e.key==='ArrowLeft'||e.key==='Escape')&&shelf.classList.contains('on'))closeShelf()});
+let sw=null;
+addEventListener('touchstart',e=>{const p=e.touches[0];sw={x:p.clientX,y:p.clientY,t:performance.now()}},{passive:true});
+addEventListener('touchend',e=>{if(!sw)return;const p=e.changedTouches[0],dx=p.clientX-sw.x,dy=p.clientY-sw.y,dt=performance.now()-sw.t;sw=null;
+ if(Math.abs(dx)>70&&Math.abs(dy)<Math.abs(dx)*.6&&dt<900){if(dx>0&&!shelf.classList.contains('on'))openShelf();else if(dx<0&&shelf.classList.contains('on'))closeShelf()}},{passive:true});
+let wx=0,wt=0;addEventListener('wheel',e=>{if(Math.abs(e.deltaX)<Math.abs(e.deltaY))return;const n=performance.now();if(n-wt>400)wx=0;wt=n;wx+=e.deltaX;
+ if(wx<-120&&!shelf.classList.contains('on')){openShelf();wx=0}else if(wx>120&&shelf.classList.contains('on')){closeShelf();wx=0}},{passive:true});
+const hint=document.getElementById('swipeHint');setTimeout(()=>hint.classList.add('on'),6000);setTimeout(()=>hint.classList.remove('on'),14000);
+
 /* ── 起動 ── */
 function resize(){
  DPR=Math.min(devicePixelRatio||1,1.6);W=innerWidth;H=Math.max(innerHeight,LVH.offsetHeight||0);VH=innerHeight;
@@ -505,7 +594,7 @@ resize();
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,150)});
 prePlace();
 let last=performance.now();
-function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;clock+=dt;stepMB(dt);draw(clock,dt);stepWorks(dt,clock);stepWords(dt,clock);requestAnimationFrame(frame)}
+function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;clock+=dt;stepMB(dt);stepCam(clock);draw(clock,dt);stepWorks(dt,clock);stepWords(dt,clock);requestAnimationFrame(frame)}
 document.addEventListener('visibilitychange',()=>{last=performance.now()});
 requestAnimationFrame(frame);
 }
