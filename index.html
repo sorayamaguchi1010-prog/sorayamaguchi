@@ -95,7 +95,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .sh-head p{margin:6px 0 0;font-size:12px;letter-spacing:.2em;color:rgba(239,230,214,.6)}
 .sh-close{font:italic 300 17px "Cormorant Garamond",serif;color:rgba(239,230,214,.8);background:none;border:0;min-height:44px;padding:8px 6px;cursor:pointer}
 .sh-close:hover,.sh-close:focus-visible{color:#fff}
-.sh-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:10px 0 20px;scrollbar-width:thin}
+.sh-body{flex:1;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;}@media(min-width:601px){.sh-body{overflow:hidden!important}}.sh-body{padding:10px 0 20px;scrollbar-width:thin}
 .row{position:relative;margin:30px 0 0;padding:0 10px}
 .row h3{margin:0 0 8px 2px;font:400 12px "Zen Old Mincho",serif;letter-spacing:.3em;color:rgba(239,230,214,.55)}
 .books{display:flex;align-items:flex-end;flex-wrap:wrap;row-gap:24px;gap:3px;min-height:230px;padding:0 6px;overflow-x:hidden;overflow-y:hidden;scrollbar-width:none;-webkit-overflow-scrolling:touch}.books::-webkit-scrollbar{display:none}
@@ -189,6 +189,55 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .pj-btn,.pj-sel{font:13px "Zen Old Mincho",serif;color:#fbf7ee;background:rgba(255,253,246,.1);border:1px solid rgba(255,253,246,.3);border-radius:999px;padding:9px 16px;min-height:40px;cursor:pointer}
 .pj-sel{max-width:min(420px,80vw)}.pj-sel option{color:#222}
 .pj-btn:hover,.pj-btn:focus-visible{background:rgba(255,253,246,.22);outline:none}
+.l-form{display:grid;gap:14px}
+.l-form label{display:grid;gap:6px;font-size:13px;letter-spacing:.08em;color:#5a4a3a}
+.l-form input,.l-form textarea{font:16px/1.8 "Zen Old Mincho",serif;color:#2b2219;background:transparent;border:0;border-bottom:1px solid rgba(58,47,37,.35);padding:6px 2px;border-radius:0;resize:vertical;outline:none}
+.l-form textarea{background:repeating-linear-gradient(transparent 0 31px,rgba(58,47,37,.18) 31px 32px);line-height:32px;border-bottom:0;min-height:160px}
+.l-form input:focus,.l-form textarea:focus{border-color:#7e2116}
+.l-hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.l-status{margin:0!important;font-size:13px!important;min-height:1.4em;color:#7e2116}
+.letter{max-height:88vh;overflow:auto}
+.room{position:fixed;inset:0;z-index:14;background:#120c08;opacity:0;visibility:hidden;transition:opacity 1s,visibility 0s 1s;overflow:hidden}
+.room.on{opacity:1;visibility:visible;transition:opacity 1s}
+.room::after{content:"";position:absolute;inset:-50%;pointer-events:none;opacity:.2;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1.2s steps(6) infinite}
+.rm-scene{position:absolute;left:50%;top:50%;width:1600px;height:1000px;transform-origin:50% 50%;transform:translate(-50%,-50%) scale(var(--rs,1))}
+.room.on .rm-scene{animation:rmIn 1.4s cubic-bezier(.2,.7,.2,1)}
+@keyframes rmIn{from{transform:translate(-50%,-50%) scale(calc(var(--rs,1)*1.12));filter:blur(6px) brightness(.5)}}
+.rm-wall{position:absolute;left:0;right:0;top:0;height:66%;background:radial-gradient(60% 70% at 22% 40%,rgba(255,214,150,.30),transparent 70%),linear-gradient(rgba(0,0,0,.35),transparent 30%,rgba(0,0,0,.25)),url(tex/wood-back.webp) 0 0/360px auto}
+.rm-wall::after{content:"";position:absolute;left:0;right:0;bottom:0;height:18px;background:linear-gradient(#3a2618,#22150c);box-shadow:0 6px 12px rgba(0,0,0,.5)}
+.rm-floor{position:absolute;left:-20%;right:-20%;top:66%;height:60%;background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.1) 40%,rgba(0,0,0,.4)),url(tex/wood-board.webp) 0 0/auto 90px;transform:perspective(900px) rotateX(62deg);transform-origin:50% 0}
+.rm-window{position:absolute;left:12%;top:12%;width:22%;height:34%;background:url(field.webp) 40% 55%/cover;box-shadow:0 0 0 14px #3a2416,0 0 0 16px #1e130b,0 30px 60px rgba(0,0,0,.5),0 0 120px 40px rgba(255,220,160,.18)}
+.rm-window span{position:absolute;inset:0;background:linear-gradient(90deg,transparent 49%,#3a2416 49% 51%,transparent 51%),linear-gradient(transparent 49%,#3a2416 49% 51%,transparent 51%),linear-gradient(120deg,rgba(255,255,255,.18),transparent 40%)}
+.rm-sign{position:absolute;left:41%;top:10%;margin:0;font:italic 300 54px/1 "Cormorant Garamond",serif;letter-spacing:.06em;color:#e9d9bb;text-shadow:0 2px 0 rgba(0,0,0,.5),0 0 20px rgba(255,210,150,.25);opacity:.9}
+.rm-item{position:absolute;padding:0;border:0;background:none;cursor:pointer;transition:transform .7s cubic-bezier(.3,.7,.2,1),filter .7s;-webkit-tap-highlight-color:transparent}
+.rm-item img{display:block;width:100%;height:auto;filter:saturate(.85) brightness(.82) drop-shadow(0 18px 14px rgba(0,0,0,.55));-webkit-user-drag:none}
+.rm-item:hover,.rm-item:focus-visible{transform:translateY(-6px) scale(1.03);outline:none}
+.rm-item:hover img,.rm-item:focus-visible img{filter:saturate(.95) brightness(1) drop-shadow(0 22px 16px rgba(0,0,0,.6))}
+.rm-label{position:absolute;left:50%;bottom:100%;transform:translate(-50%,-6px);white-space:nowrap;font:14px "Zen Old Mincho",serif;letter-spacing:.2em;color:#f3e6cf;text-shadow:0 1px 10px rgba(0,0,0,.8);opacity:0;transition:opacity .6s}
+.rm-item:hover .rm-label,.rm-item:focus-visible .rm-label{opacity:1}
+@media(hover:none){.rm-label{opacity:.9}}
+#rmProj{left:16%;top:64%;width:210px}
+#rmDesk{left:40%;top:52%;width:380px}
+#rmBox{left:52%;top:74%;width:200px}
+#rmCase{left:69%;top:8%;width:300px;height:640px;background:linear-gradient(90deg,#2a1a0f,#3d2817 8%,#3d2817 92%,#22150c);box-shadow:0 30px 60px rgba(0,0,0,.6),inset 0 0 0 14px #4a3020,inset 0 0 30px rgba(0,0,0,.6)}
+.rm-shelves{position:absolute;inset:14px;display:grid;grid-template-rows:repeat(4,1fr)}
+.rm-shelves i{display:flex;align-items:flex-end;gap:2px;padding:0 6px;border-bottom:12px solid #5a3d27;box-shadow:inset 0 -18px 18px -12px rgba(0,0,0,.6)}
+.rm-shelves b{display:block;width:var(--w);height:var(--h);background:var(--c) url(tex/paper.webp) 0 0/120px auto;background-blend-mode:multiply;border-radius:1px 2px 0 0;box-shadow:inset -3px 0 4px rgba(0,0,0,.35),inset 2px 0 0 rgba(255,250,235,.12)}
+#rmCase .rm-label{bottom:auto;top:-30px}
+.rm-screen{left:40%;top:20%;width:24%;height:30%;background:radial-gradient(ellipse at 50% 50%,rgba(255,244,220,.22),rgba(255,236,200,.06) 70%,transparent);border-radius:2px;box-shadow:0 0 0 1px rgba(255,240,210,.08)}
+.rm-screen::after{content:"映像を観る";position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);font:15px "Zen Old Mincho",serif;letter-spacing:.3em;color:rgba(255,244,222,.5)}
+.rm-beam{position:absolute;left:-30%;top:40%;width:120%;height:200%;pointer-events:none;background:linear-gradient(200deg,rgba(255,236,200,.12),transparent 60%);clip-path:polygon(25% 0,100% 0,15% 100%,8% 100%);opacity:.7}
+.rm-scene.pt{width:900px;height:1500px}
+.pt .rm-wall{height:56%}.pt .rm-floor{top:56%}
+.pt .rm-window{left:8%;top:13%;width:38%;height:20%}
+.pt .rm-sign{left:0;right:0;top:4%;text-align:center;font-size:62px}
+.pt .rm-screen{left:52%;top:14%;width:42%;height:18%}
+.pt #rmCase{left:56%;top:36%;width:340px;height:620px}
+.pt #rmDesk{left:4%;top:42%;width:470px}
+.pt #rmProj{left:6%;top:63%;width:290px}
+.pt #rmBox{left:48%;top:78%;width:270px}
+.pt .rm-label{font-size:22px}
+.rm-out{position:absolute;left:max(4vw,16px);bottom:calc(env(safe-area-inset-bottom) + 18px);color:rgba(243,230,207,.85)!important;z-index:3}
 .pages{position:fixed;z-index:25;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 46px);display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(20,30,22,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .pages button{font:12px "Zen Old Mincho",serif;letter-spacing:.2em;color:rgba(255,253,246,.7);background:none;border:0;border-radius:999px;padding:7px 12px 7px 14px;min-height:32px;cursor:pointer;transition:background .6s,color .6s}
 .pages button.cur{background:rgba(255,253,246,.88);color:#24301f}
@@ -256,25 +305,25 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
 <canvas id="bg" class="layer" aria-hidden="true"></canvas>
 <canvas id="vine" class="layer" aria-hidden="true" hidden></canvas>
 <div id="field" aria-label="浮かんでいる作品"></div>
-<button type="button" id="hut" aria-label="古屋に入る（憶録の本棚）">
+<button type="button" id="hut" aria-label="Atelier BAILE に入る">
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="glow"><stop offset="0" stop-color="#ffcf7a" stop-opacity=".55"/><stop offset="1" stop-color="#ffcf7a" stop-opacity="0"/></radialGradient></defs></svg>
 <img src="hut.webp" alt="" width="900" height="596" draggable="false">
 <span class="win-light" aria-hidden="true"></span>
-<span class="hut-label">憶録の本棚</span>
+<span class="hut-label">Atelier BAILE</span>
 </button>
 <button type="button" class="prop" id="kid" aria-label="プロフィール（about）">
 <img src="child.webp" alt="" width="318" height="360" draggable="false">
 <span class="hut-label">わたし</span></button>
-<button type="button" class="prop" id="proj" aria-label="映写機（映像）">
+<button type="button" class="prop" id="proj" hidden aria-label="映写機（映像）">
 <img src="projector.webp" alt="" width="520" height="504" draggable="false">
 <span class="hut-label">映像</span></button>
 <button type="button" class="prop" id="post" aria-label="連絡">
 <img src="post.webp" alt="" width="278" height="420" draggable="false">
 <span class="hut-label">連絡</span></button>
-<button type="button" class="prop" id="desk" aria-label="机のノート（note）">
+<button type="button" class="prop" id="desk" hidden aria-label="机のノート（note）">
 <img src="desk.webp" alt="" width="700" height="460" draggable="false">
 <span class="hut-label">note</span></button>
-<button type="button" class="prop" id="box" aria-label="憶録のInstagram（@okuroku.sora）">
+<button type="button" class="prop" id="box" hidden aria-label="憶録のInstagram（@okuroku.sora）">
 <img src="box.webp" alt="" width="600" height="401" draggable="false">
 <span class="hut-label">憶録</span></button>
 <button type="button" id="board" aria-label="掲示板（写真）">
@@ -291,6 +340,19 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
  <p class="role">憶録家</p>
 </div>
 
+<section class="room" id="room" aria-label="Atelier BAILE" aria-hidden="true">
+ <div class="rm-scene" id="rmScene">
+  <div class="rm-wall"></div><div class="rm-floor"></div>
+  <div class="rm-window"><span></span></div>
+  <p class="rm-sign">Atelier BAILE</p>
+  <button type="button" class="rm-item rm-screen" id="rmScreen" aria-label="映像を観る"><span class="rm-beam"></span></button>
+  <button type="button" class="rm-item rm-case" id="rmCase" aria-label="本棚（憶録）"><span class="rm-shelves" id="rmShelves"></span><span class="rm-label">本棚</span></button>
+  <button type="button" class="rm-item" id="rmDesk" aria-label="note"><img src="desk.webp" alt=""><span class="rm-label">note</span></button>
+  <button type="button" class="rm-item" id="rmProj" aria-label="映写機"><img src="projector.webp" alt=""><span class="rm-label">映写機</span></button>
+  <button type="button" class="rm-item" id="rmBox" aria-label="憶録の棚（Instagram）"><img src="box.webp" alt=""><span class="rm-label">憶録</span></button>
+ </div>
+ <button type="button" class="sh-close rm-out" id="roomClose">← 草原へ出る</button>
+</section>
 <section class="shelf" id="shelf" aria-label="憶録 作品一覧" aria-hidden="true">
  <header class="sh-head"><div><h2>憶録</h2><p>追憶を目的に記録する</p></div><button type="button" class="sh-close" id="shelfClose">草原へ戻る →</button></header>
  <div class="sh-body" id="shelfBody"></div>
@@ -306,9 +368,14 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
  <button class="close" type="button" data-close>close</button>
  <div class="letter">
   <p class="l-to">sora yamaguchi へ</p>
-  <p>撮影・映像・デザインのご相談、感想、ただの近況でも。<br>ポストに落とすように、気軽にどうぞ。</p>
-  <p class="l-addr" id="mailAddr">sorayamaguchi1010@gmail.com</p>
-  <div class="l-btns"><a class="l-btn" href="mailto:sorayamaguchi1010@gmail.com">手紙を書く</a><button type="button" class="l-btn" id="copyMail">アドレスを写す</button><a class="l-btn" href="https://www.instagram.com/sora___yamaguchi/">Instagram</a></div>
+  <form id="letterForm" class="l-form" novalidate>
+   <label>お名前<input name="name" required autocomplete="name" maxlength="80"></label>
+   <label>返信先のメールアドレス<input name="email" type="email" required autocomplete="email" maxlength="120"></label>
+   <label>手紙<textarea name="message" required rows="6" maxlength="4000" placeholder="撮影・映像・デザインのご相談、感想、ただの近況でも。"></textarea></label>
+   <input type="text" name="_honey" tabindex="-1" autocomplete="off" class="l-hp" aria-hidden="true">
+   <div class="l-btns"><button type="submit" class="l-btn" id="letterSend">ポストに入れる</button><a class="l-btn l-ig" href="https://ig.me/m/sora___yamaguchi">Instagram DM</a></div>
+   <p class="l-status" id="letterStatus" role="status"></p>
+  </form>
  </div>
 </div>
 <div class="over" id="noteView" role="dialog" aria-modal="true" aria-label="note">
@@ -752,7 +819,8 @@ function buildShelf(){
  row('リール　@okuroku.sora',reels.map((w,i)=>bookEl('','reel',()=>openWork({it:w}),{img:'/ig/'+encodeURIComponent(w.ig),seed:i})));
 }
 let shelfBuilt=false;
-function openShelf(){if(typeof closePins==='function')closePins();if(!shelfBuilt){buildShelf();shelfBuilt=true}shelf.classList.add('on');shelf.setAttribute('aria-hidden','false');hint.classList.remove('on')}
+function fitShelf(){shelfBody.style.zoom='';if(innerWidth<600)return;const f=shelfBody.clientHeight/shelfBody.scrollHeight;if(f<1)shelfBody.style.zoom=Math.max(.55,f*.98).toFixed(3)}
+function openShelf(){if(typeof closePins==='function')closePins();if(!shelfBuilt){buildShelf();shelfBuilt=true}shelf.classList.add('on');requestAnimationFrame(fitShelf);shelf.setAttribute('aria-hidden','false');hint.classList.remove('on')}
 function closeShelf(){shelf.classList.remove('on');shelf.setAttribute('aria-hidden','true')}
 
 document.getElementById('shelfClose').addEventListener('click',closeShelf);
@@ -760,7 +828,7 @@ addEventListener('keydown',e=>{if(view.classList.contains('on')||aboutView.class
 let sw=null;
 addEventListener('touchstart',e=>{const p=e.touches[0];sw={x:p.clientX,y:p.clientY,t:performance.now()}},{passive:true});
 addEventListener('touchend',e=>{if(!sw)return;const p=e.changedTouches[0],dx=p.clientX-sw.x,dy=p.clientY-sw.y,dt=performance.now()-sw.t;sw=null;
- if(Math.abs(dx)>50&&Math.abs(dy)<Math.abs(dx)*.8&&dt<1600){if(view.classList.contains('on')||aboutView.classList.contains('on'))return;const sh=shelf.classList.contains('on'),pb=pinboard.classList.contains('on');if(sh||pb){closeShelf();closePins();return}if(dx>0)openShelf();else openPins()}},{passive:true});
+ if(Math.abs(dx)>50&&Math.abs(dy)<Math.abs(dx)*.8&&dt<1600){if(view.classList.contains('on')||aboutView.classList.contains('on'))return;const sh=shelf.classList.contains('on'),pb=pinboard.classList.contains('on');if(sh||pb){closeShelf();closePins();return}if(room.classList.contains('on')){closeRoom();return}if(dx>0)openShelf();else openPins()}},{passive:true});
 let wx=0,wt=0;addEventListener('wheel',e=>{if(Math.abs(e.deltaX)<Math.abs(e.deltaY))return;const n=performance.now();if(n<wt)return;if(n-wt>400)wx=0;wt=n;wx+=e.deltaX;
  const sh=shelf.classList.contains('on'),pb=pinboard.classList.contains('on');if(view.classList.contains('on'))return;if(Math.abs(wx)>120){if(sh||pb){closeShelf();closePins()}else if(wx<0)openShelf();else openPins();wx=0;wt=n+700}},{passive:true});
 const hint=document.getElementById('swipeHint');setTimeout(()=>hint.classList.add('on'),6000);setTimeout(()=>hint.classList.remove('on'),14000);
@@ -768,7 +836,7 @@ const hint=document.getElementById('swipeHint');setTimeout(()=>hint.classList.ad
 /* ── 古屋：土手の上に置く。クリックで本棚へ ── */
 const hut=document.getElementById('hut');
 function placeHut(){const mob=W<600,bx=mob?(fit.ox<0?(-fit.ox+W*.18)/fit.s:.12*BG.w):.2*BG.w,by=BG.h*(mob?.705:.8);const p=ip([bx,by]);const w=mob?Math.min(130,W*.34):clamp(W*.12,130,200);hut.style.width=w+'px';const h=w*596/900*.96;hut.style.left=(p[0]-w/2).toFixed(1)+'px';hut.style.top=(p[1]-h).toFixed(1)+'px'}
-hut.addEventListener('click',openShelf);
+hut.addEventListener('click',()=>openRoom());
 
 /* ── 作品を3Dで手に取る：ドラッグで回転、ホイール・ピンチで拡大、ダブルクリックで戻す ── */
 function viewer3D(it){
@@ -826,8 +894,7 @@ function placeProps(){placeProp(boxEl,.33,.15,.92,.055,52,401/600);placeProp(des
 const nl=document.getElementById('noteList');NOTES.forEach(([t,u])=>{const li=document.createElement('li');const a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';a.textContent=t;li.appendChild(a);nl.appendChild(li)});
 postEl.addEventListener('click',()=>show(postView));deskEl.addEventListener('click',()=>show(noteView));boxEl.addEventListener('click',()=>{location.href='https://www.instagram.com/okuroku.sora/'});
 [postView,noteView].forEach(v=>v.addEventListener('click',e=>{if(e.target===v||e.target.hasAttribute('data-close'))v.classList.remove('on')}));
-addEventListener('keydown',e=>{if(e.key==='Escape')[postView,noteView].forEach(v=>v.classList.remove('on'))});
-document.getElementById('copyMail').addEventListener('click',async e=>{try{await navigator.clipboard.writeText('sorayamaguchi1010@gmail.com');e.target.textContent='写しました'}catch(_){const r=document.createRange();r.selectNodeContents(document.getElementById('mailAddr'));const sl=getSelection();sl.removeAllRanges();sl.addRange(r);e.target.textContent='選択しました'}setTimeout(()=>e.target.textContent='アドレスを写す',2200)});
+addEventListener('keydown',e=>{if(e.key==='Escape'){const any=[postView,noteView,projView,view,aboutView].some(v=>v.classList.contains('on'));[postView,noteView].forEach(v=>v.classList.remove('on'));if(!any&&!shelf.classList.contains('on')&&room.classList.contains('on'))closeRoom()}});
 
 /* スマホ：下の草地を2段に使って小物を並べる */
 function placeMobile(){const base=VH-(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sab'))||0);
@@ -841,9 +908,6 @@ const SCN=[ // 実寸の幅(m)、縦横比、PC位置(写真上の割合)、ス�
  {id:'hut',  mw:4.2, ar:596/900*.96, d:[.2,.735],  m:[.3,-150]},
  {id:'board',mw:1.8, ar:509/760*.98, d:[.74,.745], m:[.66,-150]},
  {id:'kid',  mw:.62,  ar:360/318,     d:[.5,.8], m:[.5,-112]},
- {id:'box',  mw:.7,  ar:401/600,     d:[.33,.83], m:[.16,-40]},
- {id:'desk', mw:1.15,ar:460/700,     d:[.62,.835], m:[.55,-40]},
- {id:'proj', mw:.5,  ar:504/520,     d:[.12,.82], m:[.84,-150]},
  {id:'post', mw:.62, ar:420/278,     d:[.9,.8], m:[.9,-44]}];
 function placeScene(){const mob=W<600,Y0=ip([0,BG.h*.66])[1],K=mob?.42:.78;
  for(const o of SCN){const el=document.getElementById(o.id);if(!el)continue;let x,y;
@@ -873,6 +937,31 @@ function resize(){
 if(!initGL()){bx=bg.getContext('2d')}
 resize();
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,150)});
+/* ── 手紙：その場で書いて、そのまま届ける ── */
+const lf=document.getElementById('letterForm'),ls=document.getElementById('letterStatus'),lb=document.getElementById('letterSend');
+lf.addEventListener('submit',async e=>{e.preventDefault();if(lf._honey.value)return;
+ if(!lf.name.value.trim()||!/^\S+@\S+\.\S+$/.test(lf.email.value)||!lf.message.value.trim()){ls.textContent='お名前・返信先・手紙をご記入ください。';return}
+ lb.disabled=true;ls.textContent='ポストに入れています…';
+ try{const r=await fetch('https://formsubmit.co/ajax/sorayamaguchi1010@gmail.com',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},
+   body:JSON.stringify({name:lf.name.value,email:lf.email.value,message:lf.message.value,_subject:'sora yamaguchi HPから手紙が届きました',_template:'box',_captcha:'false'})});
+  const j=await r.json().catch(()=>({}));if(!r.ok||j.success==='false'||j.success===false)throw 0;
+  ls.textContent='届けました。お返事をお待ちください。';lf.reset()}
+ catch(_){ls.textContent='うまく届きませんでした。時間をおいてもう一度お試しください。'}
+ lb.disabled=false});
+/* ── Atelier BAILE：小屋の中 ── */
+const room=document.getElementById('room'),rmScene=document.getElementById('rmScene');
+function fitRoom(){const pt=innerHeight>innerWidth*1.15;rmScene.classList.toggle('pt',pt);const SW=pt?900:1600,SH=pt?1500:1000;const k=Math.max(innerWidth/SW,innerHeight/SH);rmScene.style.setProperty('--rs',k.toFixed(4))}
+(function(){const sh=document.getElementById('rmShelves'),rr=seeded(9);for(let i=0;i<4;i++){const row=document.createElement('i');let x=0;while(x<240){const w=10+rr()*16;const b=document.createElement('b');const c=CLOTH[Math.floor(rr()*CLOTH.length)][0];b.style.cssText=`--w:${w.toFixed(0)}px;--h:${(70+rr()*50).toFixed(0)}px;--c:${c}`;row.appendChild(b);x+=w+2;if(rr()<.08)x+=30}sh.appendChild(row)}})();
+function openRoom(){fitRoom();room.classList.add('on');room.setAttribute('aria-hidden','false')}
+function closeRoom(){room.classList.remove('on');room.setAttribute('aria-hidden','true')}
+document.getElementById('roomClose').addEventListener('click',closeRoom);
+document.getElementById('rmCase').addEventListener('click',openShelf);
+document.getElementById('rmDesk').addEventListener('click',()=>show(noteView));
+document.getElementById('rmProj').addEventListener('click',()=>{pjRandom();show(projView)});
+document.getElementById('rmScreen').addEventListener('click',()=>{pjRandom();show(projView)});
+document.getElementById('rmBox').addEventListener('click',()=>{location.href='https://www.instagram.com/okuroku.sora/'});
+addEventListener('resize',()=>{if(room.classList.contains('on'))fitRoom()});
+
 prePlace();
 let last=performance.now();
 function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;clock+=dt;stepMB(dt);stepCam(clock);draw(clock,dt);stepWorks(dt,clock);stepWords(dt,clock);requestAnimationFrame(frame)}
