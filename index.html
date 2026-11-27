@@ -136,6 +136,15 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .nb-page li a{color:#2f3440;text-decoration:none;border-bottom:1px solid transparent}
 .nb-page li a:hover,.nb-page li a:focus-visible{border-color:#2f3440;outline:none}
 .nb-more{display:inline-block;margin-top:10px;font:italic 15px "Cormorant Garamond",serif;color:#4a5a78}
+.book{background:linear-gradient(90deg,rgba(255,240,210,.10),rgba(255,240,210,.22) 40%,rgba(255,240,210,.06)),url(tex/paper.webp) calc(var(--px,0)*1px) 0/220px auto,var(--bg,#556b4f);background-blend-mode:screen,multiply,normal}
+.book::selection{background:none}
+.book{box-shadow:inset 2px 0 0 rgba(255,250,235,.12),inset -3px 0 6px rgba(0,0,0,.35),inset 0 0 14px rgba(60,40,20,.35),0 2px 4px rgba(0,0,0,.4)!important}
+.book .gr2{opacity:.55!important}
+.book.ph{background:#222 var(--img) center/cover!important}
+.shelf::after,.pinboard::after{content:"";position:absolute;inset:-50%;pointer-events:none;z-index:3;opacity:.2;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1.2s steps(6) infinite}
+.sh-close{font:400 12px "Zen Old Mincho",serif!important;letter-spacing:.18em;padding:10px 4px!important}
+.sh-close:focus:not(:focus-visible){outline:none}
+.sh-body{padding-bottom:84px!important}
 .pages{position:fixed;z-index:25;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 46px);display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(20,30,22,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .pages button{font:12px "Zen Old Mincho",serif;letter-spacing:.2em;color:rgba(255,253,246,.7);background:none;border:0;border-radius:999px;padding:7px 12px 7px 14px;min-height:32px;cursor:pointer;transition:background .6s,color .6s}
 .pages button.cur{background:rgba(255,253,246,.88);color:#24301f}
@@ -676,7 +685,7 @@ const shelf=document.getElementById('shelf'),shelfBody=document.getElementById('
 const CLOTH=[["#4f5b45","#efe6d0"],["#7a3b2e","#f2e2c9"],["#2f3e52","#e7e0cf"],["#c9b28a","#2b2219"],["#5d4a3a","#f0e4cc"],["#1f2a24","#d9cfb8"],["#8a6d3b","#f6ecd6"],["#e8dfcc","#3a2e22"],["#3d2f3f","#eadbc6"],["#6f7d6a","#f4ecdc"]];
 function bookEl(title,kind,onOpen,opt={}){
  const b=document.createElement('button');b.type='button';b.className='book';const r=seeded(title.length*31+(title.charCodeAt(0)||7)*7+(opt.seed||0));
- const c=CLOTH[Math.floor(r()*CLOTH.length)];b.style.setProperty('--bg',c[0]);b.style.setProperty('--fg',c[1]);
+ const c=CLOTH[Math.floor(r()*CLOTH.length)];b.style.setProperty('--bg',c[0]);b.style.setProperty('--fg',c[1]);b.style.setProperty('--px',Math.round(r()*260));
  const m=title.match(/^#(\d+)\s*/),body=m?title.slice(m[0].length):title,n=[...body].length+(m?1:0);
  const h=Math.round(170+r()*56),ADV=14.9,COL=17.2,cap=Math.max(4,Math.floor((h-58)/ADV));
  const k=Math.max(1,Math.ceil(n/cap)),per=Math.ceil(n/k);
@@ -700,7 +709,7 @@ function buildShelf(){
  row('リール　@okuroku.sora',reels.map((w,i)=>bookEl('','reel',()=>openWork({it:w}),{img:'/ig/'+encodeURIComponent(w.ig),seed:i})));
 }
 let shelfBuilt=false;
-function openShelf(){if(typeof closePins==='function')closePins();if(!shelfBuilt){buildShelf();shelfBuilt=true}shelf.classList.add('on');shelf.setAttribute('aria-hidden','false');document.getElementById('shelfClose').focus({preventScroll:true});hint.classList.remove('on')}
+function openShelf(){if(typeof closePins==='function')closePins();if(!shelfBuilt){buildShelf();shelfBuilt=true}shelf.classList.add('on');shelf.setAttribute('aria-hidden','false');hint.classList.remove('on')}
 function closeShelf(){shelf.classList.remove('on');shelf.setAttribute('aria-hidden','true')}
 document.getElementById('shelfBtn').addEventListener('click',openShelf);
 document.getElementById('shelfClose').addEventListener('click',closeShelf);
@@ -761,7 +770,7 @@ function buildPins(){pinBody.innerHTML='';const ps=WORKS.filter(w=>/^works\/(sum
  ps.forEach(w=>{const b=document.createElement('button');b.type='button';b.className='pin';b.style.setProperty('--r',((rr2()-.5)*6).toFixed(2)+'deg');
   const im=new Image();im.src=w.src;im.alt=w.title||'写真';im.loading='lazy';im.decoding='async';const c=document.createElement('span');c.className='cap';c.textContent=w.title||'';
   b.append(im,c);b.addEventListener('click',()=>openWork({it:w}));pinBody.appendChild(b)})}
-function openPins(){if(!pinBuilt){buildPins();pinBuilt=true}closeShelf();pinboard.classList.add('on');pinboard.setAttribute('aria-hidden','false');document.getElementById('pinClose').focus({preventScroll:true})}
+function openPins(){if(!pinBuilt){buildPins();pinBuilt=true}closeShelf();pinboard.classList.add('on');pinboard.setAttribute('aria-hidden','false');}
 function closePins(){pinboard.classList.remove('on');pinboard.setAttribute('aria-hidden','true')}
 boardEl.addEventListener('click',openPins);document.getElementById('pinBtn').addEventListener('click',openPins);document.getElementById('pinClose').addEventListener('click',closePins);
 addEventListener('keydown',e=>{if(e.key==='Escape'&&pinboard.classList.contains('on')&&!view.classList.contains('on'))closePins()});
