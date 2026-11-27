@@ -84,7 +84,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 @media(max-width:600px){.name{left:14px;top:calc(env(safe-area-inset-top) + 8px)}nav{left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 2px);justify-content:center;gap:0;max-width:none}nav{flex-wrap:nowrap;padding:0 4px}nav button,nav a{padding:4px 4px;font-size:13.5px;min-height:34px;line-height:1.2;white-space:nowrap}.veil{background:radial-gradient(130% 95% at 50% 38%,transparent 62%,rgba(10,30,20,.22) 100%),linear-gradient(to top,rgba(8,26,14,.45),transparent 12%)}}
 @media(prefers-reduced-motion:reduce){.grain{animation:none}}
 #cam{position:fixed;left:0;top:0;width:100%;height:100%;height:100lvh;z-index:0;will-change:transform;transform-origin:50% 55%}
-#cam #bg{z-index:0}#cam #field{z-index:2}#cam #near,#cam #fg{z-index:3}
+#cam #bg{z-index:0}#cam #field{z-index:2}#cam #hut,#cam #board,#cam .prop{z-index:1}#cam #near,#cam #fg{z-index:3}
 .shelf{position:fixed;inset:0;z-index:15;color:#efe6d6;background:
  radial-gradient(120% 80% at 50% 0%,rgba(255,214,150,.10),transparent 60%),
  linear-gradient(#211a14,#16110d);transform:translateX(-102%);transition:transform 1.2s cubic-bezier(.65,0,.25,1);display:flex;flex-direction:column;
@@ -115,7 +115,8 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .book:focus-visible{box-shadow:0 0 0 1px #fff}
 .sh-hint{margin:8px 0 0;text-align:center;font-size:11px;letter-spacing:.2em;color:rgba(239,230,214,.4)}
 .prop{position:absolute;left:0;top:0;z-index:2;padding:0;border:0;background:none;cursor:pointer;transform-origin:50% 100%;filter:drop-shadow(0 5px 6px rgba(10,25,10,.35)) saturate(.82);transition:transform .8s cubic-bezier(.3,.7,.2,1);-webkit-tap-highlight-color:transparent}
-.prop svg{display:block;width:100%;height:auto;overflow:visible}
+.prop img{display:block;width:100%;height:auto;filter:saturate(.85) brightness(.95);-webkit-user-drag:none}
+.prop::after{content:"";position:absolute;left:8%;right:4%;bottom:-2%;height:10%;border-radius:50%;background:rgba(20,35,12,.45);filter:blur(5px);z-index:-1}
 .prop .hut-label{position:absolute;left:50%;bottom:100%;transform:translate(-50%,6px);white-space:nowrap;font-size:12px;letter-spacing:.2em;color:var(--ink);text-shadow:0 1px 10px rgba(0,20,10,.6);opacity:0;transition:opacity .8s,transform .8s}
 .prop:hover,.prop:focus-visible{transform:scale(1.07);outline:none}
 .prop:hover .hut-label,.prop:focus-visible .hut-label{opacity:1;transform:translate(-50%,-4px)}
@@ -209,43 +210,13 @@ html,body{overscroll-behavior:none}
 <span class="hut-label">憶録の本棚</span>
 </button>
 <button type="button" class="prop" id="post" aria-label="ポスト（連絡先）">
-<svg viewBox="0 0 90 180" aria-hidden="true"><defs><filter id="agP" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves="2" seed="2" result="n"/><feColorMatrix in="n" type="saturate" values="0" result="g"/><feComponentTransfer in="g" result="g2"><feFuncA type="table" tableValues="0 .55"/></feComponentTransfer><feComposite in="g2" in2="SourceGraphic" operator="in" result="m"/><feBlend in="SourceGraphic" in2="m" mode="multiply"/></filter><linearGradient id="pR" x1="0" x2="1"><stop offset="0" stop-color="#7e2116"/><stop offset=".35" stop-color="#c2412d"/><stop offset=".6" stop-color="#a5321f"/><stop offset="1" stop-color="#5e170f"/></linearGradient></defs>
- <ellipse cx="46" cy="174" rx="34" ry="5" fill="#1d2a12" opacity=".45"/>
- <g filter="url(#agP)"><rect x="34" y="128" width="22" height="46" fill="#3a3330"/><rect x="28" y="124" width="34" height="8" rx="2" fill="#4a423e"/>
- <path d="M14 54Q14 14 45 14Q76 14 76 54V128H14Z" fill="url(#pR)"/>
- <path d="M10 50Q10 10 45 10Q80 10 80 50L76 52Q75 18 45 18Q15 18 14 52Z" fill="#8f2a1c"/>
- <rect x="24" y="44" width="42" height="7" rx="2" fill="#2a120c"/><rect x="22" y="41" width="46" height="3" rx="1" fill="#d4573f"/>
- <rect x="30" y="62" width="30" height="34" fill="#efe7d6"/><g stroke="#8f2a1c" stroke-width="1.6"><path d="M36 70h18M36 76h18M36 82h12"/></g>
- <path d="M38 104h14M45 100v12" stroke="#efe7d6" stroke-width="2.4"/>
- <rect x="14" y="116" width="62" height="12" fill="#6a1a10" opacity=".55"/></g></svg>
+<img src="post.webp" alt="" width="278" height="420" draggable="false">
 <span class="hut-label">ポスト</span></button>
 <button type="button" class="prop" id="desk" aria-label="机のノート（note）">
-<svg viewBox="0 0 180 140" aria-hidden="true"><defs><filter id="agD" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves="2" seed="5" result="n"/><feColorMatrix in="n" type="saturate" values="0" result="g"/><feComponentTransfer in="g" result="g2"><feFuncA type="table" tableValues="0 .55"/></feComponentTransfer><feComposite in="g2" in2="SourceGraphic" operator="in" result="m"/><feBlend in="SourceGraphic" in2="m" mode="multiply"/></filter></defs>
- <ellipse cx="94" cy="132" rx="78" ry="7" fill="#1d2a12" opacity=".45"/>
- <g filter="url(#agD)">
-  <polygon points="18,58 120,48 166,62 64,74" fill="#8b6442"/>
-  <polygon points="18,58 64,74 64,80 18,64" fill="#5b3e27"/><polygon points="64,74 166,62 166,68 64,80" fill="#6d4b31"/>
-  <g fill="#4a3220"><rect x="22" y="64" width="5" height="62"/><rect x="58" y="79" width="5" height="52"/><rect x="158" y="67" width="5" height="58"/><rect x="114" y="54" width="4" height="40" opacity=".7"/></g>
-  <path d="M27 100L58 112M63 112L158 100" stroke="#4a3220" stroke-width="3"/>
-  <polygon points="52,58 96,52 128,60 84,67" fill="#f3eee2"/><polygon points="84,67 128,60 128,62 84,69" fill="#d9d1bf"/>
-  <path d="M84 67L96 52" stroke="#c9bfa8" stroke-width="1.2"/>
-  <g stroke="#9db0c6" stroke-width=".7" opacity=".9"><path d="M60 58.5l26-3.4M63 60.5l26-3.4M66 62.5l26-3.4M98 56l24 5.4M95 58l24 5.4M92 60l24 5.4"/></g>
-  <g stroke="#3b3a40" stroke-width="1" opacity=".75"><path d="M64 59.4c4-1 7-.4 11-1.6M100 57.4c4 .4 8 1.6 12 2.4"/></g>
-  <path d="M110 66L140 61" stroke="#2b2b2f" stroke-width="2.2" stroke-linecap="round"/><path d="M140 61l3-.5" stroke="#c9a24a" stroke-width="2.2" stroke-linecap="round"/>
- </g></svg>
+<img src="desk.webp" alt="" width="700" height="460" draggable="false">
 <span class="hut-label">note</span></button>
 <button type="button" class="prop" id="box" aria-label="木箱（憶録）">
-<svg viewBox="0 0 150 120" aria-hidden="true"><defs><filter id="agB" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves="2" seed="9" result="n"/><feColorMatrix in="n" type="saturate" values="0" result="g"/><feComponentTransfer in="g" result="g2"><feFuncA type="table" tableValues="0 .55"/></feComponentTransfer><feComposite in="g2" in2="SourceGraphic" operator="in" result="m"/><feBlend in="SourceGraphic" in2="m" mode="multiply"/></filter></defs>
- <ellipse cx="78" cy="112" rx="64" ry="7" fill="#1d2a12" opacity=".45"/>
- <g filter="url(#agB)">
-  <polygon points="14,46 96,40 136,52 54,60" fill="#3c2a1c"/>
-  <polygon points="14,46 54,60 54,110 14,96" fill="#7a5638"/><polygon points="54,60 136,52 136,100 54,110" fill="#94704c"/>
-  <g stroke="#4a3220" stroke-width="1.2" opacity=".7"><path d="M14 63L54 77M14 80L54 94M54 77L136 69M54 94L136 85"/></g>
-  <g fill="#5a3e27"><polygon points="14,46 20,48 20,98 14,96"/><polygon points="48,58 54,60 54,110 48,108"/><polygon points="130,53 136,52 136,100 130,101"/></g>
-  <polygon points="10,40 92,22 134,34 52,52" fill="#a07a54"/><polygon points="10,40 52,52 52,58 10,46" fill="#6d4b31"/>
-  <g stroke="#5a3e27" stroke-width="1.2" opacity=".7"><path d="M24 37L66 49M38 34L80 46M52 31L94 43M66 28L108 40"/></g>
-  <text x="95" y="88" font-family="Zen Old Mincho,serif" font-size="15" fill="#2b1d12" opacity=".75" transform="skewY(-5)" text-anchor="middle" letter-spacing="3">憶録</text>
- </g></svg>
+<img src="box.webp" alt="" width="600" height="401" draggable="false">
 <span class="hut-label">憶録</span></button>
 <button type="button" id="board" aria-label="掲示板（写真）">
 <img src="board.webp" alt="" width="760" height="509" draggable="false">
@@ -805,7 +776,7 @@ new MutationObserver(syncPages).observe(shelf,{attributes:true,attributeFilter:[
 /* ── 川べりの小物：ポスト・机のノート・木箱 ── */
 const postEl=document.getElementById('post'),deskEl=document.getElementById('desk'),boxEl=document.getElementById('box'),postView=document.getElementById('postView'),noteView=document.getElementById('noteView');
 function placeProp(el,dx,mx,yf,wd,wm,ar){const mob=W<600,bx=mob?(fit.ox<0?(-fit.ox+W*mx)/fit.s:mx*BG.w):dx*BG.w;const p=ip([bx,BG.h*yf]);const w=mob?wm:clamp(W*wd,wm,wm*1.9);el.style.width=w+'px';let top=p[1]-w*ar;const lim=(mob?VH-150:VH-70)-w*ar;if(top>lim)top=lim;el.style.left=(p[0]-w/2).toFixed(1)+'px';el.style.top=top.toFixed(1)+'px'}
-function placeProps(){placeProp(boxEl,.21,.16,.93,.05,52,120/150);placeProp(deskEl,.31,.4,.95,.07,70,140/180);placeProp(postEl,.42,.64,.95,.032,30,180/90)}
+function placeProps(){placeProp(boxEl,.25,.15,.88,.055,52,401/600);placeProp(deskEl,.36,.4,.94,.075,70,460/700);placeProp(postEl,.47,.64,.955,.03,30,420/278)}
 const nl=document.getElementById('noteList');NOTES.forEach(([t,u])=>{const li=document.createElement('li');const a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';a.textContent=t;li.appendChild(a);nl.appendChild(li)});
 postEl.addEventListener('click',()=>show(postView));deskEl.addEventListener('click',()=>show(noteView));boxEl.addEventListener('click',openShelf);
 [postView,noteView].forEach(v=>v.addEventListener('click',e=>{if(e.target===v||e.target.hasAttribute('data-close'))v.classList.remove('on')}));
