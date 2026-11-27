@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+<script type="importmap">{"imports":{"three":"./vendor/three.module.min.js"}}</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>sora yamaguchi</title>
@@ -247,6 +248,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .rm-pins i::before{content:"";display:block;width:100%;height:100%;background:var(--im) center/cover}
 .rm-photos{width:auto!important;height:auto!important}
 .rm-frame{position:absolute;z-index:3;display:block;padding:0;border:0;cursor:pointer;background:#1a110a;transition:transform .6s cubic-bezier(.3,.7,.2,1);box-shadow:0 0 0 var(--fw,8px) #2b1b10,0 0 0 calc(var(--fw,8px) + 2px) #120a05,0 16px 22px rgba(0,0,0,.55)}
+.rm-frame.r3d{background:transparent;box-shadow:none}.rm-frame.r3d>img{opacity:0}.rm-frame .f3d-wall{position:absolute;pointer-events:none;filter:drop-shadow(0 14px 14px rgba(0,0,0,.5))}.stage .f3d{position:absolute;inset:0;width:100%;height:100%;display:block}
 .rm-frame img{display:block;width:100%;height:100%;object-fit:cover;filter:brightness(.82) sepia(.1)}
 .rm-frame:hover,.rm-frame:focus-visible{transform:scale(1.03);outline:none}.rm-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(125deg,rgba(255,255,255,.12),transparent 40%);pointer-events:none}
 .rm-out{position:absolute;left:max(4vw,16px);bottom:calc(env(safe-area-inset-bottom) + 18px);color:rgba(243,230,207,.85)!important;z-index:3}
@@ -782,7 +784,7 @@ let lastFocus=null;
 function show(ov){lastFocus=document.activeElement;ov.classList.add('on');ov.querySelector('.close').focus()}
 function hide(){[view,aboutView].forEach(v=>v.classList.remove('on'));setTimeout(()=>{if(!view.classList.contains('on'))vMedia.innerHTML=''},900);if(lastFocus&&lastFocus.isConnected)lastFocus.focus()}
 function openWork(o){
- const it=o.it;vMedia.innerHTML='';vMedia.classList.remove('has-poem');if(it.src&&it.kind==='photo'){vMedia.classList.toggle('has-poem',!!it.poem);const st=viewer3D(it);if(it.poem){const wrap=document.createElement('div');wrap.className='poem-wrap';const pt=document.createElement('div');pt.className='poem-text';pt.textContent=it.poem;wrap.append(st,pt);vMedia.appendChild(wrap)}else vMedia.appendChild(st);const hn=document.createElement('p');hn.className='v-hint';hn.textContent='ドラッグで回す　ホイール・ピンチで寄る　ダブルクリックで戻す';vMedia.appendChild(hn)}else{const m=mediaFor(it,true);if(!it.yt&&!it.ig)m.classList.add('big');vMedia.appendChild(m)}
+ const it=o.it;vMedia.innerHTML='';vMedia.classList.remove('has-poem');if(it.src&&it.kind==='photo'){vMedia.classList.toggle('has-poem',!!it.poem);const st=it.frame?frameStage(it):viewer3D(it);if(it.poem){const wrap=document.createElement('div');wrap.className='poem-wrap';const pt=document.createElement('div');pt.className='poem-text';pt.textContent=it.poem;wrap.append(st,pt);vMedia.appendChild(wrap)}else vMedia.appendChild(st);const hn=document.createElement('p');hn.className='v-hint';hn.textContent='ドラッグで回す　ホイール・ピンチで寄る　ダブルクリックで戻す';vMedia.appendChild(hn)}else{const m=mediaFor(it,true);if(!it.yt&&!it.ig)m.classList.add('big');vMedia.appendChild(m)}
  vCap.innerHTML='';const b=document.createElement('b');b.textContent=it.title||'';vCap.appendChild(b);
  if(it.year){const i=document.createElement('i');i.textContent=it.year;vCap.appendChild(i)}
  if(it.note){const p=document.createElement('p');p.textContent=it.note;vCap.appendChild(p)}
@@ -890,6 +892,12 @@ function viewer3D(it){
  requestAnimationFrame(loop);
  return stage}
 
+/* ── 額縁は three.js の立体モデルで ── */
+let F3=null;const f3=()=>F3||(F3=import('./frame3d.js'));
+function frameStage(it){const stage=document.createElement('div');stage.className='stage';
+ f3().then(m=>{requestAnimationFrame(()=>m.mountViewer(stage,it,RM))}).catch(()=>{const s2=viewer3D(it);stage.replaceWith(s2)});return stage}
+function wallFrames(){f3().then(m=>{m.mountWallFrame(document.getElementById('rmF1'),'frame-baile.webp',1);m.mountWallFrame(document.getElementById('rmF2'),'frame-room.webp',1.5)}).catch(()=>{})}
+
 /* ── 写真の掲示板 ── */
 const pinboard=document.getElementById('pinboard'),pinBody=document.getElementById('pinBody'),boardEl=document.getElementById('board');
 let pinBuilt=false;
@@ -978,14 +986,14 @@ function placeRoom(pt,SW,SH,k){const FL=SH*(pt?.56:.68),P=FL/(pt?2.2:1.95),H0=FL
  const fr=(id,cx,top,w,h)=>Object.assign(g(id).style,{left:(cx-w/2).toFixed(1)+'px',top:top.toFixed(1)+'px',width:w.toFixed(1)+'px',height:h.toFixed(1)+'px','--fw':(.03*P).toFixed(1)+'px','--mat':(.035*P).toFixed(1)+'px'});
  const winL=SW*(pt?.42:.37)-(pt?.85:1.1)*P/2,visL=Math.max(pt?0:-9999,SW/2-innerWidth/(2*k))+.12*P,gap=.14*P,h1=(pt?.4:.6)*P,w2=h1*1.5,top=FL-(pt?1.85:1.72)*P;
  let tot=h1+gap+w2,avail=winL-.12*P-visL,sc=Math.min(1,avail/tot);const a=h1*sc,b=w2*sc,x0=visL+(avail-(a+gap*sc+b))/2;
- if(pt){fr('rmF1',SW*.15,FL-1.88*P,.36*P,.36*P);fr('rmF2',SW*.15,FL-1.4*P,.36*P,.24*P)}else{fr('rmF1',x0+a/2,top,a,a);fr('rmF2',x0+a+gap*sc+b/2,top+(a-b/1.5)/2,b,b/1.5)}
+ if(pt){fr('rmF1',SW*.13,FL-1.9*P,.3*P,.3*P);fr('rmF2',SW*.13,FL-1.45*P,.3*P,.2*P)}else{fr('rmF1',x0+a/2,top,a,a);fr('rmF2',x0+a+gap*sc+b/2,top+(a-b/1.5)/2,b,b/1.5)}
  const win=document.querySelector('.rm-window'),ww=(pt?.85:1.1)*P,wh=(pt?.85:1.0)*P;Object.assign(win.style,{left:(SW*(pt?.42:.37)-ww/2).toFixed(1)+'px',top:(FL-1.88*P).toFixed(1)+'px',width:ww.toFixed(1)+'px',height:wh.toFixed(1)+'px'});
  const pins=g('rmPins'),cw=.054*P*1.5,wall=g('rmWall');pins.style.setProperty('--cw',cw.toFixed(1)+'px');pins.style.setProperty('--cg',(cw*.22).toFixed(1)+'px');pins.style.setProperty('--cols',pt?4:6);
  Object.assign(wall.style,{left:(SW*(pt?.74:.61)-(pt?4:6)*cw*1.22/2).toFixed(1)+'px',top:(FL-(pt?1.95:1.75)*P).toFixed(1)+'px'});
  const t=document.querySelector('.rm-sign');if(t){Object.assign(t.style,{left:pt?'0':'40px',right:pt?'0':'auto',top:pt?((FL-2.2*P)-90).toFixed(1)+'px':'26px',fontSize:pt?'48px':'40px',textAlign:pt?'center':'left'})}}
 (function(){const p=document.getElementById('rmPins'),ps=WORKS.filter(w=>/^works\/(summer|photo)-/.test(w.src||'')).slice(0,24),rr=seeded(21);ps.forEach(w=>{const i=document.createElement('i');i.style.setProperty('--im',`url("${w.src}")`);i.style.removeProperty('background');i.style.setProperty('--r',((rr()-.5)*8).toFixed(1)+'deg');p.appendChild(i)})})();
 
-function openRoom(){fitRoom();room.classList.add('on');room.setAttribute('aria-hidden','false')}
+let wfOn=false;function openRoom(){if(!wfOn){wfOn=true;wallFrames()}fitRoom();room.classList.add('on');room.setAttribute('aria-hidden','false')}
 function closeRoom(){room.classList.remove('on');room.setAttribute('aria-hidden','true')}
 document.getElementById('roomClose').addEventListener('click',closeRoom);
 document.getElementById('rmF1').addEventListener('click',()=>openWork({it:{src:'frame-baile.webp',kind:'photo',ar:1,title:'BAILE',frame:true}}));
