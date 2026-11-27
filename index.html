@@ -237,7 +237,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .pt #rmDesk{left:12%;top:44%;width:400px}
 .pt #rmProj{left:40%;top:68%;width:280px}
 .pt #rmBox{left:14%;top:80%;width:240px}
-.pt .rm-label{font-size:22px}
+.pt .rm-label{font-size:22px}.pt .rm-pins i:nth-child(n+13){display:none}
 .rm-photos{left:40%;top:20%;width:25%;height:30%;background:none}
 .rm-pins{position:absolute;inset:0;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:4px}
 .rm-pins i{display:block;background:#eee5d2 var(--im) center/cover;border:3px solid #efe7d6;box-shadow:0 4px 6px rgba(0,0,0,.45);transform:rotate(var(--r));filter:brightness(.82) sepia(.15)}
@@ -990,7 +990,23 @@ function placeRoom(pt,SW,SH,k){const FL=SH*(pt?.56:.68),P=FL/(pt?2.2:1.95),H0=FL
  const win=document.querySelector('.rm-window'),ww=(pt?.85:1.1)*P,wh=(pt?.85:1.0)*P;Object.assign(win.style,{left:(SW*(pt?.42:.37)-ww/2).toFixed(1)+'px',top:(FL-1.88*P).toFixed(1)+'px',width:ww.toFixed(1)+'px',height:wh.toFixed(1)+'px'});
  const pins=g('rmPins'),cw=.054*P*1.5,wall=g('rmWall');pins.style.setProperty('--cw',cw.toFixed(1)+'px');pins.style.setProperty('--cg',(cw*.22).toFixed(1)+'px');pins.style.setProperty('--cols',pt?4:6);
  Object.assign(wall.style,{left:(SW*(pt?.74:.61)-(pt?4:6)*cw*1.22/2).toFixed(1)+'px',top:(FL-(pt?1.95:1.75)*P).toFixed(1)+'px'});
+ if(pt)roomPortrait(P,fr,g);
  const t=document.querySelector('.rm-sign');if(t){Object.assign(t.style,{left:pt?'0':'40px',right:pt?'0':'auto',top:pt?((FL-2.2*P)-90).toFixed(1)+'px':'26px',fontSize:pt?'48px':'40px',textAlign:pt?'center':'left'})}}
+/* スマホ縦：何も重ならないように、壁の段・床の段に並べ直す（シーン座標 900×1500、見える幅はおよそ 60〜840） */
+function roomPortrait(P,fr,g){
+ const pl=(id,x,bottom,w,ar)=>Object.assign(g(id).style,{left:x+'px',top:(bottom-w*ar).toFixed(1)+'px',width:w+'px',height:'auto'});
+ // 壁の上段：左に額2枚、まん中に窓、右に写真
+ fr('rmF1',150,170,150,150);fr('rmF2',150,385,150,100);
+ Object.assign(document.querySelector('.rm-window').style,{left:'275px',top:'165px',width:'320px',height:'320px'});
+ const cw=34,wall=g('rmWall'),pins=g('rmPins');pins.style.setProperty('--cw',cw+'px');pins.style.setProperty('--cg',(cw*.22).toFixed(1)+'px');pins.style.setProperty('--cols',4);
+ Object.assign(wall.style,{left:'650px',top:'170px'});
+ // 中段：左に机、右に本棚（床に立つ）
+ pl('rmDesk',60,925,430,492/720);
+ pl('rmCase',610,860,230,700/344);
+ // 床の段：映写機と木箱
+ pl('rmProj',70,1280,200,457/560);
+ pl('rmBox',320,1280,290,401/600);
+}
 (function(){const p=document.getElementById('rmPins'),ps=WORKS.filter(w=>/^works\/(summer|photo)-/.test(w.src||'')).slice(0,24),rr=seeded(21);ps.forEach(w=>{const i=document.createElement('i');i.style.setProperty('--im',`url("${w.src}")`);i.style.removeProperty('background');i.style.setProperty('--r',((rr()-.5)*8).toFixed(1)+'deg');p.appendChild(i)})})();
 
 let wfOn=false;function openRoom(){if(!wfOn){wfOn=true;wallFrames()}fitRoom();room.classList.add('on');room.setAttribute('aria-hidden','false')}
