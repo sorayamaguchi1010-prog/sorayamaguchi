@@ -78,7 +78,7 @@ function loadImg(src) {
   return imgCache.get(src);
 }
 function carveBack(mat, bw, bh) {
-  const W = 1024, H = Math.round(W * bh / bw);
+  const W = 2048, H = Math.round(W * bh / bw);
   const col = document.createElement('canvas'), bmp = document.createElement('canvas');
   col.width = bmp.width = W; col.height = bmp.height = H;
   const cm = new THREE.CanvasTexture(col), bm = new THREE.CanvasTexture(bmp);
@@ -92,7 +92,7 @@ function carveBack(mat, bw, bh) {
     c.fillStyle = 'rgba(120,86,56,.35)'; c.globalCompositeOperation = 'multiply'; c.fillRect(0, 0, W, H);
     c.globalCompositeOperation = 'source-over';
     // ロゴの位置（少し下寄り、中央）
-    const lw = W * .56, lh = lw * logo.height / logo.width, lx = (W - lw) / 2, ly = H * .56 - lh / 2;
+    const lw = W * .19, lh = lw * logo.height / logo.width, lx = (W - lw) / 2, ly = H * .66 - lh / 2;
     // ロゴを単色の形に（彫刻刀の幅ぶん、線を少し太らせる）
     const mask = document.createElement('canvas'); mask.width = W; mask.height = H;
     const mk = mask.getContext('2d');
