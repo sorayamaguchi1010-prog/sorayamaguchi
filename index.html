@@ -246,6 +246,9 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .rm-pins i{width:var(--cw);height:calc(var(--cw)*1.593);border:0!important;background:#f3efe6!important;padding:calc(var(--cw)*.074) calc(var(--cw)*.074) calc(var(--cw)*.3);box-sizing:border-box;box-shadow:0 2px 3px rgba(0,0,0,.45)!important}
 .rm-pins i::before{content:"";display:block;width:100%;height:100%;background:var(--im) center/cover}
 .rm-photos{width:auto!important;height:auto!important}
+.rm-frame{position:absolute;z-index:2;display:block;padding:var(--mat,10px);background:#efe8da;box-shadow:0 0 0 var(--fw,8px) #2b1b10,0 0 0 calc(var(--fw,8px) + 2px) #120a05,0 16px 22px rgba(0,0,0,.55)}
+.rm-frame img{display:block;width:100%;height:100%;object-fit:cover;filter:brightness(.82) sepia(.1)}
+.rm-frame::after{content:"";position:absolute;inset:0;background:linear-gradient(125deg,rgba(255,255,255,.12),transparent 40%);pointer-events:none}
 .rm-out{position:absolute;left:max(4vw,16px);bottom:calc(env(safe-area-inset-bottom) + 18px);color:rgba(243,230,207,.85)!important;z-index:3}
 .pages{position:fixed;z-index:25;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 46px);display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(20,30,22,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .pages button{font:12px "Zen Old Mincho",serif;letter-spacing:.2em;color:rgba(255,253,246,.7);background:none;border:0;border-radius:999px;padding:7px 12px 7px 14px;min-height:32px;cursor:pointer;transition:background .6s,color .6s}
@@ -353,7 +356,7 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
  <div class="rm-scene" id="rmScene">
   <div class="rm-wall"></div><div class="rm-floor"></div>
   <div class="rm-window"><span></span></div>
-  <p class="rm-sign">Atelier BAILE</p>
+  <p class="rm-sign" hidden>Atelier BAILE</p><span class="rm-frame" id="rmF1"><img src="frame-baile.webp" alt="Atelier BAILE"></span><span class="rm-frame" id="rmF2"><img src="frame-room.webp" alt="Atelier BAILE の部屋"></span>
   <button type="button" class="rm-item rm-photos" id="rmWall" aria-label="写真"><span class="rm-pins" id="rmPins"></span><span class="rm-label">写真</span></button>
   <button type="button" class="rm-item" id="rmCase" aria-label="本棚（憶録）"><img src="bookcase.webp" alt=""><span class="rm-label">本棚</span></button>
   <button type="button" class="rm-item" id="rmDesk" aria-label="note"><img src="desk.webp" alt=""><span class="rm-label">note</span></button>
@@ -968,7 +971,9 @@ function placeRoom(pt,SW,SH){const FL=SH*(pt?.56:.68),P=FL/(pt?2.2:1.95),H0=FL-1
  const d=at(g('rmDesk'),pt?.36:.52,.7,1.2,492/720);
  at(g('rmProj'),pt?.16:.12,pt?1.25:.9,.4,457/560);
  at(g('rmBox'),pt?.4:.24,pt?1.25:.9,.55,401/600);
- const win=document.querySelector('.rm-window'),ww=1.1*P,wh=1.0*P;Object.assign(win.style,{left:(SW*(pt?.3:.24)-ww/2).toFixed(1)+'px',top:(FL-1.88*P).toFixed(1)+'px',width:ww.toFixed(1)+'px',height:wh.toFixed(1)+'px'});
+ const fr=(id,cx,top,w,h)=>Object.assign(g(id).style,{left:(cx-w/2).toFixed(1)+'px',top:top.toFixed(1)+'px',width:w.toFixed(1)+'px',height:h.toFixed(1)+'px','--fw':(.03*P).toFixed(1)+'px','--mat':(.035*P).toFixed(1)+'px'});
+ if(pt){fr('rmF1',SW*.13,FL-1.9*P,.42*P,.42*P);fr('rmF2',SW*.13,FL-1.35*P,.42*P,.28*P)}else{fr('rmF1',SW*.1,FL-1.72*P,.46*P,.46*P);fr('rmF2',SW*.1,FL-1.12*P,.46*P,.31*P)}
+ const win=document.querySelector('.rm-window'),ww=(pt?.85:1.1)*P,wh=(pt?.85:1.0)*P;Object.assign(win.style,{left:(SW*(pt?.42:.3)-ww/2).toFixed(1)+'px',top:(FL-1.88*P).toFixed(1)+'px',width:ww.toFixed(1)+'px',height:wh.toFixed(1)+'px'});
  const pins=g('rmPins'),cw=.054*P*1.5,wall=g('rmWall');pins.style.setProperty('--cw',cw.toFixed(1)+'px');pins.style.setProperty('--cg',(cw*.22).toFixed(1)+'px');pins.style.setProperty('--cols',pt?4:6);
  Object.assign(wall.style,{left:(SW*(pt?.74:.53)-(pt?4:6)*cw*1.22/2).toFixed(1)+'px',top:(FL-(pt?1.95:1.75)*P).toFixed(1)+'px'});
  const t=document.querySelector('.rm-sign');if(t){Object.assign(t.style,{left:pt?'0':'40px',right:pt?'0':'auto',top:pt?((FL-2.2*P)-90).toFixed(1)+'px':'26px',fontSize:pt?'48px':'40px',textAlign:pt?'center':'left'})}}
