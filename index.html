@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
 <title>sora yamaguchi</title>
 <meta name="description" content="sora yamaguchi — 憶録家。写真と映像を、記録ではなく記憶として。">
 <meta property="og:title" content="sora yamaguchi">
@@ -150,8 +150,8 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .pages button{font:12px "Zen Old Mincho",serif;letter-spacing:.2em;color:rgba(255,253,246,.7);background:none;border:0;border-radius:999px;padding:7px 12px 7px 14px;min-height:32px;cursor:pointer;transition:background .6s,color .6s}
 .pages button.cur{background:rgba(255,253,246,.88);color:#24301f}
 @media(min-width:601px){.pages{bottom:max(5vh,22px);left:max(5vw,20px);transform:none}}
-html,body{overscroll-behavior:none}
-.swipe-hint{position:fixed;z-index:6;left:50%;bottom:calc(env(safe-area-inset-bottom) + 92px);transform:translateX(-50%);margin:0;font-size:11px;letter-spacing:.2em;color:var(--faint);text-shadow:0 1px 10px rgba(0,20,10,.5);opacity:0;transition:opacity 2s;pointer-events:none;white-space:nowrap}
+html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
+.swipe-hint{position:fixed;z-index:6;left:50%;bottom:auto;top:calc(env(safe-area-inset-top) + 96px);transform:translateX(-50%);margin:0;font-size:11px;letter-spacing:.2em;color:var(--faint);text-shadow:0 1px 10px rgba(0,20,10,.5);opacity:0;transition:opacity 2s;pointer-events:none;white-space:nowrap}
 .swipe-hint.on{opacity:1}
 @media(min-width:601px){.swipe-hint{display:none}}
 @media(prefers-reduced-motion:reduce){.shelf,.pinboard{transition:none}}
@@ -393,7 +393,7 @@ const MET={x:-999,y:-999,len:170,a:0,dx:-.86,dy:.5,on:false,age:0,life:1,v:950,n
 function stepMeteor(dt){if(RM)return;if(!MET.on){MET.next-=dt;MET.a=0;if(MET.next<=0){MET.on=true;MET.age=0;MET.life=rr(2.4,3.6);MET.v=rr(220,380);const ang=rr(.25,.5)*(R()<.5?1:-1);MET.dx=(ang>0?-1:1)*Math.cos(Math.abs(ang));MET.dy=Math.sin(Math.abs(ang));MET.x=rr(W*.15,W*.95);MET.y=rr(H*.04,Math.max(H*.08,HZ-H*.3));MET.len=rr(200,320)}return}
  MET.age+=dt;const k=MET.age/MET.life;MET.x+=MET.dx*MET.v*dt;MET.y+=MET.dy*MET.v*dt;MET.a=Math.sin(Math.min(1,k)*Math.PI)*.9;if(k>=1){MET.on=false;MET.a=0;MET.next=rr(35,80)}}
 function layout(){const E=W<600?150:0,s=Math.max(W/BG.w,(H+E*2)/BG.h);fit={s,ox:(W-BG.w*s)*BG.fx,oy:(H-BG.h*s)*BG.fy};
- const hs=document.documentElement.style;hs.backgroundSize=`${(BG.w*s).toFixed(1)}px ${(BG.h*s).toFixed(1)}px`;hs.backgroundPosition=`${fit.ox.toFixed(1)}px ${fit.oy.toFixed(1)}px`;HZ=fit.oy+BG.h*s*BG.hz;WY=W<600?VH-130:VH*.8}
+ const hs=document.documentElement.style;hs.backgroundSize=`${(BG.w*s).toFixed(1)}px ${(BG.h*s).toFixed(1)}px`;hs.backgroundPosition=`${fit.ox.toFixed(1)}px ${fit.oy.toFixed(1)}px`;HZ=fit.oy+BG.h*s*BG.hz;WY=W<600?VH-200:VH*.8}
 
 /* ── 風：x と時間で決まる、ゆっくり渡っていく波（写真の草と手前の草で共有） ── */
 let MB=0,mbT=0,lastP=null;
@@ -793,12 +793,19 @@ postEl.addEventListener('click',()=>show(postView));deskEl.addEventListener('cli
 addEventListener('keydown',e=>{if(e.key==='Escape')[postView,noteView].forEach(v=>v.classList.remove('on'))});
 document.getElementById('copyMail').addEventListener('click',async e=>{try{await navigator.clipboard.writeText('sorayamaguchi1010@gmail.com');e.target.textContent='写しました'}catch(_){const r=document.createRange();r.selectNodeContents(document.getElementById('mailAddr'));const sl=getSelection();sl.removeAllRanges();sl.addRange(r);e.target.textContent='選択しました'}setTimeout(()=>e.target.textContent='アドレスを写す',2200)});
 
+/* スマホ：下の草地を2段に使って小物を並べる */
+function placeMobile(){const base=VH-(parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--sab'))||0);
+ const put=(el,cx,bottom,w,ar)=>{el.style.width=w+'px';el.style.left=(W*cx-w/2).toFixed(1)+'px';el.style.top=(bottom-w*ar).toFixed(1)+'px'};
+ const r1=VH-108,r2=VH-212;
+ put(hut,.3,r2,Math.min(150,W*.4),596/900*.96);put(boardEl,.78,r2,Math.min(118,W*.3),509/760*.98);
+ put(boxEl,.16,r1,Math.min(78,W*.2),401/600);put(deskEl,.5,r1,Math.min(104,W*.27),460/700);put(postEl,.84,r1,Math.min(30,W*.08),420/278)}
+
 /* ── 起動 ── */
 function resize(){
- DPR=Math.min(devicePixelRatio||1,1.6);W=innerWidth;H=Math.max(innerHeight,LVH.offsetHeight||0);VH=innerHeight;
+ DPR=Math.min(devicePixelRatio||1,1.6);W=document.documentElement.clientWidth||innerWidth;VH=document.documentElement.clientHeight||innerHeight;H=Math.max(VH,LVH.offsetHeight||0);
  bg.width=W*DPR;bg.height=H*DPR;for(const c of[fg,near,vc]){c.width=W*DPR;c.height=H*DPR;c.getContext('2d').setTransform(DPR,0,0,DPR,0,0)}
  if(!gl&&bx)bx.setTransform(DPR,0,0,DPR,0,0);
- layout();buildColors();buildBlades();placeHut();placeBoard();placeProps();
+ layout();buildColors();buildBlades();placeHut();placeBoard();placeProps();if(W<600)placeMobile();
  for(const o of live){o.y=clamp(o.y,H*.05,Math.max(H*.05,WY-o.h))}
 }
 if(!initGL()){bx=bg.getContext('2d')}
