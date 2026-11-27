@@ -81,7 +81,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .about dd{margin:0;overflow-wrap:anywhere}
 .about a{color:#fff;text-underline-offset:4px;text-decoration-thickness:.5px}
 
-@media(max-width:600px){.name{left:14px;top:calc(env(safe-area-inset-top) + 8px)}nav{left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 2px);justify-content:center;gap:0;max-width:none}nav{flex-wrap:nowrap}nav button,nav a{padding:10px 4px;font-size:13px;min-height:40px;white-space:nowrap}.veil{background:radial-gradient(130% 95% at 50% 38%,transparent 62%,rgba(10,30,20,.22) 100%),linear-gradient(to top,rgba(8,26,14,.45),transparent 12%)}}
+@media(max-width:600px){.name{left:14px;top:calc(env(safe-area-inset-top) + 8px)}nav{left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 2px);justify-content:center;gap:0;max-width:none}nav{flex-wrap:wrap;row-gap:0;padding:0 8px}nav button,nav a{padding:4px 7px;font-size:14px;min-height:34px;line-height:1.2;white-space:nowrap}.veil{background:radial-gradient(130% 95% at 50% 38%,transparent 62%,rgba(10,30,20,.22) 100%),linear-gradient(to top,rgba(8,26,14,.45),transparent 12%)}}
 @media(prefers-reduced-motion:reduce){.grain{animation:none}}
 #cam{position:fixed;left:0;top:0;width:100%;height:100%;height:100lvh;z-index:0;will-change:transform;transform-origin:50% 55%}
 #cam #bg{z-index:0}#cam #field{z-index:2}#cam #near,#cam #fg{z-index:3}
@@ -114,12 +114,12 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .book:hover,.book:focus-visible{transform:translateY(-10px) rotate(var(--lean,0deg));box-shadow:inset 2px 0 0 rgba(255,255,255,.1),0 14px 18px -8px rgba(0,0,0,.6);outline:none}
 .book:focus-visible{box-shadow:0 0 0 1px #fff}
 .sh-hint{margin:8px 0 0;text-align:center;font-size:11px;letter-spacing:.2em;color:rgba(239,230,214,.4)}
-.swipe-hint{position:fixed;z-index:6;left:50%;bottom:calc(env(safe-area-inset-bottom) + 58px);transform:translateX(-50%);margin:0;font-size:11px;letter-spacing:.2em;color:var(--faint);text-shadow:0 1px 10px rgba(0,20,10,.5);opacity:0;transition:opacity 2s;pointer-events:none;white-space:nowrap}
+.swipe-hint{position:fixed;z-index:6;left:50%;bottom:calc(env(safe-area-inset-bottom) + 86px);transform:translateX(-50%);margin:0;font-size:11px;letter-spacing:.2em;color:var(--faint);text-shadow:0 1px 10px rgba(0,20,10,.5);opacity:0;transition:opacity 2s;pointer-events:none;white-space:nowrap}
 .swipe-hint.on{opacity:1}
 @media(min-width:601px){.swipe-hint{display:none}}
 @media(prefers-reduced-motion:reduce){.shelf,.pinboard{transition:none}}
 #board{position:absolute;left:0;top:0;z-index:2;padding:0;border:0;background:none;cursor:pointer;transform-origin:50% 100%;filter:drop-shadow(0 6px 8px rgba(10,25,10,.35)) saturate(.85);transition:transform .8s cubic-bezier(.3,.7,.2,1);-webkit-tap-highlight-color:transparent}
-#board svg{display:block;width:100%;height:auto}
+
 #board .hut-label{position:absolute;left:50%;bottom:100%;transform:translate(-50%,6px);white-space:nowrap;font-size:12px;letter-spacing:.2em;color:var(--ink);text-shadow:0 1px 10px rgba(0,20,10,.6);opacity:0;transition:opacity .8s,transform .8s}
 #board:hover,#board:focus-visible{transform:scale(1.05);outline:none}
 #board:hover .hut-label,#board:focus-visible .hut-label{opacity:1;transform:translate(-50%,-4px)}
@@ -138,7 +138,11 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 @media(max-width:600px){.pb-board{column-width:140px;column-gap:16px;padding:26px 16px 30px;border-width:10px}}
 
 #hut{position:absolute;left:0;top:0;z-index:2;padding:0;border:0;background:none;cursor:pointer;transform-origin:50% 100%;filter:drop-shadow(0 6px 8px rgba(10,25,10,.35)) saturate(.85) contrast(1.02);transition:transform .8s cubic-bezier(.3,.7,.2,1);-webkit-tap-highlight-color:transparent}
-#hut svg{display:block;width:100%;height:auto}
+#hut img,#board img{display:block;width:100%;height:auto;filter:saturate(.82) contrast(1.02) brightness(.96);-webkit-user-drag:none}
+#hut::after,#board::after{content:"";position:absolute;left:6%;right:2%;bottom:-3%;height:12%;border-radius:50%;background:rgba(20,35,12,.45);filter:blur(6px);z-index:-1}
+#hut .win-light{position:absolute;left:56%;top:46%;width:24%;height:22%;border-radius:40%;background:radial-gradient(rgba(255,205,120,.75),rgba(255,180,90,0) 70%);mix-blend-mode:screen;opacity:0;transition:opacity 1s;pointer-events:none}
+#hut:hover .win-light,#hut:focus-visible .win-light{opacity:1}
+
 #hut .wglow{opacity:.45;transition:opacity 1s}
 #hut .hut-label{position:absolute;left:50%;bottom:100%;transform:translate(-50%,6px);white-space:nowrap;font-size:12px;letter-spacing:.2em;color:var(--ink);text-shadow:0 1px 10px rgba(0,20,10,.6);opacity:0;transition:opacity .8s,transform .8s}
 #hut:hover,#hut:focus-visible{transform:scale(1.04);outline:none}
@@ -173,60 +177,13 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 <canvas id="vine" class="layer" aria-hidden="true" hidden></canvas>
 <div id="field" aria-label="浮かんでいる作品"></div>
 <button type="button" id="hut" aria-label="古屋に入る（憶録の本棚）">
-<svg viewBox="0 0 240 180" aria-hidden="true">
- <defs>
-  <filter id="age" x="-10%" y="-10%" width="120%" height="120%"><feTurbulence type="fractalNoise" baseFrequency="1.3" numOctaves="2" seed="4" result="n"/><feColorMatrix in="n" type="saturate" values="0" result="g"/><feComponentTransfer in="g" result="g2"><feFuncA type="table" tableValues="0 .5"/></feComponentTransfer><feComposite in="g2" in2="SourceGraphic" operator="in" result="m"/><feBlend in="SourceGraphic" in2="m" mode="multiply"/></filter>
-  <linearGradient id="hfront" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#5a3c28"/><stop offset="1" stop-color="#3a2618"/></linearGradient>
-  <linearGradient id="hside" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#80583a"/><stop offset="1" stop-color="#6a4730"/></linearGradient>
-  <linearGradient id="hroof" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#5b534d"/><stop offset="1" stop-color="#2f2925"/></linearGradient>
-  <radialGradient id="lamp"><stop offset="0" stop-color="#ffe2a0"/><stop offset=".6" stop-color="#ffb65c"/><stop offset="1" stop-color="#c97a2c"/></radialGradient>
-  <radialGradient id="glow"><stop offset="0" stop-color="#ffcf7a" stop-opacity=".55"/><stop offset="1" stop-color="#ffcf7a" stop-opacity="0"/></radialGradient>
- </defs>
- <ellipse cx="128" cy="164" rx="108" ry="12" fill="#1d2a12" opacity=".42"/>
- <g filter="url(#age)">
-  <polygon points="30,102 66,74 102,106 102,166 30,158" fill="url(#hfront)"/>
-  <g stroke="#24160d" stroke-width="1" opacity=".75"><path d="M42 93v66M54 84v76M66 76v86M78 86v77M90 96v68"/></g>
-  <polygon points="102,106 214,92 214,150 102,166" fill="url(#hside)"/>
-  <g stroke="#3a2416" stroke-width="1" opacity=".55"><path d="M116 104v60M130 102v60M144 100v59M158 98v58M172 97v57M186 95v57M200 93v57"/></g>
-  <polygon points="102,159 214,144 214,150 102,166" fill="#2e1f14"/>
-  <polygon points="58,66 172,52 222,90 104,108" fill="url(#hroof)"/>
-  <g stroke="#1e1916" stroke-width="1.1" opacity=".8"><path d="M72 64L118 104M88 62L134 102M104 60L150 100M120 58L166 98M136 56L182 96M152 54L198 94M166 53L212 91"/></g>
-  <polygon points="58,66 104,108 100,112 22,104 26,100" fill="#3b342f"/>
-  <path d="M24 103L64 69L104 109" fill="none" stroke="#6a625b" stroke-width="3" stroke-linecap="round"/>
-  <path d="M58 66L172 52" stroke="#7a716a" stroke-width="3" stroke-linecap="round"/>
-  <polygon points="150,40 160,39 161,62 151,63" fill="#2c2623"/><polygon points="148,37 163,36 163,41 148,42" fill="#3d3632"/>
-  <polygon points="48,118 82,121 82,163 48,160" fill="#d6c7a2"/>
-  <g stroke="#4a3220" stroke-width="2"><path d="M48 118L82 121L82 163L48 160ZM65 119.5v42M48 132l34 3M48 146l34 3"/></g>
-  <polygon class="win" points="132,112 176,107 176,133 132,138" fill="url(#lamp)"/>
-  <g stroke="#3a2618" stroke-width="2.2"><path d="M132 112L176 107L176 133L132 138ZM154 109.5v26M132 125l44 -5"/></g>
-  <polygon points="128,138 180,132 180,136 128,142" fill="#3a2a1e"/>
- </g>
- <circle class="wglow" cx="154" cy="122" r="48" fill="url(#glow)"/>
- <g stroke="#3f6a22" stroke-width="1.4" stroke-linecap="round" opacity=".9"><path d="M26 160l-3-13M34 161l2-11M42 162l-2-9M110 168l-2-10M118 167l2-9M206 152l4-12M214 151l-1-10M222 150l3-8"/></g>
-</svg>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs><radialGradient id="glow"><stop offset="0" stop-color="#ffcf7a" stop-opacity=".55"/><stop offset="1" stop-color="#ffcf7a" stop-opacity="0"/></radialGradient></defs></svg>
+<img src="hut.webp" alt="" width="900" height="596" draggable="false">
+<span class="win-light" aria-hidden="true"></span>
 <span class="hut-label">憶録の本棚</span>
 </button>
 <button type="button" id="board" aria-label="掲示板（写真）">
-<svg viewBox="0 0 200 170" aria-hidden="true">
- <defs><linearGradient id="bwood" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#7a5636"/><stop offset="1" stop-color="#5a3c25"/></linearGradient></defs>
- <ellipse cx="100" cy="162" rx="78" ry="7" fill="#1d2a12" opacity=".4"/>
- <g filter="url(#age)">
-  <rect x="30" y="40" width="9" height="122" fill="#4a3220"/><rect x="161" y="40" width="9" height="122" fill="#4a3220"/>
-  <polygon points="16,32 100,14 184,32 180,38 100,22 20,38" fill="#3b332e"/>
-  <rect x="20" y="38" width="160" height="92" fill="url(#bwood)"/>
-  <rect x="26" y="44" width="148" height="80" fill="#6b4a2f"/>
-  <g stroke="#3a2616" stroke-width="1" opacity=".55"><path d="M26 64h148M26 84h148M26 104h148"/></g>
-  <g><rect x="38" y="52" width="30" height="22" fill="#e9e2d2" transform="rotate(-4 53 63)"/><rect x="41" y="55" width="24" height="15" fill="#7fa3b8" transform="rotate(-4 53 63)"/>
-  <rect x="78" y="50" width="26" height="32" fill="#ece5d6" transform="rotate(3 91 66)"/><rect x="81" y="53" width="20" height="22" fill="#b89a62" transform="rotate(3 91 66)"/>
-  <rect x="116" y="54" width="44" height="28" fill="#e9e2d2" transform="rotate(-2 138 68)"/><rect x="119" y="57" width="38" height="20" fill="#5f7f52" transform="rotate(-2 138 68)"/>
-  <rect x="44" y="88" width="34" height="26" fill="#ece5d6" transform="rotate(5 61 101)"/><rect x="47" y="91" width="28" height="18" fill="#c98a5a" transform="rotate(5 61 101)"/>
-  <rect x="96" y="90" width="24" height="28" fill="#e9e2d2" transform="rotate(-6 108 104)"/><rect x="99" y="93" width="18" height="19" fill="#3e5a6e" transform="rotate(-6 108 104)"/>
-  <rect x="130" y="90" width="32" height="24" fill="#ece5d6" transform="rotate(2 146 102)"/><rect x="133" y="93" width="26" height="16" fill="#9bb07a" transform="rotate(2 146 102)"/></g>
-  <g fill="#b23a2a"><circle cx="53" cy="52" r="2.2"/><circle cx="91" cy="50" r="2.2"/><circle cx="138" cy="54" r="2.2"/><circle cx="61" cy="88" r="2.2"/><circle cx="108" cy="90" r="2.2"/><circle cx="146" cy="90" r="2.2"/></g>
-  <rect x="20" y="128" width="160" height="5" fill="#3a2a1e"/>
- </g>
- <g stroke="#3f6a22" stroke-width="1.4" stroke-linecap="round" opacity=".9"><path d="M28 162l-3-12M36 162l2-10M158 162l3-11M168 162l-2-9"/></g>
-</svg>
+<img src="board.webp" alt="" width="760" height="509" draggable="false">
 <span class="hut-label">写真の掲示板</span>
 </button>
 <canvas id="near" class="layer" aria-hidden="true"></canvas>
@@ -703,7 +660,7 @@ const hint=document.getElementById('swipeHint');setTimeout(()=>hint.classList.ad
 
 /* ── 古屋：土手の上に置く。クリックで本棚へ ── */
 const hut=document.getElementById('hut');
-function placeHut(){const mob=W<600,bx=mob?(fit.ox<0?(-fit.ox+W*.18)/fit.s:.12*BG.w):.11*BG.w,by=BG.h*(mob?.705:.72);const p=ip([bx,by]);const w=mob?Math.min(124,W*.32):clamp(W*.095,104,164);hut.style.width=w+'px';const h=w*180/240;hut.style.left=(p[0]-w/2).toFixed(1)+'px';hut.style.top=(p[1]-h).toFixed(1)+'px'}
+function placeHut(){const mob=W<600,bx=mob?(fit.ox<0?(-fit.ox+W*.18)/fit.s:.12*BG.w):.11*BG.w,by=BG.h*(mob?.705:.72);const p=ip([bx,by]);const w=mob?Math.min(130,W*.34):clamp(W*.1,110,170);hut.style.width=w+'px';const h=w*596/900*.96;hut.style.left=(p[0]-w/2).toFixed(1)+'px';hut.style.top=(p[1]-h).toFixed(1)+'px'}
 hut.addEventListener('click',openShelf);
 
 /* ── 作品を3Dで手に取る：ドラッグで回転、ホイール・ピンチで拡大、ダブルクリックで戻す ── */
@@ -753,7 +710,7 @@ function openPins(){if(!pinBuilt){buildPins();pinBuilt=true}closeShelf();pinboar
 function closePins(){pinboard.classList.remove('on');pinboard.setAttribute('aria-hidden','true')}
 boardEl.addEventListener('click',openPins);document.getElementById('pinBtn').addEventListener('click',openPins);document.getElementById('pinClose').addEventListener('click',closePins);
 addEventListener('keydown',e=>{if(e.key==='Escape'&&pinboard.classList.contains('on')&&!view.classList.contains('on'))closePins()});
-function placeBoard(){const mob=W<600,bx=mob?(fit.ox<0?(-fit.ox+W*.8)/fit.s:.8*BG.w):.86*BG.w,by=BG.h*(mob?.73:.75);const p=ip([bx,by]);const w=mob?Math.min(96,W*.25):clamp(W*.07,80,124);boardEl.style.width=w+'px';const h=w*170/200;boardEl.style.left=(p[0]-w/2).toFixed(1)+'px';boardEl.style.top=(p[1]-h).toFixed(1)+'px'}
+function placeBoard(){const mob=W<600,bx=mob?(fit.ox<0?(-fit.ox+W*.8)/fit.s:.8*BG.w):.86*BG.w,by=BG.h*(mob?.73:.75);const p=ip([bx,by]);const w=mob?Math.min(100,W*.26):clamp(W*.075,84,130);boardEl.style.width=w+'px';const h=w*509/760*.98;boardEl.style.left=(p[0]-w/2).toFixed(1)+'px';boardEl.style.top=(p[1]-h).toFixed(1)+'px'}
 
 /* ── 起動 ── */
 function resize(){
