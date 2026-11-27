@@ -1,0 +1,2 @@
+wood textures derived from three.js examples/textures/hardwood2_diffuse.jpg
+three.js — MIT License — Copyright © 2010-2024 three.js authors
