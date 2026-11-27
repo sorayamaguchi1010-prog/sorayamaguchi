@@ -146,6 +146,19 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .sh-close{font:400 12px "Zen Old Mincho",serif!important;letter-spacing:.18em;padding:10px 4px!important}
 .sh-close:focus:not(:focus-visible){outline:none}
 .sh-body{padding-bottom:84px!important}
+.row::after{filter:sepia(.25) contrast(1.05);box-shadow:0 2px 0 #1e120a,0 16px 22px -6px rgba(0,0,0,.8),inset 0 2px 0 rgba(255,220,170,.22),inset 0 -5px 8px rgba(0,0,0,.45),inset 0 0 0 1px rgba(0,0,0,.25)!important;border-radius:1px}
+.sh-body{filter:sepia(.12)}
+.shelf{background-color:#140d08!important}
+/* 古書の背：生成り・灰・クラフトの紙に、墨の題簽 */
+.book{color:#2a2118!important;font-weight:600;border-radius:1px 2px 1px 1px!important;
+ background:linear-gradient(90deg,rgba(60,40,20,.28),rgba(255,248,230,.10) 18%,rgba(255,248,230,.05) 70%,rgba(60,40,20,.32)),url(tex/paper.webp) calc(var(--px,0)*1px) 0/200px auto,var(--bg)!important;background-blend-mode:normal,multiply,normal!important;
+ box-shadow:inset 0 0 0 1px rgba(80,55,30,.25),inset 0 0 18px rgba(90,60,30,.35),0 2px 4px rgba(0,0,0,.5)!important}
+.book::before,.book::after{display:none!important}
+.book .t{border:1.4px solid rgba(42,33,24,.85);padding:9px 3px;box-sizing:content-box;margin-top:10px!important}
+.book.acc .t{background:var(--acc);border-color:#5f78a0;box-shadow:0 0 0 2px var(--acc),0 0 0 3.4px #5f78a0;color:#2a1810}
+.book.plain .t{border-color:transparent}
+.book .k{font:500 9px "Zen Old Mincho",serif!important;letter-spacing:.2em;opacity:.65!important;bottom:12px!important;writing-mode:vertical-rl!important;transform:translateX(-50%)!important}
+.book .gr2{opacity:.4!important}
 .pages{position:fixed;z-index:25;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 46px);display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(20,30,22,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .pages button{font:12px "Zen Old Mincho",serif;letter-spacing:.2em;color:rgba(255,253,246,.7);background:none;border:0;border-radius:999px;padding:7px 12px 7px 14px;min-height:32px;cursor:pointer;transition:background .6s,color .6s}
 .pages button.cur{background:rgba(255,253,246,.88);color:#24301f}
@@ -262,7 +275,6 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
  <div class="pb-body"><div class="pb-board" id="pinBody"></div></div>
  <p class="sh-hint">右へスワイプで草原へ</p>
 </section>
-<div class="pages" id="pages" role="tablist" aria-label="ページ"><button type="button" data-p="pins">写真</button><button type="button" data-p="field" class="cur">草原</button><button type="button" data-p="shelf">憶録</button></div>
 <p class="swipe-hint" id="swipeHint">← 写真の掲示板　　憶録の本棚 →</p>
 <div class="over" id="postView" role="dialog" aria-modal="true" aria-label="手紙">
  <button class="close" type="button" data-close>close</button>
@@ -683,17 +695,17 @@ function stepCam(t){if(RM){cam.style.transform='';return}
 /* ── 憶録の本棚：右へスワイプで開く ── */
 const seeded=s=>()=>{s|=0;s=s+0x6D2B79F5|0;let t=Math.imul(s^s>>>15,1|s);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
 const shelf=document.getElementById('shelf'),shelfBody=document.getElementById('shelfBody');
-const CLOTH=[["#4f5b45","#efe6d0"],["#7a3b2e","#f2e2c9"],["#2f3e52","#e7e0cf"],["#c9b28a","#2b2219"],["#5d4a3a","#f0e4cc"],["#1f2a24","#d9cfb8"],["#8a6d3b","#f6ecd6"],["#e8dfcc","#3a2e22"],["#3d2f3f","#eadbc6"],["#6f7d6a","#f4ecdc"]];
+const CLOTH=[["#d9cdb2"],["#cfc3a6"],["#c6bca4"],["#ddd3bc"],["#bfb293"],["#d4c39f"],["#c9c2b0"],["#e0d5bb"],["#b8ab8c"],["#d6cbb1"]];
 function bookEl(title,kind,onOpen,opt={}){
  const b=document.createElement('button');b.type='button';b.className='book';const r=seeded(title.length*31+(title.charCodeAt(0)||7)*7+(opt.seed||0));
- const c=CLOTH[Math.floor(r()*CLOTH.length)];b.style.setProperty('--bg',c[0]);b.style.setProperty('--fg',c[1]);b.style.setProperty('--px',Math.round(r()*260));
+ const c=CLOTH[Math.floor(r()*CLOTH.length)];b.style.setProperty('--bg',c[0]);const v=r();if(v<.22){b.classList.add('acc');b.style.setProperty('--acc',['#e0906a','#d98b62','#cf9a74'][Math.floor(r()*3)])}else if(v<.36)b.classList.add('plain');b.style.setProperty('--px',Math.round(r()*260));
  const m=title.match(/^#(\d+)\s*/),body=m?title.slice(m[0].length):title,n=[...body].length+(m?1:0);
- const h=Math.round(170+r()*56),ADV=14.9,COL=17.2,cap=Math.max(4,Math.floor((h-58)/ADV));
+ const h=Math.round(170+r()*56),ADV=14.9,COL=17.2,cap=Math.max(4,Math.floor((h-84)/ADV));
  const k=Math.max(1,Math.ceil(n/cap)),per=Math.ceil(n/k);
- const w=opt.img?Math.round(h*.56):Math.round(Math.max(36,k*COL+20+r()*6));
+ const w=opt.img?Math.round(h*.56):Math.round(Math.max(40,k*COL+30+r()*6));
  b.style.height=h+'px';b.style.width=w+'px';if(r()<.14)b.style.setProperty('--lean',(r()<.5?-1:1)*(3+r()*3)+'deg');
  if(opt.img){b.classList.add('ph');b.style.setProperty('--img',`url("${opt.img}")`)}
- const t=document.createElement('span');t.className='t';t.style.height=(per*ADV+ADV*.45).toFixed(1)+'px';
+ const t=document.createElement('span');t.className='t';t.style.height=(per*ADV+ADV*.45).toFixed(1)+'px';const cap2=Math.max(4,Math.floor((h-80)/ADV));if(per>cap2){}
  if(m){const u=document.createElement('span');u.className='tcy';u.textContent='#'+m[1];t.appendChild(u)}
  t.appendChild(document.createTextNode(body));
  const kk=document.createElement('span');kk.className='k';kk.textContent=kind;const g=document.createElement('span');g.className='gr2';
@@ -725,7 +737,7 @@ const hint=document.getElementById('swipeHint');setTimeout(()=>hint.classList.ad
 
 /* ── 古屋：土手の上に置く。クリックで本棚へ ── */
 const hut=document.getElementById('hut');
-function placeHut(){const mob=W<600,bx=mob?(fit.ox<0?(-fit.ox+W*.18)/fit.s:.12*BG.w):.11*BG.w,by=BG.h*(mob?.705:.72);const p=ip([bx,by]);const w=mob?Math.min(130,W*.34):clamp(W*.1,110,170);hut.style.width=w+'px';const h=w*596/900*.96;hut.style.left=(p[0]-w/2).toFixed(1)+'px';hut.style.top=(p[1]-h).toFixed(1)+'px'}
+function placeHut(){const mob=W<600,bx=mob?(fit.ox<0?(-fit.ox+W*.18)/fit.s:.12*BG.w):.2*BG.w,by=BG.h*(mob?.705:.8);const p=ip([bx,by]);const w=mob?Math.min(130,W*.34):clamp(W*.12,130,200);hut.style.width=w+'px';const h=w*596/900*.96;hut.style.left=(p[0]-w/2).toFixed(1)+'px';hut.style.top=(p[1]-h).toFixed(1)+'px'}
 hut.addEventListener('click',openShelf);
 
 /* ── 作品を3Dで手に取る：ドラッグで回転、ホイール・ピンチで拡大、ダブルクリックで戻す ── */
@@ -775,18 +787,12 @@ function openPins(){if(!pinBuilt){buildPins();pinBuilt=true}closeShelf();pinboar
 function closePins(){pinboard.classList.remove('on');pinboard.setAttribute('aria-hidden','true')}
 boardEl.addEventListener('click',openPins);document.getElementById('pinBtn').addEventListener('click',openPins);document.getElementById('pinClose').addEventListener('click',closePins);
 addEventListener('keydown',e=>{if(e.key==='Escape'&&pinboard.classList.contains('on')&&!view.classList.contains('on'))closePins()});
-function placeBoard(){const mob=W<600,bx=mob?(fit.ox<0?(-fit.ox+W*.86)/fit.s:.86*BG.w):.86*BG.w,by=BG.h*(mob?.73:.75);const p=ip([bx,by]);const w=mob?Math.min(100,W*.26):clamp(W*.075,84,130);boardEl.style.width=w+'px';const h=w*509/760*.98;boardEl.style.left=(p[0]-w/2).toFixed(1)+'px';boardEl.style.top=(p[1]-h).toFixed(1)+'px'}
-
-/* ── 写真・草原・憶録 のページ切替 ── */
-const pagesEl=document.getElementById('pages');
-function syncPages(){const sh=shelf.classList.contains('on'),pb=pinboard.classList.contains('on');const cur=sh?'shelf':pb?'pins':'field';pagesEl.querySelectorAll('button').forEach(b=>{b.classList.toggle('cur',b.dataset.p===cur);b.setAttribute('aria-selected',b.dataset.p===cur)})}
-pagesEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const p=b.dataset.p;if(p==='field'){closeShelf();closePins()}else if(p==='shelf')openShelf();else openPins()});
-new MutationObserver(syncPages).observe(shelf,{attributes:true,attributeFilter:['class']});new MutationObserver(syncPages).observe(pinboard,{attributes:true,attributeFilter:['class']});
+function placeBoard(){const mob=W<600,bx=mob?(fit.ox<0?(-fit.ox+W*.86)/fit.s:.86*BG.w):.76*BG.w,by=BG.h*(mob?.73:.8);const p=ip([bx,by]);const w=mob?Math.min(100,W*.26):clamp(W*.085,96,146);boardEl.style.width=w+'px';const h=w*509/760*.98;boardEl.style.left=(p[0]-w/2).toFixed(1)+'px';boardEl.style.top=(p[1]-h).toFixed(1)+'px'}
 
 /* ── 川べりの小物：ポスト・机のノート・木箱 ── */
 const postEl=document.getElementById('post'),deskEl=document.getElementById('desk'),boxEl=document.getElementById('box'),postView=document.getElementById('postView'),noteView=document.getElementById('noteView');
 function placeProp(el,dx,mx,yf,wd,wm,ar){const mob=W<600,bx=mob?(fit.ox<0?(-fit.ox+W*mx)/fit.s:mx*BG.w):dx*BG.w;const p=ip([bx,BG.h*yf]);const w=mob?wm:clamp(W*wd,wm,wm*1.9);el.style.width=w+'px';let top=p[1]-w*ar;const lim=(mob?VH-150:VH-70)-w*ar;if(top>lim)top=lim;el.style.left=(p[0]-w/2).toFixed(1)+'px';el.style.top=top.toFixed(1)+'px'}
-function placeProps(){placeProp(boxEl,.25,.15,.88,.055,52,401/600);placeProp(deskEl,.36,.4,.94,.075,70,460/700);placeProp(postEl,.47,.64,.955,.03,30,420/278)}
+function placeProps(){placeProp(boxEl,.33,.15,.92,.055,52,401/600);placeProp(deskEl,.45,.4,.95,.075,70,460/700);placeProp(postEl,.535,.64,.95,.03,30,420/278)}
 const nl=document.getElementById('noteList');NOTES.forEach(([t,u])=>{const li=document.createElement('li');const a=document.createElement('a');a.href=u;a.target='_blank';a.rel='noopener';a.textContent=t;li.appendChild(a);nl.appendChild(li)});
 postEl.addEventListener('click',()=>show(postView));deskEl.addEventListener('click',()=>show(noteView));boxEl.addEventListener('click',openShelf);
 [postView,noteView].forEach(v=>v.addEventListener('click',e=>{if(e.target===v||e.target.hasAttribute('data-close'))v.classList.remove('on')}));
