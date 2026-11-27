@@ -200,7 +200,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .room{position:fixed;inset:0;z-index:14;background:#120c08;opacity:0;visibility:hidden;transition:opacity 1s,visibility 0s 1s;overflow:hidden}
 .room.on{opacity:1;visibility:visible;transition:opacity 1s}
 .room::after{content:"";position:absolute;inset:-50%;pointer-events:none;opacity:.2;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1.2s steps(6) infinite}
-transform-origin:50% 50%;transform:translate(-50%,-50%) scale(var(--rs,1))}
+.rm-scene{position:absolute;left:50%;top:50%;width:1600px;height:1000px;transform-origin:50% 50%;transform:translate(-50%,-50%) scale(var(--rs,1))}
 .room.on .rm-scene{animation:rmIn 1.4s cubic-bezier(.2,.7,.2,1)}
 @keyframes rmIn{from{transform:translate(-50%,-50%) scale(calc(var(--rs,1)*1.12));filter:blur(6px) brightness(.5)}}
 .rm-wall{position:absolute;left:0;right:0;top:0;height:66%;background:radial-gradient(60% 70% at 22% 40%,rgba(255,214,150,.30),transparent 70%),linear-gradient(rgba(0,0,0,.35),transparent 30%,rgba(0,0,0,.25)),url(tex/wood-back.webp) 0 0/360px auto}
@@ -216,10 +216,10 @@ transform-origin:50% 50%;transform:translate(-50%,-50%) scale(var(--rs,1))}
 .rm-label{position:absolute;left:50%;bottom:100%;transform:translate(-50%,-6px);white-space:nowrap;font:14px "Zen Old Mincho",serif;letter-spacing:.2em;color:#f3e6cf;text-shadow:0 1px 10px rgba(0,0,0,.8);opacity:0;transition:opacity .6s}
 .rm-item:hover .rm-label,.rm-item:focus-visible .rm-label{opacity:1}
 @media(hover:none){.rm-label{opacity:.9}}
-#rmProj{left:16%;top:64%;width:210px}
-#rmDesk{left:40%;top:52%;width:380px}
-#rmBox{left:52%;top:74%;width:200px}
-#rmCase{left:69%;top:8%;width:300px;height:640px;background:linear-gradient(90deg,#2a1a0f,#3d2817 8%,#3d2817 92%,#22150c);box-shadow:0 30px 60px rgba(0,0,0,.6),inset 0 0 0 14px #4a3020,inset 0 0 30px rgba(0,0,0,.6)}
+#rmProj{left:27%;top:63%;width:250px}
+#rmDesk{left:40%;top:50%;width:400px}
+#rmBox{left:3%;top:76%;width:230px}#rmBox img{filter:saturate(.8) brightness(.62) sepia(.12) drop-shadow(0 18px 14px rgba(0,0,0,.6))}
+#rmCase{left:70%;top:6%;width:300px}
 .rm-shelves{position:absolute;inset:14px;display:grid;grid-template-rows:repeat(4,1fr)}
 .rm-shelves i{display:flex;align-items:flex-end;gap:2px;padding:0 6px;border-bottom:12px solid #5a3d27;box-shadow:inset 0 -18px 18px -12px rgba(0,0,0,.6)}
 .rm-shelves b{display:block;width:var(--w);height:var(--h);background:var(--c) url(tex/paper.webp) 0 0/120px auto;background-blend-mode:multiply;border-radius:1px 2px 0 0;box-shadow:inset -3px 0 4px rgba(0,0,0,.35),inset 2px 0 0 rgba(255,250,235,.12)}
@@ -229,29 +229,19 @@ transform-origin:50% 50%;transform:translate(-50%,-50%) scale(var(--rs,1))}
 .rm-beam{position:absolute;left:-30%;top:40%;width:120%;height:200%;pointer-events:none;background:linear-gradient(200deg,rgba(255,236,200,.12),transparent 60%);clip-path:polygon(25% 0,100% 0,15% 100%,8% 100%);opacity:.7}
 .rm-scene.pt{width:900px;height:1500px}
 .pt .rm-wall{height:56%}.pt .rm-floor{top:56%}
-.pt .rm-window{left:8%;top:13%;width:38%;height:20%}
+.pt .rm-window{left:14%;top:13%;width:32%;height:18%}
 .pt .rm-sign{left:0;right:0;top:4%;text-align:center;font-size:62px}
-.pt .rm-screen{left:52%;top:14%;width:42%;height:18%}
-.pt #rmCase{left:56%;top:36%;width:340px;height:620px}
-.pt #rmDesk{left:4%;top:42%;width:470px}
-.pt #rmProj{left:6%;top:63%;width:290px}
-.pt #rmBox{left:48%;top:78%;width:270px}
+.pt .rm-photos{left:50%;top:13%;width:36%;height:18%}
+.pt #rmCase{left:54%;top:34%;width:290px}
+.pt #rmDesk{left:12%;top:44%;width:400px}
+.pt #rmProj{left:40%;top:68%;width:280px}
+.pt #rmBox{left:14%;top:80%;width:240px}
 .pt .rm-label{font-size:22px}
-.rm-scene{position:absolute;left:50%;top:50%;width:2000px;height:1333px;transform-origin:50% 50%;transform:translate(-50%,-50%) scale(var(--rs,1))}
-.rm-photo{position:absolute;inset:0;width:100%;height:100%;display:block;filter:contrast(1.04) saturate(.92)}
-.rm-scene .rm-item img{filter:brightness(.62) saturate(.8) sepia(.12) contrast(1.05) drop-shadow(0 22px 18px rgba(0,0,0,.6))}
-.rm-scene .rm-item:hover img,.rm-scene .rm-item:focus-visible img{filter:brightness(.8) saturate(.9) sepia(.08) drop-shadow(0 26px 20px rgba(0,0,0,.65))}
-.rm-scene #rmCase{left:.5%;top:30%;width:440px;height:auto;background:none;box-shadow:none}
-.rm-scene #rmBox{left:22%;top:80%;width:300px}.rm-scene #rmBox img,.rm-scene #rmDesk img{filter:brightness(.45) saturate(.75) sepia(.15) contrast(1.08) drop-shadow(0 22px 18px rgba(0,0,0,.7))}.rm-scene #rmCase img{filter:brightness(.55) saturate(.8) sepia(.12) drop-shadow(0 22px 18px rgba(0,0,0,.6))}
-.rm-scene #rmProj{left:68%;top:42%;width:300px}
-.rm-scene #rmDesk{left:60%;top:68%;width:720px}
-.rm-wall-btn{left:29%;top:19%;width:36%;height:46%;border-radius:2px;background:transparent;transition:box-shadow .6s,background .6s}
-.rm-wall-btn:hover,.rm-wall-btn:focus-visible{background:rgba(255,240,210,.06);box-shadow:0 0 0 2px rgba(255,240,210,.35),0 0 60px rgba(255,230,190,.15);transform:none}
-.rm-wall-btn .rm-label{bottom:auto;top:50%;transform:translate(-50%,-50%);font-size:26px;letter-spacing:.4em}
-.rm-scene .rm-label{font-size:24px}
-.rm-title{position:absolute;left:3%;top:3%;margin:0;font:italic 300 46px/1 "Cormorant Garamond",serif;color:rgba(243,230,207,.75);letter-spacing:.06em;text-shadow:0 2px 12px rgba(0,0,0,.6)}
-.room .rm-pan{position:absolute;inset:0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
-.room .rm-pan::-webkit-scrollbar{display:none}
+.rm-photos{left:40%;top:20%;width:25%;height:30%;background:none}
+.rm-pins{position:absolute;inset:0;display:grid;grid-template-columns:repeat(5,1fr);gap:6px;padding:4px}
+.rm-pins i{display:block;background:#eee5d2 var(--im) center/cover;border:3px solid #efe7d6;box-shadow:0 4px 6px rgba(0,0,0,.45);transform:rotate(var(--r));filter:brightness(.82) sepia(.15)}
+.rm-photos:hover .rm-pins i,.rm-photos:focus-visible .rm-pins i{filter:brightness(1) sepia(.05)}
+.rm-item img{filter:saturate(.85) brightness(.78) sepia(.08) drop-shadow(0 18px 14px rgba(0,0,0,.55))}
 .rm-out{position:absolute;left:max(4vw,16px);bottom:calc(env(safe-area-inset-bottom) + 18px);color:rgba(243,230,207,.85)!important;z-index:3}
 .pages{position:fixed;z-index:25;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 46px);display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(20,30,22,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
 .pages button{font:12px "Zen Old Mincho",serif;letter-spacing:.2em;color:rgba(255,253,246,.7);background:none;border:0;border-radius:999px;padding:7px 12px 7px 14px;min-height:32px;cursor:pointer;transition:background .6s,color .6s}
@@ -332,9 +322,6 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
 <button type="button" class="prop" id="proj" hidden aria-label="映写機（映像）">
 <img src="projector.webp" alt="" width="520" height="504" draggable="false">
 <span class="hut-label">映像</span></button>
-<button type="button" class="prop" id="sign" aria-label="Atelier BAILE に入る">
-<img src="sign.webp" alt="" width="620" height="1000" draggable="false">
-<span class="hut-label">Atelier BAILE</span></button>
 <button type="button" class="prop" id="post" aria-label="連絡">
 <img src="post.webp" alt="" width="278" height="420" draggable="false">
 <span class="hut-label">連絡</span></button>
@@ -359,15 +346,16 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
 </div>
 
 <section class="room" id="room" aria-label="Atelier BAILE" aria-hidden="true">
- <div class="rm-pan" id="rmPan"><div class="rm-scene" id="rmScene">
-  <img class="rm-photo" src="room.webp" alt="" width="2000" height="1333">
-  <button type="button" class="rm-item rm-wall-btn" id="rmWall" aria-label="写真"><span class="rm-label">写真</span></button>
+ <div class="rm-scene" id="rmScene">
+  <div class="rm-wall"></div><div class="rm-floor"></div>
+  <div class="rm-window"><span></span></div>
+  <p class="rm-sign">Atelier BAILE</p>
+  <button type="button" class="rm-item rm-photos" id="rmWall" aria-label="写真"><span class="rm-pins" id="rmPins"></span><span class="rm-label">写真</span></button>
   <button type="button" class="rm-item" id="rmCase" aria-label="本棚（憶録）"><img src="bookcase.webp" alt=""><span class="rm-label">本棚</span></button>
-  <button type="button" class="rm-item" id="rmBox" aria-label="憶録の棚（Instagram）"><img src="box.webp" alt=""><span class="rm-label">憶録</span></button>
-  <button type="button" class="rm-item" id="rmProj" aria-label="映写機"><img src="projector.webp" alt=""><span class="rm-label">映写機</span></button>
   <button type="button" class="rm-item" id="rmDesk" aria-label="note"><img src="desk.webp" alt=""><span class="rm-label">note</span></button>
-  <p class="rm-title">Atelier BAILE</p>
- </div></div>
+  <button type="button" class="rm-item" id="rmProj" aria-label="映写機"><img src="projector.webp" alt=""><span class="rm-label">映写機</span></button>
+  <button type="button" class="rm-item" id="rmBox" aria-label="憶録の棚（Instagram）"><img src="box.webp" alt=""><span class="rm-label">憶録</span></button>
+ </div>
  <button type="button" class="sh-close rm-out" id="roomClose">← 草原へ出る</button>
 </section>
 <section class="shelf" id="shelf" aria-label="憶録 作品一覧" aria-hidden="true">
@@ -923,14 +911,13 @@ function placeMobile(){const base=VH-(parseFloat(getComputedStyle(document.docum
 /* ── 景色に置くもの：遠近に合わせて実寸で置く ── */
 const SCN=[ // 実寸の幅(m)、縦横比、PC位置(写真上の割合)、スマホ位置(画面の割合)
  {id:'hut',  mw:4.2, ar:596/900*.96, d:[.2,.735],  m:[.3,-150]},
- {id:'sign', mw:1.25, ar:1000/620,    d:[.74,.75], m:[.72,-150]},
  {id:'kid',  mw:.62,  ar:360/318,     d:[.5,.8], m:[.5,-112]},
  {id:'post', mw:.62, ar:420/278,     d:[.9,.8], m:[.9,-44]}];
 function placeScene(){const mob=W<600,Y0=ip([0,BG.h*.66])[1],K=mob?.42:.78;
  for(const o of SCN){const el=document.getElementById(o.id);if(!el)continue;let x,y;
   if(mob){x=W*o.m[0];y=VH+o.m[1]}else{const p=ip([o.d[0]*BG.w,o.d[1]*BG.h]);x=p[0];y=Math.min(p[1],VH-60)}
   const w=Math.max(18,o.mw*K*Math.max(8,y-Y0));el.style.width=w.toFixed(1)+'px';el.style.left=(x-w/2).toFixed(1)+'px';el.style.top=(y-w*o.ar).toFixed(1)+'px';el.style.zIndex=Math.round(y)}}
-document.getElementById('kid').addEventListener('click',()=>show(aboutView));document.getElementById('sign').addEventListener('click',()=>openRoom());
+document.getElementById('kid').addEventListener('click',()=>show(aboutView));
 
 /* ── 映写機：YouTubeをランダムに一本かける ── */
 const projView=document.getElementById('projView'),pjScreen=document.getElementById('pjScreen'),pjTitle=document.getElementById('pjTitle'),pjSel=document.getElementById('pjSel');
@@ -967,9 +954,8 @@ lf.addEventListener('submit',async e=>{e.preventDefault();if(lf._honey.value)ret
  lb.disabled=false});
 /* ── Atelier BAILE：小屋の中 ── */
 const room=document.getElementById('room'),rmScene=document.getElementById('rmScene');
-function fitRoom(){const SW=2000,SH=1333,k=Math.max(innerWidth/SW,innerHeight/SH),pan=document.getElementById('rmPan');
- if(innerWidth/innerHeight<1.1){rmScene.style.cssText=`position:relative;left:0;top:0;transform:scale(${k.toFixed(4)});transform-origin:0 0;margin-right:${(SW*k-SW).toFixed(0)}px;margin-bottom:${(SH*k-SH).toFixed(0)}px`;requestAnimationFrame(()=>{pan.scrollLeft=(SW*k-innerWidth)*.42})}
- else{rmScene.style.cssText='';rmScene.style.setProperty('--rs',k.toFixed(4))}}
+function fitRoom(){const pt=innerHeight>innerWidth*1.15;rmScene.classList.toggle('pt',pt);const SW=pt?900:1600,SH=pt?1500:1000;const k=Math.max(innerWidth/SW,innerHeight/SH);rmScene.style.setProperty('--rs',k.toFixed(4))}
+(function(){const p=document.getElementById('rmPins'),ps=WORKS.filter(w=>/^works\/(summer|photo)-/.test(w.src||'')).slice(0,15),rr=seeded(21);ps.forEach(w=>{const i=document.createElement('i');i.style.setProperty('--im',`url("${w.src}")`);i.style.setProperty('--r',((rr()-.5)*8).toFixed(1)+'deg');p.appendChild(i)})})();
 
 function openRoom(){fitRoom();room.classList.add('on');room.setAttribute('aria-hidden','false')}
 function closeRoom(){room.classList.remove('on');room.setAttribute('aria-hidden','true')}
