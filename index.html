@@ -929,13 +929,13 @@ function placeMobile(){const base=VH-(parseFloat(getComputedStyle(document.docum
 
 /* ── 景色に置くもの：遠近に合わせて実寸で置く ── */
 const SCN=[ // 実寸の幅(m)、縦横比、PC位置(写真上の割合)、スマホ位置(画面の割合)
- {id:'hut',  mw:4.2, ar:596/900*.96, d:[.2,.735],  m:[.3,-150]},
- {id:'kid',  mw:.62,  ar:360/318,     d:[.5,.8], m:[.5,-112]},
+ {id:'hut',  mw:4.2, ar:596/900*.96, d:[.2,.735],  m:[.19,-150]},
+ {id:'kid',  mw:.62,  ar:360/318,     d:[.5,.8], m:[.5,-104], ms:1.75},
  {id:'post', mw:.62, ar:420/278,     d:[.9,.8], m:[.9,-44]}];
 function placeScene(){const mob=W<600,Y0=ip([0,BG.h*.66])[1],K=mob?.42:.78;
  for(const o of SCN){const el=document.getElementById(o.id);if(!el)continue;let x,y;
   if(mob){x=W*o.m[0];y=VH+o.m[1]}else{const p=ip([o.d[0]*BG.w,o.d[1]*BG.h]);x=p[0];y=Math.min(p[1],VH-60)}
-  const w=Math.max(18,o.mw*K*Math.max(8,y-Y0));el.style.width=w.toFixed(1)+'px';el.style.left=(x-w/2).toFixed(1)+'px';el.style.top=(y-w*o.ar).toFixed(1)+'px';el.style.zIndex=Math.round(y)}}
+  const w=Math.max(18,o.mw*K*Math.max(8,y-Y0))*(mob&&o.ms||1);el.style.width=w.toFixed(1)+'px';el.style.left=(x-w/2).toFixed(1)+'px';el.style.top=(y-w*o.ar).toFixed(1)+'px';el.style.zIndex=Math.round(y)}}
 document.getElementById('kid').addEventListener('click',()=>show(aboutView));
 
 /* ── 映写機：YouTubeをランダムに一本かける ── */
