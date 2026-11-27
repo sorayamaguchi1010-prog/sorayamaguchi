@@ -141,6 +141,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .book{box-shadow:inset 2px 0 0 rgba(255,250,235,.12),inset -3px 0 6px rgba(0,0,0,.35),inset 0 0 14px rgba(60,40,20,.35),0 2px 4px rgba(0,0,0,.4)!important}
 .book .gr2{opacity:.55!important}
 .book.ph{background:#222 var(--img) center/cover!important}
+.shelf,.pinboard{overflow:hidden}.shelf:not(.on),.pinboard:not(.on){visibility:hidden;transition:transform 1.2s cubic-bezier(.65,0,.25,1),visibility 0s 1.2s}.shelf.on,.pinboard.on{visibility:visible;transition:transform 1.2s cubic-bezier(.65,0,.25,1)}
 .shelf::after,.pinboard::after{content:"";position:absolute;inset:-50%;pointer-events:none;z-index:3;opacity:.2;mix-blend-mode:overlay;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");animation:grain 1.2s steps(6) infinite}
 .sh-close{font:400 12px "Zen Old Mincho",serif!important;letter-spacing:.18em;padding:10px 4px!important}
 .sh-close:focus:not(:focus-visible){outline:none}
