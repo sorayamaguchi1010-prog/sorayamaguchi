@@ -206,7 +206,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 @keyframes rmIn{from{transform:translate(-50%,-50%) scale(calc(var(--rs,1)*1.12));filter:blur(6px) brightness(.5)}}
 .rm-wall{position:absolute;left:-60%;right:-60%;top:-80%;height:146%;background:radial-gradient(60% 70% at 22% 40%,rgba(255,214,150,.30),transparent 70%),linear-gradient(rgba(0,0,0,.35),transparent 30%,rgba(0,0,0,.25)),url(tex/wall.webp) 0 0/auto 620px #22160e}
 .rm-wall::after{content:"";position:absolute;left:0;right:0;bottom:0;height:18px;background:linear-gradient(#3a2618,#22150c);box-shadow:0 6px 12px rgba(0,0,0,.5)}
-.rm-floor{position:absolute;z-index:0;left:-120%;right:-120%;top:66%;height:160%;background:linear-gradient(rgba(0,0,0,.62),rgba(0,0,0,.18) 8%,rgba(0,0,0,0) 26%,rgba(0,0,0,.35) 70%,rgba(0,0,0,.5)),radial-gradient(ellipse 30% 22% at 45% 12%,rgba(255,214,160,.10),transparent 70%),url(tex/floor.webp) 0 0/auto 370px #2a1b11}
+.rm-floor{position:absolute;z-index:0;left:-120%;right:-120%;top:66%;height:160%;overflow:hidden;perspective:1600px;perspective-origin:50% -600px;background:#1c120b}.rm-floor i{position:absolute;left:0;top:0;width:100%;height:1600px;transform-origin:50% 0;transform:rotateX(90deg);background:linear-gradient(rgba(0,0,0,.55),rgba(0,0,0,.2) 10%,transparent 35%,rgba(0,0,0,.25)),radial-gradient(ellipse 18% 40% at 46% 0,rgba(255,214,160,.14),transparent 70%),url(tex/floor.webp) 0 0/auto var(--pl,370px)}.rm-floor::after{content:"";position:absolute;inset:0;background:linear-gradient(rgba(0,0,0,.5),transparent 6%,transparent 70%,rgba(0,0,0,.35));pointer-events:none}
 .rm-window{position:absolute;left:12%;top:12%;width:22%;height:34%;margin:-16px 0 0 -16px;border:16px solid transparent;background:url(field.webp) 40% 55%/cover padding-box,linear-gradient(rgba(0,0,0,.25),rgba(0,0,0,.45)) border-box,url(tex/floor.webp) 0 0/auto 260px border-box;box-shadow:inset 0 0 0 1px rgba(0,0,0,.6),inset 0 6px 14px rgba(0,0,0,.45),0 0 0 2px #140c06,0 26px 50px rgba(0,0,0,.5),0 0 120px 40px rgba(255,220,160,.16)}
 .rm-window::after{content:"";position:absolute;left:-30px;right:-30px;bottom:-30px;height:14px;background:linear-gradient(rgba(255,230,190,.12),transparent 40%),url(tex/floor.webp) 0 0/auto 200px;box-shadow:0 10px 14px rgba(0,0,0,.55),inset 0 -3px 0 rgba(0,0,0,.4)}
 .rm-window span{position:absolute;inset:0;background:linear-gradient(90deg,transparent calc(50% - 6px),#2a1a0f calc(50% - 6px),#4a3020 50%,#24160c calc(50% + 6px),transparent calc(50% + 6px)),linear-gradient(transparent calc(50% - 6px),#4a3020 calc(50% - 6px),#2a1a0f calc(50% + 6px),transparent calc(50% + 6px)),linear-gradient(120deg,rgba(255,255,255,.18),transparent 40%)}
@@ -361,7 +361,7 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
 
 <section class="room" id="room" aria-label="Atelier BAILE" aria-hidden="true">
  <div class="rm-scene" id="rmScene">
-  <div class="rm-wall"></div><div class="rm-floor"></div>
+  <div class="rm-wall"></div><div class="rm-floor"><i></i></div>
   <div class="rm-window"><span></span></div>
   <p class="rm-sign" hidden>Atelier BAILE</p><button type="button" class="rm-frame" id="rmF1" aria-label="BAILE のロゴを見る"><img src="frame-baile.webp" alt=""></button><button type="button" class="rm-frame" id="rmF2" aria-label="部屋の写真を見る"><img src="frame-room.webp" alt=""></button>
   <button type="button" class="rm-item rm-photos" id="rmWall" aria-label="写真"><span class="rm-pins" id="rmPins"></span><span class="rm-label">写真</span></button>
@@ -980,10 +980,11 @@ function fitRoom(){const pt=innerHeight>innerWidth*1.15;rmScene.classList.toggle
 function placeRoom(pt,SW,SH,k){const FL=SH*(pt?.56:.68),P=FL/(pt?2.2:1.95),H0=FL-1.5*P,D0=4;
  const at=(el,xf,z,mw,ar,lift=0)=>{const f=D0/(D0-z),ppm=P*f,yb=H0+(FL-H0)*f-lift*ppm,w=mw*ppm;Object.assign(el.style,{left:(SW*xf-w/2).toFixed(1)+'px',top:(yb-w*ar).toFixed(1)+'px',width:w.toFixed(1)+'px',height:'auto'});return{yb,ppm,w}};
  const g=id=>document.getElementById(id);
- at(g('rmCase'),pt?.78:.83,.35,.9,700/344);
- const d=at(g('rmDesk'),pt?.36:.52,.7,1.2,492/720);
- at(g('rmProj'),pt?.16:.12,pt?1.25:.9,.4,457/560);
- at(g('rmBox'),pt?.4:.24,pt?1.25:.9,.55,401/600);
+ {const fl=document.querySelector('.rm-floor');fl.style.top=FL+'px';fl.style.perspective=(D0*P).toFixed(1)+'px';fl.style.perspectiveOrigin=`50% ${(-1.5*P).toFixed(1)}px`;const fi=fl.firstElementChild;fi.style.height=((D0-.05)*P).toFixed(1)+'px';fi.style.setProperty('--pl',(.96*P).toFixed(1)+'px')}
+ at(g('rmCase'),pt?.78:.83,.35,.66,1764/700);
+ const d=at(g('rmDesk'),pt?.36:.52,.7,1.2,631/900);
+ at(g('rmProj'),pt?.16:.12,pt?1.25:.9,.36,1008/900);
+ at(g('rmBox'),pt?.4:.24,pt?1.25:.9,.58,554/900);
  const fr=(id,cx,top,w,h)=>Object.assign(g(id).style,{left:(cx-w/2).toFixed(1)+'px',top:top.toFixed(1)+'px',width:w.toFixed(1)+'px',height:h.toFixed(1)+'px','--fw':(.03*P).toFixed(1)+'px','--mat':(.035*P).toFixed(1)+'px'});
  const winL=SW*(pt?.42:.37)-(pt?.85:1.1)*P/2,visL=Math.max(pt?0:-9999,SW/2-innerWidth/(2*k))+.12*P,gap=.2*P,h1=(pt?.4:.6)*P,w2=h1*1.5,top=FL-(pt?1.85:1.72)*P;
  const M=.11;/* 額の縁（写真の長辺×0.11）を含めて並べる */let tot=h1*(1+2*M)+gap+w2*(1+2*M),avail=winL-.12*P-visL,sc=Math.min(1,avail/tot);const a=h1*sc,b=w2*sc,x0=visL+(avail-tot*sc)/2;
@@ -1000,13 +1001,13 @@ function roomPortrait(P,fr,g){
  fr('rmF1',150,170,150,150);fr('rmF2',150,385,150,100);
  Object.assign(document.querySelector('.rm-window').style,{left:'275px',top:'165px',width:'320px',height:'320px'});
  const cw=34,wall=g('rmWall'),pins=g('rmPins');pins.style.setProperty('--cw',cw+'px');pins.style.setProperty('--cg',(cw*.22).toFixed(1)+'px');pins.style.setProperty('--cols',4);
- Object.assign(wall.style,{left:'650px',top:'170px'});
+ Object.assign(wall.style,{left:'650px',top:'150px'});
  // 中段：左に机、右に本棚（床に立つ）
- pl('rmDesk',60,925,430,492/720);
- pl('rmCase',610,860,230,700/344);
+ pl('rmDesk',60,925,430,631/900);
+ pl('rmCase',640,860,175,1764/700);
  // 床の段：映写機と木箱
- pl('rmProj',70,1280,200,457/560);
- pl('rmBox',320,1280,290,401/600);
+ pl('rmProj',70,1280,190,1008/900);
+ pl('rmBox',320,1280,290,554/900);
 }
 (function(){const p=document.getElementById('rmPins'),ps=WORKS.filter(w=>/^works\/(summer|photo)-/.test(w.src||'')).slice(0,24),rr=seeded(21);ps.forEach(w=>{const i=document.createElement('i');i.style.setProperty('--im',`url("${w.src}")`);i.style.removeProperty('background');i.style.setProperty('--r',((rr()-.5)*8).toFixed(1)+'deg');p.appendChild(i)})})();
 
