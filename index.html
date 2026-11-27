@@ -81,7 +81,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .about dd{margin:0;overflow-wrap:anywhere}
 .about a{color:#fff;text-underline-offset:4px;text-decoration-thickness:.5px}
 
-@media(max-width:600px){.name{left:14px;top:calc(env(safe-area-inset-top) + 8px)}nav{left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 2px);justify-content:center;gap:0;max-width:none}nav{flex-wrap:wrap;row-gap:0;padding:0 8px}nav button,nav a{padding:4px 7px;font-size:14px;min-height:34px;line-height:1.2;white-space:nowrap}.veil{background:radial-gradient(130% 95% at 50% 38%,transparent 62%,rgba(10,30,20,.22) 100%),linear-gradient(to top,rgba(8,26,14,.45),transparent 12%)}}
+@media(max-width:600px){.name{left:14px;top:calc(env(safe-area-inset-top) + 8px)}nav{left:0;right:0;bottom:calc(env(safe-area-inset-bottom) + 2px);justify-content:center;gap:0;max-width:none}nav{flex-wrap:nowrap;padding:0 4px}nav button,nav a{padding:4px 4px;font-size:13.5px;min-height:34px;line-height:1.2;white-space:nowrap}.veil{background:radial-gradient(130% 95% at 50% 38%,transparent 62%,rgba(10,30,20,.22) 100%),linear-gradient(to top,rgba(8,26,14,.45),transparent 12%)}}
 @media(prefers-reduced-motion:reduce){.grain{animation:none}}
 #cam{position:fixed;left:0;top:0;width:100%;height:100%;height:100lvh;z-index:0;will-change:transform;transform-origin:50% 55%}
 #cam #bg{z-index:0}#cam #field{z-index:2}#cam #near,#cam #fg{z-index:3}
@@ -114,7 +114,12 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .book:hover,.book:focus-visible{transform:translateY(-10px) rotate(var(--lean,0deg));box-shadow:inset 2px 0 0 rgba(255,255,255,.1),0 14px 18px -8px rgba(0,0,0,.6);outline:none}
 .book:focus-visible{box-shadow:0 0 0 1px #fff}
 .sh-hint{margin:8px 0 0;text-align:center;font-size:11px;letter-spacing:.2em;color:rgba(239,230,214,.4)}
-.swipe-hint{position:fixed;z-index:6;left:50%;bottom:calc(env(safe-area-inset-bottom) + 86px);transform:translateX(-50%);margin:0;font-size:11px;letter-spacing:.2em;color:var(--faint);text-shadow:0 1px 10px rgba(0,20,10,.5);opacity:0;transition:opacity 2s;pointer-events:none;white-space:nowrap}
+.pages{position:fixed;z-index:25;left:50%;transform:translateX(-50%);bottom:calc(env(safe-area-inset-bottom) + 46px);display:flex;gap:2px;padding:3px;border-radius:999px;background:rgba(20,30,22,.28);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.pages button{font:12px "Zen Old Mincho",serif;letter-spacing:.2em;color:rgba(255,253,246,.7);background:none;border:0;border-radius:999px;padding:7px 12px 7px 14px;min-height:32px;cursor:pointer;transition:background .6s,color .6s}
+.pages button.cur{background:rgba(255,253,246,.88);color:#24301f}
+@media(min-width:601px){.pages{bottom:max(5vh,22px);left:max(5vw,20px);transform:none}}
+html,body{overscroll-behavior:none}
+.swipe-hint{position:fixed;z-index:6;left:50%;bottom:calc(env(safe-area-inset-bottom) + 92px);transform:translateX(-50%);margin:0;font-size:11px;letter-spacing:.2em;color:var(--faint);text-shadow:0 1px 10px rgba(0,20,10,.5);opacity:0;transition:opacity 2s;pointer-events:none;white-space:nowrap}
 .swipe-hint.on{opacity:1}
 @media(min-width:601px){.swipe-hint{display:none}}
 @media(prefers-reduced-motion:reduce){.shelf,.pinboard{transition:none}}
@@ -197,8 +202,8 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 </div>
 <nav>
  <button type="button" id="aboutBtn">about</button>
- <button type="button" id="shelfBtn">憶録</button>
- <button type="button" id="pinBtn">写真</button>
+ <button type="button" id="shelfBtn" hidden>憶録</button>
+ <button type="button" id="pinBtn" hidden>写真</button>
  <a href="https://www.instagram.com/sora___yamaguchi/">instagram</a>
  <a href="https://www.instagram.com/okuroku.sora/">okuroku</a>
  <a href="https://note.com/sorayamaguchi10">note</a>
@@ -216,6 +221,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
  <div class="pb-body"><div class="pb-board" id="pinBody"></div></div>
  <p class="sh-hint">右へスワイプで草原へ</p>
 </section>
+<div class="pages" id="pages" role="tablist" aria-label="ページ"><button type="button" data-p="pins">写真</button><button type="button" data-p="field" class="cur">草原</button><button type="button" data-p="shelf">憶録</button></div>
 <p class="swipe-hint" id="swipeHint">← 写真の掲示板　　憶録の本棚 →</p>
 <div class="over" id="view" role="dialog" aria-modal="true" aria-label="作品">
  <button class="close" type="button" data-close>close</button>
@@ -329,7 +335,7 @@ const MET={x:-999,y:-999,len:170,a:0,dx:-.86,dy:.5,on:false,age:0,life:1,v:950,n
 function stepMeteor(dt){if(RM)return;if(!MET.on){MET.next-=dt;MET.a=0;if(MET.next<=0){MET.on=true;MET.age=0;MET.life=rr(2.4,3.6);MET.v=rr(220,380);const ang=rr(.25,.5)*(R()<.5?1:-1);MET.dx=(ang>0?-1:1)*Math.cos(Math.abs(ang));MET.dy=Math.sin(Math.abs(ang));MET.x=rr(W*.15,W*.95);MET.y=rr(H*.04,Math.max(H*.08,HZ-H*.3));MET.len=rr(200,320)}return}
  MET.age+=dt;const k=MET.age/MET.life;MET.x+=MET.dx*MET.v*dt;MET.y+=MET.dy*MET.v*dt;MET.a=Math.sin(Math.min(1,k)*Math.PI)*.9;if(k>=1){MET.on=false;MET.a=0;MET.next=rr(35,80)}}
 function layout(){const E=W<600?150:0,s=Math.max(W/BG.w,(H+E*2)/BG.h);fit={s,ox:(W-BG.w*s)*BG.fx,oy:(H-BG.h*s)*BG.fy};
- const hs=document.documentElement.style;hs.backgroundSize=`${(BG.w*s).toFixed(1)}px ${(BG.h*s).toFixed(1)}px`;hs.backgroundPosition=`${fit.ox.toFixed(1)}px ${fit.oy.toFixed(1)}px`;HZ=fit.oy+BG.h*s*BG.hz;WY=W<600?VH-120:VH*.8}
+ const hs=document.documentElement.style;hs.backgroundSize=`${(BG.w*s).toFixed(1)}px ${(BG.h*s).toFixed(1)}px`;hs.backgroundPosition=`${fit.ox.toFixed(1)}px ${fit.oy.toFixed(1)}px`;HZ=fit.oy+BG.h*s*BG.hz;WY=W<600?VH-130:VH*.8}
 
 /* ── 風：x と時間で決まる、ゆっくり渡っていく波（写真の草と手前の草で共有） ── */
 let MB=0,mbT=0,lastP=null;
@@ -654,7 +660,7 @@ addEventListener('keydown',e=>{if(view.classList.contains('on')||aboutView.class
 let sw=null;
 addEventListener('touchstart',e=>{const p=e.touches[0];sw={x:p.clientX,y:p.clientY,t:performance.now()}},{passive:true});
 addEventListener('touchend',e=>{if(!sw)return;const p=e.changedTouches[0],dx=p.clientX-sw.x,dy=p.clientY-sw.y,dt=performance.now()-sw.t;sw=null;
- if(Math.abs(dx)>70&&Math.abs(dy)<Math.abs(dx)*.6&&dt<900){if(view.classList.contains('on')||aboutView.classList.contains('on'))return;const sh=shelf.classList.contains('on'),pb=pinboard.classList.contains('on');if(dx>0){if(pb)closePins();else if(!sh)openShelf()}else{if(sh)closeShelf();else if(!pb)openPins()}}},{passive:true});
+ if(Math.abs(dx)>70&&Math.abs(dy)<Math.abs(dx)*.6&&dt<900){if(view.classList.contains('on')||aboutView.classList.contains('on'))return;const sh=shelf.classList.contains('on'),pb=pinboard.classList.contains('on');if(sh||pb){closeShelf();closePins();return}if(dx>0)openShelf();else openPins()}},{passive:true});
 let wx=0,wt=0;addEventListener('wheel',e=>{if(Math.abs(e.deltaX)<Math.abs(e.deltaY))return;const n=performance.now();if(n-wt>400)wx=0;wt=n;wx+=e.deltaX;
  const sh=shelf.classList.contains('on'),pb=pinboard.classList.contains('on');if(view.classList.contains('on'))return;if(wx<-120){if(pb)closePins();else if(!sh)openShelf();wx=0}else if(wx>120){if(sh)closeShelf();else if(!pb)openPins();wx=0}},{passive:true});
 const hint=document.getElementById('swipeHint');setTimeout(()=>hint.classList.add('on'),6000);setTimeout(()=>hint.classList.remove('on'),14000);
@@ -712,6 +718,12 @@ function closePins(){pinboard.classList.remove('on');pinboard.setAttribute('aria
 boardEl.addEventListener('click',openPins);document.getElementById('pinBtn').addEventListener('click',openPins);document.getElementById('pinClose').addEventListener('click',closePins);
 addEventListener('keydown',e=>{if(e.key==='Escape'&&pinboard.classList.contains('on')&&!view.classList.contains('on'))closePins()});
 function placeBoard(){const mob=W<600,bx=mob?(fit.ox<0?(-fit.ox+W*.8)/fit.s:.8*BG.w):.86*BG.w,by=BG.h*(mob?.73:.75);const p=ip([bx,by]);const w=mob?Math.min(100,W*.26):clamp(W*.075,84,130);boardEl.style.width=w+'px';const h=w*509/760*.98;boardEl.style.left=(p[0]-w/2).toFixed(1)+'px';boardEl.style.top=(p[1]-h).toFixed(1)+'px'}
+
+/* ── 写真・草原・憶録 のページ切替 ── */
+const pagesEl=document.getElementById('pages');
+function syncPages(){const sh=shelf.classList.contains('on'),pb=pinboard.classList.contains('on');const cur=sh?'shelf':pb?'pins':'field';pagesEl.querySelectorAll('button').forEach(b=>{b.classList.toggle('cur',b.dataset.p===cur);b.setAttribute('aria-selected',b.dataset.p===cur)})}
+pagesEl.addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;const p=b.dataset.p;if(p==='field'){closeShelf();closePins()}else if(p==='shelf')openShelf();else openPins()});
+new MutationObserver(syncPages).observe(shelf,{attributes:true,attributeFilter:['class']});new MutationObserver(syncPages).observe(pinboard,{attributes:true,attributeFilter:['class']});
 
 /* ── 起動 ── */
 function resize(){
