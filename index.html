@@ -642,7 +642,12 @@ function openWork(o){
  show(view);
 }
 document.getElementById('aboutBtn').addEventListener('click',()=>show(aboutView));
-[view,aboutView].forEach(v=>v.addEventListener('click',e=>{if(e.target===v||e.target.hasAttribute('data-close'))hide()}));
+aboutView.addEventListener('click',e=>{if(e.target===aboutView||e.target.hasAttribute('data-close'))hide()});
+/* 作品の外側をクリック（ドラッグではなく）したら閉じる */
+let vDown=null;
+view.addEventListener('pointerdown',e=>{vDown={x:e.clientX,y:e.clientY,on:!!e.target.closest('.obj,iframe,video,.big,a,figcaption,.v-hint')}},true);
+view.addEventListener('click',e=>{if(e.target.hasAttribute('data-close')){hide();return}
+ const d=vDown;vDown=null;if(!d)return;const moved=Math.hypot(e.clientX-d.x,e.clientY-d.y);if(d.on||moved>6)return;hide()});
 addEventListener('keydown',e=>{if(e.key==='Escape')hide()});
 
 /* ── カメラ：手持ちで撮っているような、ゆっくりした揺れ（冒頭は大きく、だんだん落ち着く） ── */
