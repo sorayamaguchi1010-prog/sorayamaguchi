@@ -71,6 +71,56 @@ function woodMats() {
   });
 }
 
+/* 裏板のテクスチャを描く：木目の上にロゴを彫り、彫り跡を濃く焼く。凹凸は bumpMap で */
+const imgCache = new Map();
+function loadImg(src) {
+  if (!imgCache.has(src)) imgCache.set(src, new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; }));
+  return imgCache.get(src);
+}
+function carveBack(mat, bw, bh) {
+  const W = 1024, H = Math.round(W * bh / bw);
+  const col = document.createElement('canvas'), bmp = document.createElement('canvas');
+  col.width = bmp.width = W; col.height = bmp.height = H;
+  const cm = new THREE.CanvasTexture(col), bm = new THREE.CanvasTexture(bmp);
+  cm.colorSpace = THREE.SRGBColorSpace; cm.anisotropy = bm.anisotropy = 8;
+  mat.map = cm; mat.bumpMap = bm;
+  Promise.all([loadImg('tex/wood-back.webp'), loadImg('logo.png')]).then(([wood, logo]) => {
+    const c = col.getContext('2d'), b = bmp.getContext('2d');
+    // 木目
+    const s = Math.max(W / wood.width, H / wood.height) * 1.1;
+    c.drawImage(wood, (W - wood.width * s) / 2, (H - wood.height * s) / 2, wood.width * s, wood.height * s);
+    c.fillStyle = 'rgba(120,86,56,.35)'; c.globalCompositeOperation = 'multiply'; c.fillRect(0, 0, W, H);
+    c.globalCompositeOperation = 'source-over';
+    // ロゴの位置（少し下寄り、中央）
+    const lw = W * .56, lh = lw * logo.height / logo.width, lx = (W - lw) / 2, ly = H * .56 - lh / 2;
+    // ロゴを単色の形に（彫刻刀の幅ぶん、線を少し太らせる）
+    const mask = document.createElement('canvas'); mask.width = W; mask.height = H;
+    const mk = mask.getContext('2d');
+    for (let k = 0; k < 12; k++) { const t = k / 12 * Math.PI * 2; mk.drawImage(logo, lx + Math.cos(t) * 1.6, ly + Math.sin(t) * 1.6, lw, lh); }
+    mk.globalCompositeOperation = 'source-in'; mk.fillStyle = '#000'; mk.fillRect(0, 0, W, H);
+    const layer = (color, blur, cutDx, cutDy, shift = [0, 0]) => {
+      const t = document.createElement('canvas'); t.width = W; t.height = H; const tc = t.getContext('2d');
+      tc.drawImage(mask, shift[0], shift[1]);
+      if (cutDx !== null) { tc.globalCompositeOperation = 'destination-out'; tc.drawImage(mask, cutDx, cutDy); }
+      tc.globalCompositeOperation = 'source-in'; tc.fillStyle = color; tc.fillRect(0, 0, W, H);
+      if (!blur) return t;
+      const u = document.createElement('canvas'); u.width = W; u.height = H; const uc = u.getContext('2d');
+      uc.filter = `blur(${blur}px)`; uc.drawImage(t, 0, 0); return u;
+    };
+    // 彫りの底（削られて少し明るい木肌）→ 上の壁の影 → 下の縁の光
+    c.drawImage(layer('#6b4a2e', 0, null), 0, 0);
+    c.globalAlpha = .85; c.drawImage(layer('#140904', .7, 0, 3), 0, 0);
+    c.globalAlpha = .5; c.drawImage(layer('#2a1608', 1.2, 0, 1.2), 0, 0);
+    c.globalAlpha = .28; c.drawImage(layer('#d8b48a', .6, 0, 0, [0, 2]), 0, 0);
+    c.globalAlpha = 1;
+    // 凹凸：板は白（高い）、ロゴは黒（低い）。少しぼかして彫り口をなだらかに
+    b.fillStyle = '#fff'; b.fillRect(0, 0, W, H);
+    b.filter = 'blur(1.2px)'; b.drawImage(mask, 0, 0); b.filter = 'none';
+    cm.needsUpdate = bm.needsUpdate = true;
+    redraws.forEach(f => f());
+  });
+}
+
 /* 額縁一式を作る。opening = 表から見える写真の大きさ（m） */
 export function buildFrame(src, ar, { opening = .5 } = {}) {
   const ow = ar >= 1 ? opening : opening * ar, oh = ar >= 1 ? opening / ar : opening;
@@ -94,22 +144,12 @@ export function buildFrame(src, ar, { opening = .5 } = {}) {
   glass.position.z = .0114;
   g.add(glass);
 
-  // 裏板
+  // 裏板：古い板に、ロゴが彫り込まれている
   const back = new THREE.Mesh(new THREE.PlaneGeometry(OW - .004, OH - .004),
-    new THREE.MeshStandardMaterial({ map: tex('tex/wood-back.webp', true, true), color: 0x9b7d5e, roughness: .9 }));
-  back.material.map.repeat.set(.8, .8);
+    new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: .88, bumpScale: 2.2 }));
+  carveBack(back.material, OW - .004, OH - .004);
   back.rotation.y = Math.PI; back.position.z = -.0004;
   g.add(back);
-  // 裏のラベル（ロゴ）
-  const lw = Math.min(.16, OW * .4);
-  const label = new THREE.Mesh(new THREE.PlaneGeometry(lw, lw * .52),
-    new THREE.MeshStandardMaterial({ color: 0xeee4d0, roughness: .95 }));
-  label.rotation.y = Math.PI; label.position.set(0, -OH * .18, -.0012);
-  g.add(label);
-  const logo = new THREE.Mesh(new THREE.PlaneGeometry(lw * .78, lw * .78 * 301 / 720),
-    new THREE.MeshBasicMaterial({ map: tex('logo.png'), transparent: true, color: 0x2a1e14 }));
-  logo.rotation.y = Math.PI; logo.position.set(0, -OH * .18, -.0016);
-  g.add(logo);
   // 吊り金具と紐
   const brass = new THREE.MeshStandardMaterial({ color: 0xb08a4a, metalness: .9, roughness: .35 });
   const ex = OW / 2 - .07, ey = OH * .22;

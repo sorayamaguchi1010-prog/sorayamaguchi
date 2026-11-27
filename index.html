@@ -984,9 +984,9 @@ function placeRoom(pt,SW,SH,k){const FL=SH*(pt?.56:.68),P=FL/(pt?2.2:1.95),H0=FL
  at(g('rmProj'),pt?.16:.12,pt?1.25:.9,.4,457/560);
  at(g('rmBox'),pt?.4:.24,pt?1.25:.9,.55,401/600);
  const fr=(id,cx,top,w,h)=>Object.assign(g(id).style,{left:(cx-w/2).toFixed(1)+'px',top:top.toFixed(1)+'px',width:w.toFixed(1)+'px',height:h.toFixed(1)+'px','--fw':(.03*P).toFixed(1)+'px','--mat':(.035*P).toFixed(1)+'px'});
- const winL=SW*(pt?.42:.37)-(pt?.85:1.1)*P/2,visL=Math.max(pt?0:-9999,SW/2-innerWidth/(2*k))+.12*P,gap=.14*P,h1=(pt?.4:.6)*P,w2=h1*1.5,top=FL-(pt?1.85:1.72)*P;
- let tot=h1+gap+w2,avail=winL-.12*P-visL,sc=Math.min(1,avail/tot);const a=h1*sc,b=w2*sc,x0=visL+(avail-(a+gap*sc+b))/2;
- if(pt){fr('rmF1',SW*.13,FL-1.9*P,.3*P,.3*P);fr('rmF2',SW*.13,FL-1.45*P,.3*P,.2*P)}else{fr('rmF1',x0+a/2,top,a,a);fr('rmF2',x0+a+gap*sc+b/2,top+(a-b/1.5)/2,b,b/1.5)}
+ const winL=SW*(pt?.42:.37)-(pt?.85:1.1)*P/2,visL=Math.max(pt?0:-9999,SW/2-innerWidth/(2*k))+.12*P,gap=.2*P,h1=(pt?.4:.6)*P,w2=h1*1.5,top=FL-(pt?1.85:1.72)*P;
+ const M=.11;/* 額の縁（写真の長辺×0.11）を含めて並べる */let tot=h1*(1+2*M)+gap+w2*(1+2*M),avail=winL-.12*P-visL,sc=Math.min(1,avail/tot);const a=h1*sc,b=w2*sc,x0=visL+(avail-tot*sc)/2;
+ if(pt){fr('rmF1',SW*.13,FL-1.9*P,.3*P,.3*P);fr('rmF2',SW*.13,FL-1.45*P,.3*P,.2*P)}else{fr('rmF1',x0+a*(.5+M),top,a,a);fr('rmF2',x0+a*(1+2*M)+gap*sc+b*(.5+M),top+(a-b/1.5)/2,b,b/1.5)}
  const win=document.querySelector('.rm-window'),ww=(pt?.85:1.1)*P,wh=(pt?.85:1.0)*P;Object.assign(win.style,{left:(SW*(pt?.42:.37)-ww/2).toFixed(1)+'px',top:(FL-1.88*P).toFixed(1)+'px',width:ww.toFixed(1)+'px',height:wh.toFixed(1)+'px'});
  const pins=g('rmPins'),cw=.054*P*1.5,wall=g('rmWall');pins.style.setProperty('--cw',cw.toFixed(1)+'px');pins.style.setProperty('--cg',(cw*.22).toFixed(1)+'px');pins.style.setProperty('--cols',pt?4:6);
  Object.assign(wall.style,{left:(SW*(pt?.74:.61)-(pt?4:6)*cw*1.22/2).toFixed(1)+'px',top:(FL-(pt?1.95:1.75)*P).toFixed(1)+'px'});
