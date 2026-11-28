@@ -73,10 +73,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .over figcaption p{flex-basis:100%;margin:0;white-space:pre-line;line-height:2;color:rgba(251,247,238,.75);font-size:14px;max-width:34em}
 .close{position:absolute;top:max(3vh,12px);right:max(4vw,12px);font:italic 300 18px "Cormorant Garamond",serif;color:rgba(251,247,238,.75);background:none;border:0;min-height:44px;padding:10px 14px;cursor:pointer}
 .close:hover,.close:focus-visible{color:#fff}.close:focus:not(:focus-visible){outline:none}
-#aboutView{background:linear-gradient(rgba(20,30,40,0) 45%,rgba(14,22,30,.55) 100%),url(about/sky.webp) center 42%/cover #6f8f9e;backdrop-filter:none;-webkit-backdrop-filter:none;align-items:end;padding-bottom:9vh}
-@media (max-aspect-ratio:1/1){#aboutView{background:linear-gradient(#5d8494,#6f929f 40%,#82a0a8 70%,#5f7c86);align-items:end}#aboutView::before{content:"";position:absolute;left:0;right:0;top:0;height:62%;background:url(about/sky.webp) 50% 58%/auto 100% no-repeat;background-size:230% auto;-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent);pointer-events:none}#aboutView .about{position:relative}}
-#aboutView .about h2{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
-.about{max-width:30em;max-height:86vh;overflow-y:auto;text-shadow:0 1px 14px rgba(20,30,40,.35)}
+.about{max-width:30em;max-height:86vh;overflow-y:auto}
 .about h2{margin:0 0 6px;font:italic 300 clamp(30px,4vw,44px)/1.05 "Cormorant Garamond",serif}
 .about .ja{margin:0 0 26px;font-size:13px;letter-spacing:.3em;color:rgba(251,247,238,.75)}
 .about p{margin:0 0 1.2em;color:rgba(251,247,238,.8)}
@@ -119,6 +116,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .book:focus-visible{box-shadow:0 0 0 1px #fff}
 .sh-hint{margin:8px 0 0;text-align:center;font-size:11px;letter-spacing:.2em;color:rgba(239,230,214,.4)}
 .prop{position:absolute;left:0;top:0;z-index:2;padding:0;border:0;background:none;cursor:pointer;transform-origin:50% 100%;filter:drop-shadow(0 5px 6px rgba(10,25,10,.35)) saturate(.82);transition:transform .8s cubic-bezier(.3,.7,.2,1);-webkit-tap-highlight-color:transparent}
+.prop#river{display:block;cursor:pointer}.prop#river[hidden]{display:none}.prop .river-label{font:italic 300 16px "Cormorant Garamond",serif;letter-spacing:.18em;bottom:auto;top:10px;left:62%;color:#fbf7ee;opacity:.6;text-shadow:0 1px 12px rgba(0,20,30,.7)}.prop#river:hover .river-label,.prop#river:focus-visible .river-label{opacity:1}
 .prop img{display:block;width:100%;height:auto;filter:saturate(.85) brightness(.95);-webkit-user-drag:none}
 .prop::after{content:"";position:absolute;left:8%;right:4%;bottom:-2%;height:10%;border-radius:50%;background:rgba(20,35,12,.45);filter:blur(5px);z-index:-1}
 .prop .hut-label{position:absolute;left:50%;bottom:100%;transform:translate(-50%,6px);white-space:nowrap;font-size:12px;letter-spacing:.2em;color:var(--ink);text-shadow:0 1px 10px rgba(0,20,10,.6);opacity:0;transition:opacity .8s,transform .8s}
@@ -340,6 +338,7 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
 <button type="button" class="prop" id="proj" hidden aria-label="映写機（映像）">
 <img src="projector.webp" alt="" width="520" height="504" draggable="false">
 <span class="hut-label">映像</span></button>
+<a class="prop" id="river" href="#" target="_blank" rel="noopener" aria-label="hirose river"><span class="hut-label river-label">hirose river</span></a>
 <button type="button" class="prop" id="post" aria-label="連絡">
 <img src="post.webp" alt="" width="278" height="420" draggable="false">
 <span class="hut-label">連絡</span></button>
@@ -533,7 +532,7 @@ const ip=(p)=>[fit.ox+p[0]*fit.s,fit.oy+p[1]*fit.s];
 const MET={x:-999,y:-999,len:170,a:0,dx:-.86,dy:.5,on:false,age:0,life:1,v:950,next:rr(14,28)};
 function stepMeteor(dt){if(RM)return;if(!MET.on){MET.next-=dt;MET.a=0;if(MET.next<=0){MET.on=true;MET.age=0;MET.life=rr(2.4,3.6);MET.v=rr(220,380);const ang=rr(.25,.5)*(R()<.5?1:-1);MET.dx=(ang>0?-1:1)*Math.cos(Math.abs(ang));MET.dy=Math.sin(Math.abs(ang));MET.x=rr(W*.15,W*.95);MET.y=rr(H*.04,Math.max(H*.08,HZ-H*.3));MET.len=rr(200,320)}return}
  MET.age+=dt;const k=MET.age/MET.life;MET.x+=MET.dx*MET.v*dt;MET.y+=MET.dy*MET.v*dt;MET.a=Math.sin(Math.min(1,k)*Math.PI)*.9;if(k>=1){MET.on=false;MET.a=0;MET.next=rr(35,80)}}
-function layout(){const E=W<600?150:0,s=Math.max(W/BG.w,(H+E*2)/BG.h);fit={s,ox:(W-BG.w*s)*BG.fx,oy:(H-BG.h*s)*BG.fy};
+function layout(){const E=W<600?150:0,s=Math.max(W/BG.w,(H+E*2)/BG.h);fit={s,ox:(W-BG.w*s)*BG.fx,oy:(H-BG.h*s)*(W<600?BG.fy:1)};
  const hs=document.documentElement.style;hs.backgroundSize=`${(BG.w*s).toFixed(1)}px ${(BG.h*s).toFixed(1)}px`;hs.backgroundPosition=`${fit.ox.toFixed(1)}px ${fit.oy.toFixed(1)}px`;HZ=fit.oy+BG.h*s*BG.hz;WY=W<600?VH-160:VH*.8}
 
 /* ── 風：x と時間で決まる、ゆっくり渡っていく波（写真の草と手前の草で共有） ── */
@@ -949,7 +948,16 @@ const SCN=[ // 実寸の幅(m)、縦横比、PC位置(写真上の割合)、ス�
 function placeScene(){const mob=W<600,Y0=ip([0,BG.h*.66])[1],K=mob?.42:.78;
  for(const o of SCN){const el=document.getElementById(o.id);if(!el)continue;let x,y;
   if(mob){x=W*o.m[0];y=VH+o.m[1]}else{const p=ip([o.d[0]*BG.w,o.d[1]*BG.h]);x=p[0];y=Math.min(p[1],VH-60)}
-  const w=Math.max(18,o.mw*K*Math.max(8,y-Y0))*(mob&&o.ms||1);el.style.width=w.toFixed(1)+'px';el.style.left=(x-w/2).toFixed(1)+'px';el.style.top=(y-w*o.ar).toFixed(1)+'px';el.style.zIndex=Math.round(y)}}
+  const w=Math.max(18,o.mw*K*Math.max(8,y-Y0))*(mob&&o.ms||1);el.style.width=w.toFixed(1)+'px';el.style.left=(x-w/2).toFixed(1)+'px';el.style.top=(y-w*o.ar).toFixed(1)+'px';el.style.zIndex=Math.round(y)}
+ placeRiver()}
+/* hirose river のリンク先（URLが決まったらここに入れる） */
+const RIVER_URL='';
+{const rv=document.getElementById('river');if(RIVER_URL)rv.href=RIVER_URL;else rv.addEventListener('click',e=>e.preventDefault())}
+/* 川：写真の下端（右下）に流れる帯の上に、作品へのリンクを置く。帯が画面に見えるときだけ */
+function placeRiver(){const el=document.getElementById('river');if(!el)return;
+ const a=ip([.52*BG.w,.935*BG.h]),b=ip([.98*BG.w,1*BG.h]),top=Math.max(a[1],0),bot=Math.min(b[1],VH),l=Math.max(a[0],0),r=Math.min(b[0],W);
+ if(W<600||bot-top<20||r-l<120){el.hidden=true;return}el.hidden=false;
+ Object.assign(el.style,{left:l+'px',top:top+'px',width:(r-l)+'px',height:(bot-top)+'px',zIndex:Math.round(bot)})}
 document.getElementById('kid').addEventListener('click',()=>show(aboutView));
 
 /* ── 映写機：YouTubeをランダムに一本かける ── */
