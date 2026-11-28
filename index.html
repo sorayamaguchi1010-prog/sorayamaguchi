@@ -354,7 +354,7 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
 .hr-nav button[disabled]{opacity:.25;cursor:default}
 .hr-back{position:absolute;left:24px;top:24px;all:unset;cursor:pointer;font-size:12px;letter-spacing:.2em;color:rgba(238,243,238,.7)}
 #hrView .hr-back{position:absolute;left:clamp(16px,3vw,32px);top:clamp(18px,3vw,32px)}
-#hrView .close{z-index:3}#hrView.solo .hr-back{display:none}
+#hrView .close{z-index:3}.hr-zm{display:flex;gap:4px;margin-left:10px;padding-left:16px;border-left:1px solid rgba(238,243,238,.25)}.hr-zm button{font-size:15px;padding:2px 10px}.hr-stage{transform-origin:50% 50%;transition:transform .35s cubic-bezier(.2,.7,.2,1)}.hr-stage.zoomed{cursor:grab}.hr-stage.panning{transition:none;cursor:grabbing}#hrView .hr-nav,#hrView .hr-back{position:relative;z-index:2}#hrView .hr-nav{padding:6px 14px;border-radius:999px;background:rgba(8,18,16,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}#hrView .hr-back{position:absolute;padding:6px 12px;border-radius:999px;background:rgba(8,18,16,.45)}#hrView.reading .close{background:rgba(8,18,16,.55)}#hrView.solo .hr-back{display:none}
 </style>
 </head>
 <body>
@@ -468,7 +468,7 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
   <div class="hr-reader">
    <button type="button" class="hr-back" id="hrBack">← 本 棚 へ</button>
    <div class="hr-stage" id="hrStage"><div class="hr-bk" id="hrBk"></div></div>
-   <div class="hr-nav"><button type="button" id="hrPrev">← 前</button><span id="hrCount"></span><button type="button" id="hrNext">次 →</button></div>
+   <div class="hr-nav"><button type="button" id="hrPrev">← 前</button><span id="hrCount"></span><button type="button" id="hrNext">次 →</button><span class="hr-zm"><button type="button" id="hrZo" aria-label="縮小">−</button><button type="button" id="hrZi" aria-label="拡大">＋</button></span></div>
   </div>
  </div>
 </div>
@@ -1045,7 +1045,7 @@ const hrView=document.getElementById('hrView'),hrBk=document.getElementById('hrB
 const HRAR=[9/16,9/16,800/1422];let hrAr=9/16;const HRB=[Array.from({length:25},(_,i)=>'hirose/'+String(i+1).padStart(2,'0')+'.webp'),Array.from({length:10},(_,i)=>'mgt/'+String(i+1).padStart(2,'0')+'.webp'),Array.from({length:10},(_,i)=>'kenso/'+String(i+1).padStart(2,'0')+'.webp')];let HR1=HRB[0];
 let hrLeaves=[],hrAt=0,hrSpread=true,hrPw=0,hrPh=0;
 function openHirose(){hrView.classList.remove('reading','solo');show(hrView)}
-function hrBuild(){const sp=innerWidth>=760&&innerWidth>innerHeight*.9;hrSpread=sp;
+function hrBuild(){hrZ=1;hrX=0;hrY=0;hrStage.style.transform='';const sp=innerWidth>=760&&innerWidth>innerHeight*.9;hrSpread=sp;
  const maxH=innerHeight*(innerWidth<600?.7:.76),maxW=innerWidth*(sp?.86:.86);
  hrPh=Math.min(maxH,(sp?maxW/2:maxW)/hrAr);hrPw=hrPh*hrAr;
  hrBk.innerHTML='';hrLeaves=[];
@@ -1077,11 +1077,33 @@ document.getElementById('cars').addEventListener('click',openKenso);
 [0,1].forEach(b=>document.getElementById('hrBook'+(b+1)).addEventListener('click',()=>{hrView.classList.remove('solo');HR1=HRB[b];hrAr=HRAR[b];hrAt=0;hrView.classList.add('reading');hrBuild();HR1.forEach(f=>{const i=new Image();i.src=f})}));
 document.getElementById('hrBack').addEventListener('click',()=>hrView.classList.remove('reading'));
 document.getElementById('hrPrev').addEventListener('click',()=>hrGo(-1));document.getElementById('hrNext').addEventListener('click',()=>hrGo(1));
-hrStage.addEventListener('click',e=>{const r=hrStage.getBoundingClientRect();hrGo(e.clientX>r.left+r.width/2?1:-1)});
-let hrT=null;hrStage.addEventListener('touchstart',e=>{hrT=e.touches[0].clientX},{passive:true});
-hrStage.addEventListener('touchend',e=>{if(hrT==null)return;const dx=e.changedTouches[0].clientX-hrT;hrT=null;if(Math.abs(dx)>40){e.preventDefault();hrGo(dx<0?1:-1)}});
+/* 寄る：ホイール・ピンチ・ダブルクリック・＋−、寄っているときはドラッグで動かす */
+let hrZ=1,hrX=0,hrY=0,hrMoved=false;const hrPts=new Map();let hrPin=null,hrDrag=null;
+function hrApply(){const r=hrStage.getBoundingClientRect(),w=r.width/hrZ,h=r.height/hrZ,mx=Math.max(0,(w*hrZ-innerWidth*.6)/2+w*.2),my=Math.max(0,(h*hrZ-innerHeight*.6)/2+h*.2);
+ if(hrZ<=1.01){hrZ=1;hrX=0;hrY=0}else{hrX=Math.max(-mx,Math.min(mx,hrX));hrY=Math.max(-my,Math.min(my,hrY))}
+ hrStage.style.transform=`translate(${hrX}px,${hrY}px) scale(${hrZ})`;hrStage.classList.toggle('zoomed',hrZ>1)}
+function hrZoomAt(nz,sx,sy){nz=Math.max(1,Math.min(4,nz));const r=hrStage.getBoundingClientRect(),cx=r.left+r.width/2-hrX,cy=r.top+r.height/2-hrY;
+ if(sx==null){sx=cx+hrX;sy=cy+hrY}const k=nz/hrZ;hrX=(sx-cx)-(sx-cx-hrX)*k;hrY=(sy-cy)-(sy-cy-hrY)*k;hrZ=nz;hrApply()}
+function hrReset(){hrZ=1;hrApply()}
+document.getElementById('hrZi').addEventListener('click',()=>hrZoomAt(hrZ*1.5));
+document.getElementById('hrZo').addEventListener('click',()=>hrZoomAt(hrZ/1.5));
+hrView.addEventListener('wheel',e=>{if(!hrView.classList.contains('reading'))return;e.preventDefault();hrZoomAt(hrZ*Math.exp(-e.deltaY*.0022),e.clientX,e.clientY)},{passive:false});
+hrStage.addEventListener('dblclick',e=>{e.preventDefault();hrZoomAt(hrZ>1?1:2.4,e.clientX,e.clientY)});
+hrStage.addEventListener('pointerdown',e=>{hrPts.set(e.pointerId,{x:e.clientX,y:e.clientY});hrMoved=false;
+ if(hrPts.size===2){const[a,b]=[...hrPts.values()];hrPin={d:Math.hypot(a.x-b.x,a.y-b.y),z:hrZ,mx:(a.x+b.x)/2,my:(a.y+b.y)/2};hrDrag=null}
+ else if(hrZ>1){hrDrag={x:e.clientX,y:e.clientY,ox:hrX,oy:hrY};hrStage.setPointerCapture(e.pointerId);hrStage.classList.add('panning')}});
+hrStage.addEventListener('pointermove',e=>{const p=hrPts.get(e.pointerId);if(!p)return;p.x=e.clientX;p.y=e.clientY;
+ if(hrPin&&hrPts.size===2){const[a,b]=[...hrPts.values()];hrStage.classList.add('panning');hrZoomAt(hrPin.z*Math.hypot(a.x-b.x,a.y-b.y)/hrPin.d,hrPin.mx,hrPin.my);hrMoved=true;return}
+ if(hrDrag){const dx=e.clientX-hrDrag.x,dy=e.clientY-hrDrag.y;if(Math.abs(dx)+Math.abs(dy)>4)hrMoved=true;hrX=hrDrag.ox+dx;hrY=hrDrag.oy+dy;hrApply()}});
+const hrUp=e=>{hrPts.delete(e.pointerId);if(hrPts.size<2)hrPin=null;if(!hrPts.size){hrDrag=null;hrStage.classList.remove('panning')}};
+hrStage.addEventListener('pointerup',hrUp);hrStage.addEventListener('pointercancel',hrUp);
+let hrClickT=0;hrStage.addEventListener('click',e=>{if(hrMoved||hrZ>1)return;const r=hrStage.getBoundingClientRect(),d=e.clientX>r.left+r.width/2?1:-1;
+ clearTimeout(hrClickT);if(e.detail>1)return;hrClickT=setTimeout(()=>hrGo(d),230)});
+let hrT=null;hrStage.addEventListener('touchstart',e=>{hrT=e.touches.length===1&&hrZ===1?e.touches[0].clientX:null},{passive:true});
+hrStage.addEventListener('touchend',e=>{if(hrT==null||hrZ>1)return;const dx=e.changedTouches[0].clientX-hrT;hrT=null;if(Math.abs(dx)>40){e.preventDefault();hrGo(dx<0?1:-1)}});
+hrStage.style.touchAction='none';
 hrView.addEventListener('click',e=>{if(e.target===hrView||e.target.hasAttribute('data-close')||e.target.classList.contains('hr-wrap')||e.target.classList.contains('hr-reader')){hrView.classList.remove('on','reading','solo');if(lastFocus&&lastFocus.isConnected)lastFocus.focus()}});
-addEventListener('keydown',e=>{if(!hrView.classList.contains('on'))return;if(e.key==='Escape'){hrView.classList.remove('on','reading','solo')}else if(hrView.classList.contains('reading')){if(e.key==='ArrowRight')hrGo(1);else if(e.key==='ArrowLeft')hrGo(-1)}});
+addEventListener('keydown',e=>{if(!hrView.classList.contains('on'))return;if(e.key==='Escape'){hrView.classList.remove('on','reading','solo')}else if(hrView.classList.contains('reading')){if(e.key==='ArrowRight')hrGo(1);else if(e.key==='ArrowLeft')hrGo(-1);else if(e.key==='+'||e.key==='=')hrZoomAt(hrZ*1.5);else if(e.key==='-')hrZoomAt(hrZ/1.5);else if(e.key==='0')hrReset()}});
 addEventListener('resize',()=>{if(hrView.classList.contains('reading'))hrBuild()});
 /* ── 起動 ── */
 function resize(){
