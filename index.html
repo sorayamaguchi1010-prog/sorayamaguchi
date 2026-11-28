@@ -116,6 +116,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .book:focus-visible{box-shadow:0 0 0 1px #fff}
 .sh-hint{margin:8px 0 0;text-align:center;font-size:11px;letter-spacing:.2em;color:rgba(239,230,214,.4)}
 .prop{position:absolute;left:0;top:0;z-index:2;padding:0;border:0;background:none;cursor:pointer;transform-origin:50% 100%;filter:drop-shadow(0 5px 6px rgba(10,25,10,.35)) saturate(.82);transition:transform .8s cubic-bezier(.3,.7,.2,1);-webkit-tap-highlight-color:transparent}
+.prop#cars{display:block;background:none}.prop#cars[hidden]{display:none}.prop#cars .hut-label{color:#fbf7ee}
 .prop#river{display:block;cursor:pointer}.prop#river[hidden]{display:none}.prop .river-label{font:italic 300 16px "Cormorant Garamond",serif;letter-spacing:.18em;bottom:auto;top:10px;left:62%;color:#fbf7ee;opacity:.6;text-shadow:0 1px 12px rgba(0,20,30,.7)}.prop#river:hover .river-label,.prop#river:focus-visible .river-label{opacity:1}
 .prop img{display:block;width:100%;height:auto;filter:saturate(.85) brightness(.95);-webkit-user-drag:none}
 .prop::after{content:"";position:absolute;left:8%;right:4%;bottom:-2%;height:10%;border-radius:50%;background:rgba(20,35,12,.45);filter:blur(5px);z-index:-1}
@@ -353,7 +354,7 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
 .hr-nav button[disabled]{opacity:.25;cursor:default}
 .hr-back{position:absolute;left:24px;top:24px;all:unset;cursor:pointer;font-size:12px;letter-spacing:.2em;color:rgba(238,243,238,.7)}
 #hrView .hr-back{position:absolute;left:clamp(16px,3vw,32px);top:clamp(18px,3vw,32px)}
-#hrView .close{z-index:3}
+#hrView .close{z-index:3}#hrView.solo .hr-back{display:none}
 </style>
 </head>
 <body>
@@ -373,6 +374,7 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
 <button type="button" class="prop" id="proj" hidden aria-label="映写機（映像）">
 <img src="projector.webp" alt="" width="520" height="504" draggable="false">
 <span class="hut-label">映像</span></button>
+<button type="button" class="prop" id="cars" aria-label="喧騒（2022）を開く"><span class="hut-label">喧 騒</span></button>
 <a class="prop" id="river" href="#" target="_blank" rel="noopener" aria-label="hirose river"><span class="hut-label river-label">hirose river</span></a>
 <button type="button" class="prop" id="post" aria-label="連絡">
 <img src="post.webp" alt="" width="278" height="420" draggable="false">
@@ -1010,7 +1012,10 @@ function placeScene(){const mob=W<600,Y0=ip([0,BG.h*.66])[1],K=mob?.42:.78;
 /* hirose river のリンク先（URLが決まったらここに入れる） */
 {const rv=document.getElementById('river');rv.removeAttribute('target');rv.addEventListener('click',e=>{e.preventDefault();openHirose()})}
 /* 川：写真の下端（右下）に流れる帯の上に、作品へのリンクを置く。帯が画面に見えるときだけ */
-function placeRiver(){const el=document.getElementById('river');if(!el)return;
+function placeCars(){const el=document.getElementById('cars');const a=ip([872,598]),b=ip([985,652]);
+ if(b[0]<30||a[0]>W-30||b[1]<0||a[1]>VH){el.hidden=true;return}el.hidden=false;
+ Object.assign(el.style,{left:a[0]+'px',top:a[1]+'px',width:(b[0]-a[0])+'px',height:(b[1]-a[1])+'px',zIndex:Math.round(b[1])})}
+function placeRiver(){placeCars();const el=document.getElementById('river');if(!el)return;
  /* 川の岸の線（シェーダーと同じ式）：画像座標で y = 1.03-(x-.42)*.32、その下と右が川 */
  const E=x=>ip([x*BG.w,(1.03-(x-.42)*.32)*BG.h]),a=E(.42),b=E(1),dx=b[0]-a[0],dy=b[1]-a[1];
  const atY=y=>a[0]+(y-a[1])*dx/dy,atX=x=>a[1]+(x-a[0])*dy/dx;
@@ -1037,12 +1042,12 @@ addEventListener('keydown',e=>{if(e.key==='Escape'&&projView.classList.contains(
 
 /* ── Hirose River：本を選んで、捲る ── */
 const hrView=document.getElementById('hrView'),hrBk=document.getElementById('hrBk'),hrStage=document.getElementById('hrStage');
-const HRB=[Array.from({length:25},(_,i)=>'hirose/'+String(i+1).padStart(2,'0')+'.webp'),Array.from({length:10},(_,i)=>'mgt/'+String(i+1).padStart(2,'0')+'.webp')];let HR1=HRB[0];
+const HRAR=[9/16,9/16,800/1422];let hrAr=9/16;const HRB=[Array.from({length:25},(_,i)=>'hirose/'+String(i+1).padStart(2,'0')+'.webp'),Array.from({length:10},(_,i)=>'mgt/'+String(i+1).padStart(2,'0')+'.webp'),Array.from({length:10},(_,i)=>'kenso/'+String(i+1).padStart(2,'0')+'.webp')];let HR1=HRB[0];
 let hrLeaves=[],hrAt=0,hrSpread=true,hrPw=0,hrPh=0;
-function openHirose(){hrView.classList.remove('reading');show(hrView)}
+function openHirose(){hrView.classList.remove('reading','solo');show(hrView)}
 function hrBuild(){const sp=innerWidth>=760&&innerWidth>innerHeight*.9;hrSpread=sp;
  const maxH=innerHeight*(innerWidth<600?.7:.76),maxW=innerWidth*(sp?.86:.86);
- hrPh=Math.min(maxH,(sp?maxW/2:maxW)*16/9);hrPw=hrPh*9/16;
+ hrPh=Math.min(maxH,(sp?maxW/2:maxW)/hrAr);hrPw=hrPh*hrAr;
  hrBk.innerHTML='';hrLeaves=[];
  const sheets=[];if(sp){for(let i=0;i<HR1.length;i+=2)sheets.push([HR1[i],HR1[i+1]||null])}else HR1.forEach(f=>sheets.push([f,null]));
  hrStage.style.width=(sp?hrPw*2:hrPw)+'px';hrStage.style.height=hrPh+'px';
@@ -1066,14 +1071,17 @@ function hrGo(d){const n=hrLeaves.length,max=hrSpread?n:n-1,to=Math.max(0,Math.m
   if(hrSpread){const x=hrAt===0?-hrPw/2:hrAt===n?hrPw/2:0;hrBk.style.transform=`translateX(${x}px)`}
   const tot=hrSpread?n+1:n;document.getElementById('hrCount').textContent=kanNum(String(hrAt+1))+' ／ '+kanNum(String(tot));
   document.getElementById('hrPrev').disabled=hrAt===0;document.getElementById('hrNext').disabled=hrSpread?hrAt===n:hrAt>=n-1})}
-[0,1].forEach(b=>document.getElementById('hrBook'+(b+1)).addEventListener('click',()=>{HR1=HRB[b];hrAt=0;hrView.classList.add('reading');hrBuild();HR1.forEach(f=>{const i=new Image();i.src=f})}));
+function hrOpen(b){HR1=HRB[b];hrAr=HRAR[b];hrAt=0;hrView.classList.add('reading');hrBuild();HR1.forEach(f=>{const i=new Image();i.src=f})}
+function openKenso(){hrView.classList.add('solo');show(hrView);hrOpen(2)}
+document.getElementById('cars').addEventListener('click',openKenso);
+[0,1].forEach(b=>document.getElementById('hrBook'+(b+1)).addEventListener('click',()=>{hrView.classList.remove('solo');HR1=HRB[b];hrAr=HRAR[b];hrAt=0;hrView.classList.add('reading');hrBuild();HR1.forEach(f=>{const i=new Image();i.src=f})}));
 document.getElementById('hrBack').addEventListener('click',()=>hrView.classList.remove('reading'));
 document.getElementById('hrPrev').addEventListener('click',()=>hrGo(-1));document.getElementById('hrNext').addEventListener('click',()=>hrGo(1));
 hrStage.addEventListener('click',e=>{const r=hrStage.getBoundingClientRect();hrGo(e.clientX>r.left+r.width/2?1:-1)});
 let hrT=null;hrStage.addEventListener('touchstart',e=>{hrT=e.touches[0].clientX},{passive:true});
 hrStage.addEventListener('touchend',e=>{if(hrT==null)return;const dx=e.changedTouches[0].clientX-hrT;hrT=null;if(Math.abs(dx)>40){e.preventDefault();hrGo(dx<0?1:-1)}});
-hrView.addEventListener('click',e=>{if(e.target===hrView||e.target.hasAttribute('data-close')||e.target.classList.contains('hr-wrap')||e.target.classList.contains('hr-reader')){hrView.classList.remove('on','reading');if(lastFocus&&lastFocus.isConnected)lastFocus.focus()}});
-addEventListener('keydown',e=>{if(!hrView.classList.contains('on'))return;if(e.key==='Escape'){hrView.classList.remove('on','reading')}else if(hrView.classList.contains('reading')){if(e.key==='ArrowRight')hrGo(1);else if(e.key==='ArrowLeft')hrGo(-1)}});
+hrView.addEventListener('click',e=>{if(e.target===hrView||e.target.hasAttribute('data-close')||e.target.classList.contains('hr-wrap')||e.target.classList.contains('hr-reader')){hrView.classList.remove('on','reading','solo');if(lastFocus&&lastFocus.isConnected)lastFocus.focus()}});
+addEventListener('keydown',e=>{if(!hrView.classList.contains('on'))return;if(e.key==='Escape'){hrView.classList.remove('on','reading','solo')}else if(hrView.classList.contains('reading')){if(e.key==='ArrowRight')hrGo(1);else if(e.key==='ArrowLeft')hrGo(-1)}});
 addEventListener('resize',()=>{if(hrView.classList.contains('reading'))hrBuild()});
 /* ── 起動 ── */
 function resize(){
