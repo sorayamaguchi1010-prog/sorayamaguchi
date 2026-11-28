@@ -1066,7 +1066,7 @@ function pjDrawLeader(now){const[w,h]=pjSize(pjLd),x=pjLd.getContext('2d'),t=(no
  x.fillStyle='#8f846c';x.beginPath();x.moveTo(cx,cy);x.arc(cx,cy,R*1.6,-Math.PI/2,-Math.PI/2+f*Math.PI*2);x.closePath();x.fill();
  x.strokeStyle='#2a241b';x.lineWidth=Math.max(1,w/500);x.beginPath();x.moveTo(0,cy);x.lineTo(w,cy);x.moveTo(cx,0);x.lineTo(cx,h);x.stroke();
  for(const k of[1,.84]){x.beginPath();x.arc(cx,cy,R*k,0,Math.PI*2);x.lineWidth=Math.max(1.5,w/260);x.stroke()}
- x.fillStyle='#1d1813';x.font=`300 ${Math.round(R*1.15)}px "Cormorant Garamond",serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(String(n),cx,cy+R*.06)}
+ x.fillStyle='#1d1813';x.font=`300 ${Math.round(R*.62)}px "Cormorant Garamond",serif`;x.textAlign='left';x.textBaseline='alphabetic';const ns=String(n),mm=x.measureText(ns);x.fillText(ns,cx-(mm.actualBoundingBoxRight-mm.actualBoundingBoxLeft)/2,cy+(mm.actualBoundingBoxAscent-mm.actualBoundingBoxDescent)/2)}
 function pjFrame(now){if(!projView.classList.contains('on')){pjRaf=0;return}pjRaf=requestAnimationFrame(pjFrame);
  if(now-pjLast<41)return;pjLast=now;
  if(!pjLd.classList.contains('off')||pjLdCb)pjDrawLeader(now);
