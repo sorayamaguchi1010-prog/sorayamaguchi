@@ -18,7 +18,7 @@
 <meta name="apple-mobile-web-app-title" content="sora yamaguchi">
 <meta name="theme-color" content="#70a3ca">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Zen+Old+Mincho:wght@400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Zen+Old+Mincho:wght@400&family=Shippori+Mincho:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* VOICE   : 囁くように。説明しない。風と光だけが喋る。
    IDEA    : 夏の記憶の草原。作品は置かれていない、風に預けられている。
@@ -367,6 +367,14 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
 .pj-gate::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:6px;box-shadow:inset 0 0 70px 18px rgba(0,0,0,.55),inset 0 0 0 2px rgba(0,0,0,.6)}
 .pj-leader{transition:opacity .6s}.pj-leader.off{opacity:0}
 html.dark-top{background-image:none!important;background-color:var(--top)!important}
+
+/* 映写機の文字：細い明朝で小さく、真ん中に */
+.pj-bar{display:flex;flex-direction:column;flex-wrap:nowrap;align-items:center;justify-content:center;gap:12px;margin-top:6px;width:100%}.pj-bar>*{flex:0 0 auto}
+.pj-title{width:100%;text-align:center;font:400 12px/1.6 "Shippori Mincho","Zen Old Mincho",serif;letter-spacing:.32em;color:rgba(251,247,238,.82);margin:0}
+.pj-ctrl{display:flex;gap:22px;align-items:center;justify-content:center;flex-wrap:wrap}
+.pj-btn,.pj-sel{font:400 11px "Shippori Mincho","Zen Old Mincho",serif;letter-spacing:.24em;color:rgba(251,247,238,.6);background:transparent;border:0;border-bottom:1px solid rgba(251,247,238,.22);border-radius:0;padding:4px 2px;min-height:0;transition:color .4s,border-color .4s}
+.pj-btn:hover,.pj-btn:focus-visible,.pj-sel:hover,.pj-sel:focus-visible{color:#fbf7ee;border-color:rgba(251,247,238,.6);background:transparent}
+.pj-sel{appearance:none;-webkit-appearance:none;text-align:center;text-align-last:center;max-width:min(300px,70vw);padding-right:2px}
 </style>
 </head>
 <body>
@@ -461,7 +469,7 @@ html.dark-top{background-image:none!important;background-color:var(--top)!import
  <button class="close" type="button" data-close>close</button>
  <canvas class="pj-beam" id="pjBeam" aria-hidden="true"></canvas>
  <div class="projview"><div class="pj-gate" id="pjGate"><div class="screen" id="pjScreen"></div><canvas class="pj-fx" id="pjFx" aria-hidden="true"></canvas><canvas class="pj-leader" id="pjLeader" aria-hidden="true"></canvas></div>
-  <div class="pj-bar"><p class="pj-title" id="pjTitle"></p><button type="button" class="pj-btn" id="pjNext">別の映像をかける ↻</button><select class="pj-sel" id="pjSel" aria-label="映像を選ぶ"></select></div></div>
+  <div class="pj-bar"><p class="pj-title" id="pjTitle"></p><div class="pj-ctrl"><button type="button" class="pj-btn" id="pjNext">別の映像をかける</button><select class="pj-sel" id="pjSel" aria-label="映像を選ぶ"></select></div></div></div>
 </div>
 <div class="over" id="view" role="dialog" aria-modal="true" aria-label="作品">
  <button class="close" type="button" data-close>close</button>
@@ -1058,7 +1066,7 @@ function pjDrawLeader(now){const[w,h]=pjSize(pjLd),x=pjLd.getContext('2d'),t=(no
  x.fillStyle='#8f846c';x.beginPath();x.moveTo(cx,cy);x.arc(cx,cy,R*1.6,-Math.PI/2,-Math.PI/2+f*Math.PI*2);x.closePath();x.fill();
  x.strokeStyle='#2a241b';x.lineWidth=Math.max(1,w/500);x.beginPath();x.moveTo(0,cy);x.lineTo(w,cy);x.moveTo(cx,0);x.lineTo(cx,h);x.stroke();
  for(const k of[1,.84]){x.beginPath();x.arc(cx,cy,R*k,0,Math.PI*2);x.lineWidth=Math.max(1.5,w/260);x.stroke()}
- x.fillStyle='#1d1813';x.font=`${Math.round(R*1.15)}px "Cormorant Garamond",serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(String(n),cx,cy+R*.06)}
+ x.fillStyle='#1d1813';x.font=`300 ${Math.round(R*1.15)}px "Cormorant Garamond",serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(String(n),cx,cy+R*.06)}
 function pjFrame(now){if(!projView.classList.contains('on')){pjRaf=0;return}pjRaf=requestAnimationFrame(pjFrame);
  if(now-pjLast<41)return;pjLast=now;
  if(!pjLd.classList.contains('off')||pjLdCb)pjDrawLeader(now);
