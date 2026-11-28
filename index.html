@@ -983,7 +983,8 @@ lf.addEventListener('submit',async e=>{e.preventDefault();if(lf._honey.value)ret
    body:JSON.stringify({name:lf.name.value,email:lf.email.value,message:lf.message.value,_subject:'sora yamaguchi HPから手紙が届きました',_template:'box',_captcha:'false'})});
   const j=await r.json().catch(()=>({}));if(!r.ok||j.success==='false'||j.success===false)throw 0;
   ls.textContent='届けました。お返事をお待ちください。';lf.reset()}
- catch(_){ls.textContent='うまく届きませんでした。時間をおいてもう一度お試しください。'}
+ catch(_){const mt='mailto:sorayamaguchi1010@gmail.com?subject='+encodeURIComponent('sora yamaguchi HPから手紙')+'&body='+encodeURIComponent(lf.message.value+'\n\n'+lf.name.value+'（'+lf.email.value+'）');
+  ls.innerHTML='';ls.append('うまく届きませんでした。',Object.assign(document.createElement('a'),{href:mt,textContent:'メールで送る',style:'color:inherit;text-decoration:underline;margin-left:.6em'}))}
  lb.disabled=false});
 /* ── Atelier BAILE：小屋の中 ── */
 const room=document.getElementById('room'),rmScene=document.getElementById('rmScene');
