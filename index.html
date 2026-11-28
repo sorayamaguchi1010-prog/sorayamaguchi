@@ -355,6 +355,17 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
 .hr-back{position:absolute;left:24px;top:24px;all:unset;cursor:pointer;font-size:12px;letter-spacing:.2em;color:rgba(238,243,238,.7)}
 #hrView .hr-back{position:absolute;left:clamp(16px,3vw,32px);top:clamp(18px,3vw,32px)}
 #hrView .close{z-index:3}.hr-zm{display:flex;gap:4px;margin-left:10px;padding-left:16px;border-left:1px solid rgba(238,243,238,.25)}.hr-zm button{font-size:15px;padding:2px 10px}.hr-stage{transform-origin:50% 50%;transition:transform .35s cubic-bezier(.2,.7,.2,1)}.hr-stage.zoomed{cursor:grab}.hr-stage.panning{transition:none;cursor:grabbing}#hrView .hr-nav,#hrView .hr-back{position:relative;z-index:2}#hrView .hr-nav{padding:6px 14px;border-radius:999px;background:rgba(8,18,16,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}#hrView .hr-back{position:absolute;padding:6px 12px;border-radius:999px;background:rgba(8,18,16,.45)}#hrView.reading .close{background:rgba(8,18,16,.55)}#hrView.solo .hr-back{display:none}
+
+/* ── 映写機：暗い部屋、光の束、フィルムの傷と粒子、カウントダウン ── */
+#projView{background:radial-gradient(ellipse 70% 60% at 50% 42%,rgba(28,22,16,.9),rgba(4,3,2,.97) 75%);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px)}
+.pj-beam{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen;z-index:0}
+.projview{position:relative;z-index:1}
+.pj-gate{position:relative;width:100%;aspect-ratio:16/9;will-change:transform}
+.pj-gate .screen{position:absolute;inset:0;width:100%;height:100%;filter:sepia(.18) contrast(1.06) saturate(.9);box-shadow:0 0 0 1px rgba(255,240,210,.05),0 0 120px 10px rgba(255,226,170,.10),0 40px 90px -30px rgba(0,0,0,.9)}
+.pj-fx,.pj-leader{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.pj-fx{mix-blend-mode:normal}
+.pj-gate::after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:6px;box-shadow:inset 0 0 70px 18px rgba(0,0,0,.55),inset 0 0 0 2px rgba(0,0,0,.6)}
+.pj-leader{transition:opacity .6s}.pj-leader.off{opacity:0}
 </style>
 </head>
 <body>
@@ -447,7 +458,8 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
 </div>
 <div class="over" id="projView" role="dialog" aria-modal="true" aria-label="映像">
  <button class="close" type="button" data-close>close</button>
- <div class="projview"><div class="screen" id="pjScreen"></div>
+ <canvas class="pj-beam" id="pjBeam" aria-hidden="true"></canvas>
+ <div class="projview"><div class="pj-gate" id="pjGate"><div class="screen" id="pjScreen"></div><canvas class="pj-fx" id="pjFx" aria-hidden="true"></canvas><canvas class="pj-leader" id="pjLeader" aria-hidden="true"></canvas></div>
   <div class="pj-bar"><p class="pj-title" id="pjTitle"></p><button type="button" class="pj-btn" id="pjNext">別の映像をかける ↻</button><select class="pj-sel" id="pjSel" aria-label="映像を選ぶ"></select></div></div>
 </div>
 <div class="over" id="view" role="dialog" aria-modal="true" aria-label="作品">
@@ -1032,9 +1044,51 @@ document.getElementById('kid').addEventListener('click',()=>show(aboutView));
 const projView=document.getElementById('projView'),pjScreen=document.getElementById('pjScreen'),pjTitle=document.getElementById('pjTitle'),pjSel=document.getElementById('pjSel');
 const FILMS=WORKS.filter(w=>w.yt);let pjCur=-1;
 FILMS.forEach((f,i)=>{const o=document.createElement('option');o.value=i;o.textContent=f.title;pjSel.appendChild(o)});
-function pjPlay(i){pjCur=i;const f=FILMS[i];pjScreen.innerHTML='';const fr=document.createElement('iframe');fr.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(f.yt)+'?autoplay=1&rel=0&playsinline=1';fr.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';fr.allowFullscreen=true;fr.title=f.title;pjScreen.appendChild(fr);pjTitle.textContent=f.title;pjSel.value=i}
+function pjPlay(i){pjCur=i;const f=FILMS[i];pjScreen.innerHTML='';pjTitle.textContent=f.title;pjSel.value=i;pjCount(()=>{if(pjCur!==i)return;const fr=document.createElement('iframe');fr.src='https://www.youtube-nocookie.com/embed/'+encodeURIComponent(f.yt)+'?autoplay=1&rel=0&playsinline=1';fr.allow='autoplay; encrypted-media; fullscreen; picture-in-picture';fr.allowFullscreen=true;fr.title=f.title;pjScreen.appendChild(fr)})}
+
+/* 映写の演出 */
+const pjFx=document.getElementById('pjFx'),pjLd=document.getElementById('pjLeader'),pjBm=document.getElementById('pjBeam'),pjGate=document.getElementById('pjGate');
+let pjRaf=0,pjLdT=0,pjLdCb=null,pjScr=[],pjDust=[],pjLast=0;
+function pjSize(c){const r=c.getBoundingClientRect(),d=Math.min(devicePixelRatio||1,1.5);const w=Math.max(2,Math.round(r.width*d)),h=Math.max(2,Math.round(r.height*d));if(c.width!==w||c.height!==h){c.width=w;c.height=h}return[w,h]}
+function pjCount(cb){pjLdCb=cb;pjLdT=performance.now();pjLd.classList.remove('off');pjStart()}
+function pjDrawLeader(now){const[w,h]=pjSize(pjLd),x=pjLd.getContext('2d'),t=(now-pjLdT)/1000,n=3-Math.floor(t/.9),f=(t%.9)/.9;
+ if(t>=2.7){if(pjLdCb){const c=pjLdCb;pjLdCb=null;c()}pjLd.classList.add('off');return}
+ x.fillStyle='#b9ad93';x.fillRect(0,0,w,h);const cx=w/2,cy=h/2,R=Math.min(w,h)*.36;
+ x.fillStyle='#8f846c';x.beginPath();x.moveTo(cx,cy);x.arc(cx,cy,R*1.6,-Math.PI/2,-Math.PI/2+f*Math.PI*2);x.closePath();x.fill();
+ x.strokeStyle='#2a241b';x.lineWidth=Math.max(1,w/500);x.beginPath();x.moveTo(0,cy);x.lineTo(w,cy);x.moveTo(cx,0);x.lineTo(cx,h);x.stroke();
+ for(const k of[1,.84]){x.beginPath();x.arc(cx,cy,R*k,0,Math.PI*2);x.lineWidth=Math.max(1.5,w/260);x.stroke()}
+ x.fillStyle='#1d1813';x.font=`${Math.round(R*1.15)}px "Cormorant Garamond",serif`;x.textAlign='center';x.textBaseline='middle';x.fillText(String(n),cx,cy+R*.06)}
+function pjFrame(now){if(!projView.classList.contains('on')){pjRaf=0;return}pjRaf=requestAnimationFrame(pjFrame);
+ if(now-pjLast<41)return;pjLast=now;
+ if(!pjLd.classList.contains('off')||pjLdCb)pjDrawLeader(now);
+ // ゆるい揺れ（ゲートの微かなふらつき）とちらつき
+ const wy=(Math.random()-.5)*.6,wx=(Math.random()-.5)*.3;pjGate.style.transform=RM?'':`translate(${wx.toFixed(2)}px,${wy.toFixed(2)}px)`;
+ const[w,h]=pjSize(pjFx),x=pjFx.getContext('2d');x.clearRect(0,0,w,h);
+ x.fillStyle=`rgba(255,236,200,${(Math.random()*.035).toFixed(3)})`;x.fillRect(0,0,w,h);
+ x.fillStyle=`rgba(0,0,0,${(Math.random()*.06).toFixed(3)})`;x.fillRect(0,0,w,h);
+ // 粒子
+ const g=Math.round(w*h/900);x.fillStyle='rgba(255,248,230,.10)';for(let i=0;i<g;i++)x.fillRect(Math.random()*w,Math.random()*h,1,1);
+ x.fillStyle='rgba(0,0,0,.14)';for(let i=0;i<g;i++)x.fillRect(Math.random()*w,Math.random()*h,1,1);
+ // 縦の傷：数フレーム残って、ゆっくり横へずれる
+ if(Math.random()<.08)pjScr.push({x:Math.random()*w,life:4+Math.random()*14,a:.08+Math.random()*.22,wd:.6+Math.random()*1.4,dark:Math.random()<.4,v:(Math.random()-.5)*1.5});
+ pjScr=pjScr.filter(o=>o.life-->0);for(const o of pjScr){o.x+=o.v;x.fillStyle=o.dark?`rgba(0,0,0,${o.a})`:`rgba(255,250,235,${o.a})`;x.fillRect(o.x,0,o.wd,h)}
+ // 埃と毛くず：一瞬だけ
+ if(Math.random()<.35)for(let k=0;k<1+Math.random()*3;k++){const px=Math.random()*w,py=Math.random()*h,r=.8+Math.random()*3.5;x.fillStyle=Math.random()<.7?'rgba(0,0,0,.55)':'rgba(255,250,235,.5)';
+  if(Math.random()<.25){x.strokeStyle=x.fillStyle;x.lineWidth=.8;x.beginPath();x.moveTo(px,py);x.bezierCurveTo(px+10*Math.random(),py-14,px-12,py+8,px+16*Math.random(),py+20*Math.random());x.stroke()}
+  else{x.beginPath();x.arc(px,py,r,0,7);x.fill()}}
+ pjDrawBeam()}
+function pjDrawBeam(){const[w,h]=pjSize(pjBm),x=pjBm.getContext('2d'),gr=pjGate.getBoundingClientRect(),br=pjBm.getBoundingClientRect(),d=w/br.width;
+ x.clearRect(0,0,w,h);const ox=w/2,oy=h*1.02,L=(gr.left-br.left)*d,R=(gr.right-br.left)*d,T=(gr.top-br.top)*d,B=(gr.bottom-br.top)*d,fl=.85+Math.random()*.15;
+ const g=x.createLinearGradient(ox,oy,ox,T);g.addColorStop(0,`rgba(255,232,190,${.16*fl})`);g.addColorStop(.5,`rgba(255,232,190,${.05*fl})`);g.addColorStop(1,'rgba(255,232,190,0)');
+ x.fillStyle=g;x.beginPath();x.moveTo(ox-6*d,oy);x.lineTo(L,B);x.lineTo(L,T);x.lineTo(R,T);x.lineTo(R,B);x.lineTo(ox+6*d,oy);x.closePath();x.fill();
+ const s=x.createRadialGradient(ox,oy,0,ox,oy,60*d);s.addColorStop(0,`rgba(255,240,210,${.5*fl})`);s.addColorStop(1,'rgba(255,240,210,0)');x.fillStyle=s;x.fillRect(ox-60*d,oy-60*d,120*d,120*d);
+ // 光の中の埃
+ if(pjDust.length<90)pjDust.push({u:Math.random(),v:Math.random(),s:.4+Math.random()*1.4,p:Math.random()*7});
+ x.fillStyle='rgba(255,244,220,.5)';for(const p of pjDust){p.v-=.0009*p.s;p.u+=Math.sin(p.p+=.03)*.0006;if(p.v<0)p.v=1;
+  const yy=oy+(T-oy)*p.v,half=(R-L)/2*p.v+6*d*(1-p.v),xx=ox+(p.u*2-1)*half;x.globalAlpha=.25+.5*Math.abs(Math.sin(p.p));x.beginPath();x.arc(xx,yy,p.s*d,0,7);x.fill()}x.globalAlpha=1}
+function pjStart(){if(!pjRaf)pjRaf=requestAnimationFrame(pjFrame)}
 function pjRandom(){let i;do{i=Math.floor(R()*FILMS.length)}while(FILMS.length>1&&i===pjCur);pjPlay(i)}
-document.getElementById('proj').addEventListener('click',()=>{pjRandom();show(projView)});
+document.getElementById('proj').addEventListener('click',()=>{show(projView);pjRandom();pjStart()});
 document.getElementById('pjNext').addEventListener('click',pjRandom);pjSel.addEventListener('change',()=>pjPlay(+pjSel.value));
 projView.addEventListener('click',e=>{if(e.target===projView||e.target.hasAttribute('data-close')){projView.classList.remove('on');pjScreen.innerHTML=''}});
 addEventListener('keydown',e=>{if(e.key==='Escape'&&projView.classList.contains('on')){projView.classList.remove('on');pjScreen.innerHTML=''}});
