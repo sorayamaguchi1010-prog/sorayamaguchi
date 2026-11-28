@@ -997,7 +997,8 @@ function viewer3D(it){
 let F3=null;const f3=()=>F3||(F3=import('./frame3d.js'));
 function frameStage(it){const stage=document.createElement('div');stage.className='stage';
  f3().then(m=>{requestAnimationFrame(()=>m.mountViewer(stage,it,RM))}).catch(()=>{const s2=viewer3D(it);stage.replaceWith(s2)});return stage}
-function wallFrames(){f3().then(m=>{m.mountWallFrame(document.getElementById('rmF1'),'frame-baile.webp',1);m.mountWallFrame(document.getElementById('rmF2'),'frame-room.webp',1.5)}).catch(()=>{})}
+let wfFree=[];function wallFrames(){f3().then(m=>{if(!room.classList.contains('on'))return;wfFree=[m.mountWallFrame(document.getElementById('rmF1'),'frame-baile.webp',1),m.mountWallFrame(document.getElementById('rmF2'),'frame-room.webp',1.5)]}).catch(()=>{})}
+function wallFramesOff(){wfFree.forEach(f=>{try{f()}catch(_){}});wfFree=[]}
 
 /* ── 写真の掲示板 ── */
 const pinboard=document.getElementById('pinboard'),pinBody=document.getElementById('pinBody'),boardEl=document.getElementById('board');
@@ -1186,6 +1187,10 @@ function resize(){
  for(const o of live){o.y=clamp(o.y,H*.05,Math.max(H*.05,WY-o.h))}
 }
 if(!initGL()){bx=bg.getContext('2d')}
+/* iPhoneでは他の3D（額縁など）を開いたり、アプリを切り替えたりすると背景の描画が失われることがある：取り戻して風を再開 */
+bg.addEventListener('webglcontextlost',e=>{e.preventDefault();gl=null},false);
+bg.addEventListener('webglcontextrestored',()=>{if(!initGL())bx=bg.getContext('2d')},false);
+addEventListener('pageshow',()=>{last=performance.now();if(gl&&gl.isContextLost&&gl.isContextLost())gl=null});
 resize();
 let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(resize,150)});
 /* ── 手紙：その場で書いて、そのまま届ける ── */
@@ -1297,8 +1302,8 @@ function lightFrame(now){if(!LT.on)return;const dt=Math.min(.05,(now-(LT.last||n
 function lightStart(){lightLayout();if(RM){LT.on=false;return}LT.on=true;LT.last=0;cancelAnimationFrame(LT.raf);LT.raf=requestAnimationFrame(lightFrame)}
 function lightStop(){LT.on=false;cancelAnimationFrame(LT.raf)}
 addEventListener('resize',()=>{if(room.classList.contains('on'))setTimeout(lightLayout,60)});
-let wfOn=false;function openRoom(){if(!wfOn){wfOn=true;wallFrames()}fitRoom();room.classList.add('on');room.setAttribute('aria-hidden','false');lightStart()}
-function closeRoom(){lightStop();room.classList.remove('on');room.setAttribute('aria-hidden','true')}
+function openRoom(){fitRoom();room.classList.add('on');room.setAttribute('aria-hidden','false');lightStart();if(!wfFree.length)wallFrames()}
+function closeRoom(){lightStop();wallFramesOff();room.classList.remove('on');room.setAttribute('aria-hidden','true')}
 document.getElementById('roomClose').addEventListener('click',closeRoom);
 document.getElementById('rmF1').addEventListener('click',()=>openWork({it:{src:'frame-baile.webp',kind:'photo',ar:1,title:'BAILE',frame:true}}));
 document.getElementById('rmF2').addEventListener('click',()=>openWork({it:{src:'frame-room.webp',kind:'photo',ar:1.5,title:'Atelier BAILE',frame:true}}));
@@ -1311,7 +1316,8 @@ addEventListener('resize',()=>{if(room.classList.contains('on'))fitRoom()});
 
 prePlace();
 let last=performance.now();
-function frame(now){const dt=Math.min(.05,(now-last)/1000);last=now;clock+=dt;stepMB(dt);stepCam(clock);draw(clock,dt);stepWorks(dt,clock);stepWords(dt,clock);requestAnimationFrame(frame)}
+function frame(now){requestAnimationFrame(frame);const dt=Math.min(.05,Math.max(0,(now-last)/1000));last=now;clock+=dt;
+ for(const f of [()=>stepMB(dt),()=>stepCam(clock),()=>draw(clock,dt),()=>stepWorks(dt,clock),()=>stepWords(dt,clock)]){try{f()}catch(e){if(!frame.err){frame.err=1;console.error(e)}}}}
 document.addEventListener('visibilitychange',()=>{last=performance.now()});
 requestAnimationFrame(frame);
 }

@@ -209,7 +209,7 @@ export function mountViewer(stage, it, RM = false) {
   }
   const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
   function loop(now) {
-    if (!stage.isConnected) { cancelAnimationFrame(raf); ro.disconnect(); r.dispose(); return; }
+    if (!stage.isConnected) { cancelAnimationFrame(raf); ro.disconnect(); r.dispose(); r.forceContextLoss(); return; }
     if (idle && !RM) { const t = (now - t0) / 1000; ry = .3 * Math.cos(t * .35); rx = -.1 + .07 * Math.sin(t * .27); }
     else if (!dragging) { ry += vx; rx += vy; vx *= .9; vy *= .9; rx = clamp(rx, -1.25, 1.25); }
     pivot.rotation.set(-rx, ry, 0);
@@ -238,6 +238,7 @@ export function mountViewer(stage, it, RM = false) {
 
 /* 部屋の壁に掛かっている額：ふだんは静か、マウスを近づけると少し傾く */
 export function mountWallFrame(btn, src, ar, mwPx) {
+  btn.querySelectorAll('canvas.f3d-wall').forEach(c => c.remove());
   const canvas = document.createElement('canvas');
   canvas.className = 'f3d-wall';
   btn.appendChild(canvas);
@@ -277,4 +278,5 @@ export function mountWallFrame(btn, src, ar, mwPx) {
   const ro = new ResizeObserver(size); ro.observe(btn);
   // テクスチャが届いたら描き直す
   redraws.add(draw);
+  return () => { redraws.delete(draw); ro.disconnect(); cancelAnimationFrame(raf); r.dispose(); r.forceContextLoss(); canvas.remove(); btn.classList.remove('r3d'); };
 }
