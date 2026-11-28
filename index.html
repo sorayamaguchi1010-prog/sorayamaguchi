@@ -73,7 +73,10 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .over figcaption p{flex-basis:100%;margin:0;white-space:pre-line;line-height:2;color:rgba(251,247,238,.75);font-size:14px;max-width:34em}
 .close{position:absolute;top:max(3vh,12px);right:max(4vw,12px);font:italic 300 18px "Cormorant Garamond",serif;color:rgba(251,247,238,.75);background:none;border:0;min-height:44px;padding:10px 14px;cursor:pointer}
 .close:hover,.close:focus-visible{color:#fff}.close:focus:not(:focus-visible){outline:none}
-.about{max-width:30em;max-height:86vh;overflow-y:auto}
+#aboutView{background:linear-gradient(rgba(20,30,40,0) 45%,rgba(14,22,30,.55) 100%),url(about/sky.webp) center 42%/cover #6f8f9e;backdrop-filter:none;-webkit-backdrop-filter:none;align-items:end;padding-bottom:9vh}
+@media (max-aspect-ratio:1/1){#aboutView{background:linear-gradient(#5d8494,#6f929f 40%,#82a0a8 70%,#5f7c86);align-items:end}#aboutView::before{content:"";position:absolute;left:0;right:0;top:0;height:62%;background:url(about/sky.webp) 50% 58%/auto 100% no-repeat;background-size:230% auto;-webkit-mask-image:linear-gradient(#000 55%,transparent);mask-image:linear-gradient(#000 55%,transparent);pointer-events:none}#aboutView .about{position:relative}}
+#aboutView .about h2{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+.about{max-width:30em;max-height:86vh;overflow-y:auto;text-shadow:0 1px 14px rgba(20,30,40,.35)}
 .about h2{margin:0 0 6px;font:italic 300 clamp(30px,4vw,44px)/1.05 "Cormorant Garamond",serif}
 .about .ja{margin:0 0 26px;font-size:13px;letter-spacing:.3em;color:rgba(251,247,238,.75)}
 .about p{margin:0 0 1.2em;color:rgba(251,247,238,.8)}
@@ -180,6 +183,7 @@ nav :focus-visible{outline:1px solid var(--soft);outline-offset:-6px}
 .row::after{height:26px!important;bottom:-26px!important;background:linear-gradient(rgba(255,230,190,.18),transparent 30%,rgba(0,0,0,.2) 70%,rgba(0,0,0,.55)),url(tex/wood-board.webp) center/auto 100% repeat-x!important}
 .poem-wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);align-items:center;gap:clamp(20px,4vw,56px);width:min(1180px,92vw)}
 .poem-wrap .stage{width:100%;height:min(76vh,820px)}
+.poem-pages{display:flex;gap:14px;margin-top:22px;white-space:normal}.poem-pages button{all:unset;cursor:pointer;font:13px "Zen Old Mincho",serif;letter-spacing:.1em;color:rgba(251,247,238,.5);padding:2px 4px;border-bottom:1px solid transparent;transition:color .3s,border-color .3s}.poem-pages button:hover{color:#fbf7ee}.poem-pages button.on{color:#fbf7ee;border-bottom-color:rgba(251,247,238,.7)}
 .poem-text{text-align:left;justify-self:start;white-space:pre-line;font:15px/2.3 "Zen Old Mincho",serif;letter-spacing:.08em;color:rgba(251,247,238,.92);max-height:76vh;overflow:auto;padding-right:6px;text-shadow:0 1px 12px rgba(0,0,0,.4)}
 @media(max-width:760px){.poem-wrap{grid-template-columns:1fr;gap:14px}.poem-wrap .stage{height:48vh}.poem-text{font-size:14px;line-height:2.1;max-height:30vh}}
 .projview{display:grid;gap:14px;justify-items:center;width:min(1000px,92vw)}
@@ -454,6 +458,15 @@ const WORKS = [
  {src:"works/poem-02.webp", kind:"photo", ar:0.5624, title:"憶録乃詩　サルビア", year:"", note:"", poem:"詩と花言葉は葛藤を肯定することも多く\n\n先生との再開　先輩の同窓会の撮影は\n疑心から解放されなかったいつかの判断を\n正しかった、と肩に手を当ててくれた\n\n就職をしていれば\n1人で活動していれば\n仲間を誘わなければ\nこの再会は生きていかなかった\n\nサルビア\n天才なんて言葉は要らない"},
  {src:"works/poem-03.webp", kind:"photo", ar:0.5624, title:"憶録乃詩　喧騒", year:"", note:"", poem:"新宿駅の改札を出た先　髪が目に入る\n\n十一月六日\n喧騒の中\n暖色の線の上を人々が行む\n光が似合うな、と不意にもれる言葉\n\n真下の電車\n落ち着きもしない世界で袖を伸ばし皆は落ち着いている\n広場の名のように寒さを感じる\n肩を寄せ合う季節になったのか"},
  {src:"works/poem-04.webp", kind:"photo", ar:0.5624, title:"憶録乃詩　師走の世界", year:"", note:"", poem:"四方八方　番号を呼ぶアナウンス\n右往左往する彼女さんに　満足げなお父さん\n目を細かせる子供が　親の目を盗み店を走り回る\n緑と赤と光に彩られたその時期は\n冷えた体に　安寧の温もりを灯してくれる\nラッピングを待つ間　師走の世界"},
+ {src:"works/poem-05.webp", kind:"photo", ar:0.5625, title:"憶録乃詩　学舎回顧", year:"", note:"", poem:"掘った消しゴム　合体させた文房具\n持ち帰り忘れた給食着\n手を抜いたパソコン室掃除\n玄関横にはクロスカントリーの板\n従兄弟の名前が彫られた図書館の椅子\n壁に掛かるナスカの地上絵の写真\n緊張した初めての放送委員\n憂鬱な漢字練習帳の左\n卒業式では桜ノ雨を流したかった"},
+ {src:"works/poem-06.webp", kind:"photo", ar:0.5625, title:"憶録乃詩　帰れない帰郷", year:"", note:"", poem:"曇天　霧がかる山\n決して陽気な旅ではなかった\n音楽はとうに消したから\n雨がガラスに当たる音　水を轢く音が響く\n人はこうして　どんな遠く見えた信号も\nハンドルを握り　気づけば超えている\n\n自宅だったものの前でドアを閉め深く空気を吸う\nかつてボールを取りに柵をよじ登った\nテニスコートは撤去されている\n心苦しい\n\n幼少を投影\n\n無邪気な遊びはもう存在しない\nしかし今しかできないことと\n未来にて失うことは多くある\n\n明日怪我してしまうかもしれない\n友人と会えなくなるかもしれない\n\n木の影が伸びたな　または知らなかったのか\nもう帰れなくなってしまった", pages:["works/poem-06b.webp"]},
+ {src:"works/poem-07.webp", kind:"photo", ar:0.5625, title:"憶録乃詩　手前に映る", year:"", note:"", poem:"倒れたコップ　机を滴る数秒\n性格は水を泳ぐ\n零れ落ちた時　人々の優しさが反射する\nちいさく　らしく　私は座っている\n反射も動かない\nいつも手前には写れない\n\n心をどこで捨てたのか　また　どこで諦めてしまったのか"},
+ {src:"works/poem-08.webp", kind:"photo", ar:0.5625, title:"憶録乃詩　祖母の背", year:"", note:"", poem:"祖母が淹れる珈琲と和菓子\n特別おいしく感じるよ\n\n私と親戚の写真たちが優しく角に生きている\n窓に向こうには回想の捗る冬景色\nやっぱり私の原風景\n\n掛かった切り絵に感化され\n何かを作りたくなる\nカメラを片手\n湯気に包まれる街に向かうのさ", pages:["works/poem-08b.webp"]},
+ {src:"works/poem-09.webp", kind:"photo", ar:0.5625, title:"憶録乃詩　池尻大橋", year:"", note:"", poem:"私はすぐに呑まれてしまうから\nスクランブルの人混みから\n些細な日常の輝きを忘れたくなかった\n\nそのイントロと共にホームに降りる\n待ち望んだ池尻の木陰", pages:["works/poem-09b.webp"]},
+ {src:"works/poem-10.webp", kind:"photo", ar:0.5625, title:"憶録乃詩　朝に名づける", year:"", note:"", poem:"苗場を走る子供たち\n鍛え上げられた肩幅はどの武道か\n練心館の私と重なる\nこの感覚の朝に名前を\n\n朝のリストをまとめていく\n\n駅伝練習をサボった朝\n疲労骨折に泣いた朝\n白い息を吐いた朝\nテストを諦めた朝\n目覚めのいい朝\n起きたくない朝\n恋をしている朝\n宿題を忘れた朝\n\n私が過ごしてきた朝は\n私が生きただけ有ったはずなのに\nそのどれもが不透明で思い出せなくて\n\n朝がまとめられていく\n\n大きな抽象へ\n\n朝に名前をつける\n忘れないように\n\n定かな朝を重ねよう"},
+ {src:"works/poem-11.webp", kind:"photo", ar:0.5625, title:"憶録乃詩　未だ青い春", year:"", note:"", poem:"汗臭いユニフォーム\n痛む右足　説教の怒号\n悔し涙　勝利の感動\nあの日の親孝行\n\n何も帰ってこない\nいつかに縋らず\nそれを糧に血肉に生きる限り進む\n\n可能性は閉じていない\nゆえに未だ青春のなか\n\n手に余る幸せは\n夏夜のベンチでのひと時\n500mの水と風の取り巻き\n\n青春は季節でも期間でもない"},
+ {src:"works/poem-12.webp", kind:"photo", ar:0.5625, title:"憶録乃詩　輪郭はペールブルー", year:"", note:"", poem:"国道から眺める山々はワントーン\n高架橋抜けて足からこんにちは\n涼む横顔　泳ぐ綿雲\n心地よい風を浴び長い道を進むと\nガタガタした輪郭のペールブルーは\n鮮明な緑覆う岩山となっていた", pages:["works/poem-12b.webp", "works/poem-12c.webp"]},
+ {src:"works/poem-13.webp", kind:"photo", ar:0.5625, title:"憶録乃詩　鬱屈な大衆", year:"", note:"", poem:"鬱屈な大衆では、二人の手は解けない"},
  {src:"works/photo-13.webp", kind:"photo", ar:0.7996, title:"安堵と暗度", year:"", note:""},
  {src:"works/photo-14.webp", kind:"photo", ar:0.838, title:"", year:"", note:""},
  {src:"works/photo-15.webp", kind:"photo", ar:1.5005, title:"調布の商店街の時間感覚が\n手提のバッグで持ち帰れれば良いのに", year:"", note:""},
@@ -785,7 +798,7 @@ let lastFocus=null;
 function show(ov){lastFocus=document.activeElement;ov.classList.add('on');ov.querySelector('.close').focus()}
 function hide(){[view,aboutView].forEach(v=>v.classList.remove('on'));setTimeout(()=>{if(!view.classList.contains('on'))vMedia.innerHTML=''},900);if(lastFocus&&lastFocus.isConnected)lastFocus.focus()}
 function openWork(o){
- const it=o.it;vMedia.innerHTML='';vMedia.classList.remove('has-poem');if(it.src&&it.kind==='photo'){vMedia.classList.toggle('has-poem',!!it.poem);const st=it.frame?frameStage(it):viewer3D(it);if(it.poem){const wrap=document.createElement('div');wrap.className='poem-wrap';const pt=document.createElement('div');pt.className='poem-text';pt.textContent=it.poem;wrap.append(st,pt);vMedia.appendChild(wrap)}else vMedia.appendChild(st);const hn=document.createElement('p');hn.className='v-hint';hn.textContent='ドラッグで回す　ホイール・ピンチで寄る　ダブルクリックで戻す';vMedia.appendChild(hn)}else{const m=mediaFor(it,true);if(!it.yt&&!it.ig)m.classList.add('big');vMedia.appendChild(m)}
+ const it=o.it;vMedia.innerHTML='';vMedia.classList.remove('has-poem');if(it.src&&it.kind==='photo'){vMedia.classList.toggle('has-poem',!!it.poem);const st=it.frame?frameStage(it):viewer3D(it);if(it.poem){const wrap=document.createElement('div');wrap.className='poem-wrap';const pt=document.createElement('div');pt.className='poem-text';pt.textContent=it.poem;wrap.append(st,pt);if(it.pages&&it.pages.length){const all=[it.src,...it.pages],nav=document.createElement('div');nav.className='poem-pages';let cur=st;all.forEach((src,k)=>{const b=document.createElement('button');b.type='button';b.textContent=kanNum(String(k+1));if(!k)b.classList.add('on');b.addEventListener('click',e=>{e.stopPropagation();if(b.classList.contains('on'))return;nav.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));const ns=viewer3D({...it,src});cur.replaceWith(ns);cur=ns});nav.appendChild(b)});pt.appendChild(nav)}vMedia.appendChild(wrap)}else vMedia.appendChild(st);const hn=document.createElement('p');hn.className='v-hint';hn.textContent='ドラッグで回す　ホイール・ピンチで寄る　ダブルクリックで戻す';vMedia.appendChild(hn)}else{const m=mediaFor(it,true);if(!it.yt&&!it.ig)m.classList.add('big');vMedia.appendChild(m)}
  vCap.innerHTML='';const b=document.createElement('b');b.textContent=it.title||'';vCap.appendChild(b);
  if(it.year){const i=document.createElement('i');i.textContent=it.year;vCap.appendChild(i)}
  if(it.note){const p=document.createElement('p');p.textContent=it.note;vCap.appendChild(p)}
