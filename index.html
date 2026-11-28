@@ -460,7 +460,7 @@ html,body{overscroll-behavior:none;touch-action:pan-x pan-y}
    <p class="hr-sub">広 瀬 川 ・ 前 橋</p>
    <div class="hr-books">
     <button type="button" class="hr-book" id="hrBook1" aria-label="一冊目を開く"><span class="sp"></span><span class="pg"></span><span class="cv" style="background-image:url(hirose/01.webp)"></span><span class="nm">一 冊 目 ・ 2022</span></button>
-    <button type="button" class="hr-book soon" id="hrBook2" aria-label="二冊目（準備中）" aria-disabled="true"><span class="sp"></span><span class="pg"></span><span class="cv"><i>Hirose River<small>二 冊 目 ・ 綴 じ て い る 途 中</small></i></span><span class="nm">二 冊 目</span></button>
+    <button type="button" class="hr-book" id="hrBook2" aria-label="二冊目を開く"><span class="sp"></span><span class="pg"></span><span class="cv" style="background-image:url(mgt/01.webp)"></span><span class="nm">二 冊 目 ・ 2023</span></button>
    </div>
   </div>
   <div class="hr-reader">
@@ -1037,7 +1037,7 @@ addEventListener('keydown',e=>{if(e.key==='Escape'&&projView.classList.contains(
 
 /* ── Hirose River：本を選んで、捲る ── */
 const hrView=document.getElementById('hrView'),hrBk=document.getElementById('hrBk'),hrStage=document.getElementById('hrStage');
-const HR1=Array.from({length:19},(_,i)=>'hirose/'+String(i+1).padStart(2,'0')+'.webp');
+const HRB=[Array.from({length:25},(_,i)=>'hirose/'+String(i+1).padStart(2,'0')+'.webp'),Array.from({length:10},(_,i)=>'mgt/'+String(i+1).padStart(2,'0')+'.webp')];let HR1=HRB[0];
 let hrLeaves=[],hrAt=0,hrSpread=true,hrPw=0,hrPh=0;
 function openHirose(){hrView.classList.remove('reading');show(hrView)}
 function hrBuild(){const sp=innerWidth>=760&&innerWidth>innerHeight*.9;hrSpread=sp;
@@ -1066,7 +1066,7 @@ function hrGo(d){const n=hrLeaves.length,max=hrSpread?n:n-1,to=Math.max(0,Math.m
   if(hrSpread){const x=hrAt===0?-hrPw/2:hrAt===n?hrPw/2:0;hrBk.style.transform=`translateX(${x}px)`}
   const tot=hrSpread?n+1:n;document.getElementById('hrCount').textContent=kanNum(String(hrAt+1))+' ／ '+kanNum(String(tot));
   document.getElementById('hrPrev').disabled=hrAt===0;document.getElementById('hrNext').disabled=hrSpread?hrAt===n:hrAt>=n-1})}
-document.getElementById('hrBook1').addEventListener('click',()=>{hrAt=0;hrView.classList.add('reading');hrBuild();HR1.forEach(f=>{const i=new Image();i.src=f})});
+[0,1].forEach(b=>document.getElementById('hrBook'+(b+1)).addEventListener('click',()=>{HR1=HRB[b];hrAt=0;hrView.classList.add('reading');hrBuild();HR1.forEach(f=>{const i=new Image();i.src=f})}));
 document.getElementById('hrBack').addEventListener('click',()=>hrView.classList.remove('reading'));
 document.getElementById('hrPrev').addEventListener('click',()=>hrGo(-1));document.getElementById('hrNext').addEventListener('click',()=>hrGo(1));
 hrStage.addEventListener('click',e=>{const r=hrStage.getBoundingClientRect();hrGo(e.clientX>r.left+r.width/2?1:-1)});
